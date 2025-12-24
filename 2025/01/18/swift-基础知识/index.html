@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"aliuhongliang.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="本文主要介绍 swift的基础知识。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="swift-基础知识">
+<meta property="og:url" content="https://aliuhongliang.github.io/2025/01/18/swift-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/index.html">
+<meta property="og:site_name" content="LiuHongLiang">
+<meta property="og:description" content="本文主要介绍 swift的基础知识。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-01-18T15:04:23.000Z">
+<meta property="article:modified_time" content="2025-12-24T02:00:26.352Z">
+<meta property="article:author" content="刘宏亮">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://aliuhongliang.github.io/2025/01/18/swift-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>swift-基础知识 | LiuHongLiang</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">LiuHongLiang</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">7</span></a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://aliuhongliang.github.io/2025/01/18/swift-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="刘宏亮">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LiuHongLiang">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          swift-基础知识
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-01-18 15:04:23" itemprop="dateCreated datePublished" datetime="2025-01-18T15:04:23+00:00">2025-01-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-12-24 02:00:26" itemprop="dateModified" datetime="2025-12-24T02:00:26+00:00">2025-12-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/swift/" itemprop="url" rel="index"><span itemprop="name">swift</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">本文主要介绍 swift的基础知识。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="结构体"><a href="#结构体" class="headerlink" title="结构体"></a>结构体</h3><blockquote>
+<ol>
+<li>结构体默认生成 初始化器（构造方法）可能是多个初始化器 ：目的是保证所有的存储属性初始化后都要有初始值  </li>
+<li>如果自己定义了初始化器，那么系统就不会自动生成了。</li>
+<li>方法要修改结构体的属性值，需要使用mutating来修饰</li>
+</ol>
+</blockquote>
+<h3 id="协议"><a href="#协议" class="headerlink" title="协议"></a>协议</h3><ul>
+<li>可以定义 方法 属性 下标的声明，可以被枚举 结构体 类 遵守，多个协议用逗号隔开</li>
+<li>协议方法中不能有默认参数</li>
+<li>协议定义的属性必须是var</li>
+<li>协议定义的类方法 类属性 类下标 必须是static 不能使用class</li>
+<li>默认需要实现所有方法，后续添加可选</li>
+<li>如果给结构体定义协议，并且该协议方法需要修改结构体属性的值，需要在协议方法中用mutating修饰。而不能说协议方法不用mutating，在实现的时候用mutating修饰。</li>
+<li>协议定义初始化器的时候，如果不是final类，必须加上required，这是因为子类默认继承协议，为了要保证子类也实现协议方法，在父类使用required来修饰该协议方法</li>
+<li>协议可以继承</li>
+<li>协议组合  func test(obj: protocol1 &amp; protocol2 &amp; protocol3) {},协议组合中最多只能有一个类类型class，可以有多个协议类型   <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">protocol</span> <span class="title class_">Proto</span> &#123; </span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">draw</span>() </span><br><span class="line">    <span class="keyword">var</span> x: <span class="type">Int</span> &#123; <span class="keyword">set</span> <span class="keyword">get</span> &#125; </span><br><span class="line">    <span class="keyword">var</span> y: <span class="type">Int</span> &#123; <span class="keyword">get</span> &#125; </span><br><span class="line">    <span class="keyword">subscript</span>(<span class="params">index</span>: <span class="type">Int</span>) -&gt; <span class="type">Int</span> &#123; <span class="keyword">set</span> <span class="keyword">get</span> &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>只有类才能使用的协议，协议需要遵守 class AnyObject</li>
+<li>可选协议 使用 @objc 修饰后，使用optional</li>
+</ul>
+<h3 id="枚举"><a href="#枚举" class="headerlink" title="枚举"></a>枚举</h3><ul>
+<li>有关联值</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="title class_">TestEnum</span> &#123;</span><br><span class="line">    <span class="keyword">case</span>  test1(int, int, int)</span><br><span class="line">    <span class="keyword">case</span>  test2(int, int)</span><br><span class="line">    <span class="keyword">case</span>  test3(bool)</span><br><span class="line">    <span class="keyword">case</span>  test4     </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>一个int占4个字节，最多的有3个int，所以需要24个字节来存储关联值，还有一个字节用来存储成员值，就是是取的test1，还是test2这种，所以总共需要25个字节，有需要内存对齐，分配32个字节。</p>
+</blockquote>
+<ul>
+<li>无关联值</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="title class_">TestEnum</span> &#123;</span><br><span class="line">    <span class="keyword">case</span>  test1</span><br><span class="line">    <span class="keyword">case</span>  test2</span><br><span class="line">    <span class="keyword">case</span>  test3</span><br><span class="line">    <span class="keyword">case</span>  test4     </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>用一个字节用来存储成员值，就是是取 test1，还是test2这种</p>
+</blockquote>
+<ul>
+<li>rawValue 获取枚举的原始值。【内部实现是使用的计算属性】</li>
+<li>可以定义类型属性&#x2F;计算属性（本质是方法）</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="title class_">test</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> dog(a: <span class="type">Int</span>, b: <span class="type">Int</span>),</span><br><span class="line">    <span class="keyword">case</span> cat(a: <span class="type">Int</span>),</span><br><span class="line">    <span class="keyword">case</span> car</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> t <span class="operator">=</span> test.dog(a:<span class="number">1</span>, b2)</span><br><span class="line"><span class="number">2</span>个int占<span class="number">16</span>字节，然后加上<span class="number">1</span>字节存储成员值（<span class="keyword">case</span>的值：dog<span class="operator">、</span>cat<span class="operator">、</span>car），总共是<span class="number">17</span>个字节，根据内存对齐，最终分配<span class="number">24</span>个字节<span class="operator">。</span></span><br><span class="line"><span class="keyword">var</span> t <span class="operator">=</span> test.cat(a:<span class="number">1</span>,)</span><br><span class="line"><span class="number">1</span>个int占<span class="number">8</span>字节，然后加上<span class="number">1</span>字节存储成员值（<span class="keyword">case</span>的值：dog<span class="operator">、</span>cat<span class="operator">、</span>ca），总共是<span class="number">9</span>个字节，根据内存对齐，最终分配<span class="number">16</span>个字节<span class="operator">。</span></span><br><span class="line"></span><br><span class="line">变量的内存地址指向的内存就是枚举的内存结构，有关联值，根据关联值和属性值分配内存，没有关联值就只有属性值，那么就占<span class="number">1</span>个字节 </span><br></pre></td></tr></table></figure>
+<ul>
+<li>由于可选是枚举类型，有两个值，一个是none 一个是some()可以用下面的写法</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> age: <span class="type">Int</span>? <span class="operator">=</span> <span class="number">10</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">switch</span> age &#123;</span><br><span class="line">  <span class="keyword">case</span> <span class="keyword">let</span> a<span class="operator">?</span>:</span><br><span class="line">    <span class="built_in">print</span>(a)</span><br><span class="line">  <span class="keyword">case</span> <span class="literal">nil</span>:</span><br><span class="line">    <span class="built_in">print</span>(‘<span class="literal">nil</span>’)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">相当于</span><br><span class="line"></span><br><span class="line"><span class="keyword">switch</span> age &#123;</span><br><span class="line">  <span class="keyword">case</span> <span class="keyword">let</span> .some(a) :</span><br><span class="line">    <span class="built_in">print</span>(a)</span><br><span class="line">  <span class="keyword">case</span> .none:</span><br><span class="line">    <span class="built_in">print</span>(‘<span class="literal">nil</span>’)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h3><blockquote>
+<ol>
+<li>没有生成可以传入属性值的初始化器，所以类的属性必须要告诉编译器它是有值的</li>
+<li>如果类的属性都有值，编译器会生成无参的初始化器</li>
+<li>内存，前8个字节存储类的相关信息(指向类对象的地址)，再8个字节存储引用计数信息，后面就是属性的存储字节数。</li>
+</ol>
+</blockquote>
+<h3 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h3><ul>
+<li>类、结构体、枚举都可以使用泛型</li>
+<li>协议不能直接使用泛型，其采用 抽象类型成员（Abstract Type Member） 的方式，具体技术称为 关联类型（Associated Type）。</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// class</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GenericClass</span>&lt;<span class="type">T</span>&gt; &#123; <span class="operator">...</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// struct</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">GenericStruct</span>&lt;<span class="type">T</span>&gt; &#123; <span class="operator">...</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// enum</span></span><br><span class="line"><span class="keyword">enum</span> <span class="title class_">GenericEnum</span>&lt;<span class="type">T</span>&gt; &#123; <span class="operator">...</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// protocol</span></span><br><span class="line"><span class="keyword">protocol</span> <span class="title class_">GenericProtocol</span> &#123;</span><br><span class="line">    <span class="keyword">associatedtype</span> <span class="type">AbstractType</span></span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">next</span>() -&gt; <span class="type">AbstractType</span></span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<p>思考：</p>
+<ul>
+<li><p>协议为什么不能使用泛型？</p>
+<blockquote>
+<ul>
+<li>协议的设计，可以解决多继承，这也就说明协议可以被多个类遵守</li>
+<li>而swift是强类型语言，那么会导致类型的不确定性</li>
+</ul>
+</blockquote>
+</li>
+<li><p>什么是类型擦除？</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/zhanglei5415/article/details/124068390">类型擦除</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/diyigechengxu/p/18699084">类型擦除</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="关联类型"><a href="#关联类型" class="headerlink" title="关联类型"></a>关联类型</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protocol</span> <span class="title class_">Stackable</span> &#123;</span><br><span class="line">	<span class="keyword">associatedtype</span> <span class="type">Element</span>;</span><br><span class="line">	或者 	<span class="keyword">associatedtype</span> <span class="type">Element</span> ： <span class="type">Equatable</span>; 表示这个泛型需要遵守<span class="type">Equatable协议</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Statck</span>: <span class="title class_ inherited__">Stackable</span> &#123;</span><br><span class="line">	<span class="keyword">typealias</span> <span class="type">Element</span> <span class="operator">=</span> <span class="type">String</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="防止继承的方式"><a href="#防止继承的方式" class="headerlink" title="防止继承的方式"></a>防止继承的方式</h3><ul>
+<li>final</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">Animal</span> &#123;</span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">sound</span>() &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Animal makes a sound&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ❌ 编译错误：无法继承 final 类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Dog</span>: <span class="title class_ inherited__">Animal</span> &#123;&#125; </span><br></pre></td></tr></table></figure>
+<ul>
+<li>static</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Animal</span> &#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">func</span> <span class="title function_">sound</span>() &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Animal makes a sound&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ❌ 编译错误：无法重写静态方法</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Dog</span>: <span class="title class_ inherited__">Animal</span> &#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="keyword">static</span> <span class="keyword">func</span> <span class="title function_">sound</span>() &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Dog barks&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>private &#x2F; fileprivate</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Animal</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">func</span> <span class="title function_">sound</span>() &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Animal makes a sound&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 子类无法访问 private 方法</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Dog</span>: <span class="title class_ inherited__">Animal</span> &#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="keyword">func</span> <span class="title function_">sound</span>() &#123; <span class="comment">// ❌ 编译错误</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Dog barks&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>枚举</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="title class_">Animal</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> dog</span><br><span class="line">    <span class="keyword">case</span> cat</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ❌ 编译错误：无法继承枚举</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Dog</span>: <span class="title class_ inherited__">Animal</span> &#123;&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>协议与扩展: 防止具体实现被继承，通过协议提供功能</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protocol</span> <span class="title class_">Animal</span> &#123;</span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">sound</span>()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">extension</span> <span class="title class_">Animal</span> &#123;</span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">sound</span>() &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Animal makes a sound&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用协议，而不是继承</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Dog</span>: <span class="title class_ inherited__">Animal</span> &#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h3><ul>
+<li><p>存储属性</p>
+<ul>
+<li>结构体、类有</li>
+<li>枚举没有</li>
+<li>创建类或者结构体的时候，所有的存储属性必须设置一个合适的初始值</li>
+<li>存储属性不允许被class修饰</li>
+</ul>
+</li>
+<li><p>计算属性</p>
+<ul>
+<li>本质其实是一个方法，不占用实例对象的内存。</li>
+<li>结构体、类、枚举都可以有</li>
+</ul>
+</li>
+<li><p>延迟属性</p>
+<ul>
+<li>表示该属性第一次被使用的时候才初始化</li>
+<li>如果多线程同时第一次访问lazy属性，无法保证属性被初始化1次 （非线程安全）</li>
+<li>不能使用 let</li>
+<li>结构体包含延迟属性的时候，创建该结构体如果使用let修饰，不能访问延迟属性，只能使用var修饰才可以访问延迟属性<blockquote>
+<ol>
+<li>结构体是值类型，使用let修饰，说明结构体的内存不能被修改，而延迟属性的特点是访问的时候才被赋值，赋值操作就是修改内存，所以使用let和存储属性相违背，会报错</li>
+<li>结构体使用lazy可以用来优化内存</li>
+</ol>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>属性观察器</p>
+<ul>
+<li>非lazy的var存储属性，才可以设置属性观察器</li>
+<li>初始化方法中设置属性值，不会触发willSet、didSet</li>
+<li>可以在子类中为父类增加属性观察器（除了只读，let属性）</li>
+<li>子类中初始化赋值会触发父类的属性观察器</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Circle</span> &#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> radius: <span class="type">Double</span> &#123;</span><br><span class="line">      <span class="keyword">willSet</span> &#123;</span><br><span class="line">          <span class="built_in">print</span>(newValue)</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">didSet</span> &#123;</span><br><span class="line">          <span class="built_in">print</span>(oldValue, radius)</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure></li>
+<li><p>类型属性</p>
+<ul>
+<li>整个程序运行过程中，就只有一份内存(类似全局变量)，不占用所在类的内存</li>
+<li>不需要在初始化的时候给定值</li>
+<li>在第一次使用的时候被初始化</li>
+<li>线程安全的</li>
+<li>可以使用 let 因为：类型属性不存在初始化的问题。</li>
+<li>static 修饰</li>
+<li>如果是类，使用static 或者 class来定义类型属性</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span><span class="operator">、</span><span class="keyword">static</span>修饰的属性，第一次使用的时候才被初始化(<span class="keyword">lazy</span> 特性)，内部代码会调用swift_once，以及dispatch_once，所以该属性也是线程安全的<span class="operator">。</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Car</span> &#123;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">var</span> num <span class="operator">=</span> <span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="number">2</span><span class="operator">、</span>调用完初始化后返回的就是num的地址<span class="operator">。</span>每一次访问<span class="type">Car</span>.num 都是获取同一份地址，所以它相当于一个全局变量，但是是有命名空间的，是有作用域的<span class="operator">。</span>访问方式只能是 <span class="type">Car</span>.num <span class="operator">=</span> <span class="number">10</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="static-和-class"><a href="#static-和-class" class="headerlink" title="static 和 class"></a>static 和 class</h3><ul>
+<li>static 【静态】<ul>
+<li>修饰 存储属性 计算属性 类型方法</li>
+<li>static修饰的类方法不能继承和重写；</li>
+<li>使用范围：class, struct, enum</li>
+</ul>
+</li>
+<li>class  【类】<ul>
+<li>修饰  计算属性 类型方法</li>
+<li>存储属性 不能用 class 修饰，因为它属于实例级别，而 class 主要用于类型级别的属性</li>
+<li>class修饰的类方法可以继承</li>
+<li>使用范围：class<blockquote>
+<p>协议中使用class定义的方法，结构体不能使用该协议，因为class定义的方法，只能类来使用，结构体不行<br>协议中使用static定义方法，实现的时候不能使用class<br>协议中使用 class 定义方法，实现的时候能使用 static<br>如果想要协议被子类继承，选择class 定义方法，因为static不能继承</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Any-AnyObject-some"><a href="#Any-AnyObject-some" class="headerlink" title="Any AnyObject some"></a>Any AnyObject some</h3><ul>
+<li>Any 代表 任意类型 （结构体、类、枚举、函数类型）</li>
+<li>AnyObject 代表 任意类类型</li>
+<li>some 不透明类型,可以用来解决协议中有关联类型的情况，用some修饰后，结果只能是确定的一种类型</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protocol</span> <span class="title class_">Runable</span> &#123;</span><br><span class="line">  <span class="keyword">associatedtype</span> <span class="type">Speed</span></span><br><span class="line">  <span class="keyword">var</span> speed: <span class="type">Speed</span> &#123; <span class="keyword">get</span> &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span>: <span class="title class_ inherited__">Runable</span> &#123;</span><br><span class="line">  <span class="keyword">var</span> speed: <span class="type">Double</span> &#123; <span class="number">10.0</span> &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Car</span>: <span class="title class_ inherited__">Runable</span> &#123;</span><br><span class="line">  <span class="keyword">var</span> speed: <span class="type">Int</span> &#123; <span class="number">1</span> &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">func</span> <span class="title function_">get</span>(<span class="keyword">_</span> <span class="params">type</span>: <span class="type">Int</span>) -&gt; <span class="keyword">some</span> <span class="type">Runable</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="type">Car</span>()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="is-as-as？as！"><a href="#is-as-as？as！" class="headerlink" title="is as as？as！"></a>is as as？as！</h3><ul>
+<li>is     判断是否为某种类型</li>
+<li>as    强制类型转换</li>
+<li>as?  类型转换 返回可选类型</li>
+<li>as!   类型转换 并强制解包</li>
+</ul>
+<h3 id="元类型"><a href="#元类型" class="headerlink" title="元类型"></a>元类型</h3><ul>
+<li>X.self          Person.self: 元类型的地址</li>
+<li>X.Type 是一个类型       X.self 的类型是 X.Type </li>
+<li>AnyClass  的类型是 Anyobject.Type</li>
+<li>类.self 理解为获取的是类对象 ，类对象的类型是 类.Type. 任意类对象的类型 是Anyobject.Type 也就是AnyClass</li>
+<li>type(of: 实例) 获取对象的类型 它的值是类对象 类型是 X.Type。【它的实质不是调用方法，而是直接将实例对象的前8个字节取出来返回】</li>
+<li>应用<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> p <span class="operator">=</span> <span class="type">Person</span>()</span><br><span class="line"><span class="keyword">var</span> type <span class="operator">=</span> <span class="type">Person</span>.<span class="keyword">self</span>  </span><br><span class="line"><span class="keyword">var</span> p <span class="operator">=</span> type.<span class="keyword">init</span>()<span class="operator">。</span></span><br><span class="line">要求类必须有<span class="keyword">init</span>方法，所以反推，这个<span class="keyword">init</span>必须是<span class="keyword">required</span>的，它能保证类以及子类都有<span class="keyword">init</span>初始化器</span><br></pre></td></tr></table></figure></li>
+<li>self 表示当前对象。</li>
+<li>Self 表示当前类型。一般作为返回值类型，可以类比oc中的instancetype，表示当前类型。Self可以直接使用 Self.count 访问count类属性</li>
+<li>class_getInstanceSize()  获取该类型的内存大小</li>
+<li>class_getSuperClass() 获取父类</li>
+</ul>
+<h3 id="String-Array"><a href="#String-Array" class="headerlink" title="String Array"></a>String Array</h3><ul>
+<li><p>String 底层</p>
+<ul>
+<li>占用内存  16个字节<ul>
+<li>如果不超过15个字符，直接用16个字节存储字符串的ASCII码值。一个字节标识长度</li>
+<li>超过15个字节，前8个字节存储字符串长度， 后8个字节存储的是字符串真正内容的地址，存储在常量区</li>
+<li>字符串拼接后，如果未超过15个字符，依然存储在地址中。如果超过，需要新分配内存来存储，新的内存在堆区。在堆区malloc开辟新空间存储</li>
+</ul>
+</li>
+<li>字符串的初始化是动态绑定的</li>
+</ul>
+</li>
+<li><p>Array 底层</p>
+<ul>
+<li>占用内存  8个字节<ul>
+<li>存储的是堆空间的地址，这个地址指向的内存就是用来存储arr的信息。前32个字节存储arr信息，比如引用计数，数组长度，数组容量等，后面存储arr里的值</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>动态数组是怎么实现的？一般是新开辟新的内存，然后将老的值copy到新内存</p>
+</li>
+<li><p>字符串一般放在常量区</p>
+</li>
+<li><p>可选类型的本质 是枚举</p>
+</li>
+</ul>
+<h3 id="访问控制"><a href="#访问控制" class="headerlink" title="访问控制"></a>访问控制</h3><ul>
+<li>fatalError  assert 断言闪退，退出app</li>
+<li>访问控制<ul>
+<li>open ：模块中和模块外 可以访问和继承，只能类使用，结构体不行</li>
+<li>public： 模块中和模块外可以访问，模块外不能继承</li>
+<li>internal：模块中可以访问，模块外不能访问</li>
+<li>fileprivate： 只能在当前文件中访问。</li>
+<li>private:： 只能在定义的{ }中，和当前文件中 该类或结构体的扩展中访问</li>
+<li>类是fileprivate，里面的属性、方法默认都是fileprivate，如果要自定义只能定义比fileprivate低的访问权限</li>
+</ul>
+</li>
+<li>访问权限<ul>
+<li>禁止使用init  private init() {}</li>
+</ul>
+</li>
+<li>swift的局部作用域</li>
+</ul>
+<h3 id="指针的用法"><a href="#指针的用法" class="headerlink" title="指针的用法"></a>指针的用法</h3>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/01/17/swift-%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" rel="prev" title="swift-底层原理">
+      <i class="fa fa-chevron-left"></i> swift-底层原理
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/01/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" rel="next" title="计算机基础">
+      计算机基础 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%84%E4%BD%93"><span class="nav-number">1.</span> <span class="nav-text">结构体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%8F%E8%AE%AE"><span class="nav-number">2.</span> <span class="nav-text">协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%9A%E4%B8%BE"><span class="nav-number">3.</span> <span class="nav-text">枚举</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1"><span class="nav-number">4.</span> <span class="nav-text">对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B"><span class="nav-number">5.</span> <span class="nav-text">泛型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E8%81%94%E7%B1%BB%E5%9E%8B"><span class="nav-number">6.</span> <span class="nav-text">关联类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%B2%E6%AD%A2%E7%BB%A7%E6%89%BF%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="nav-number">7.</span> <span class="nav-text">防止继承的方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%9E%E6%80%A7"><span class="nav-number">8.</span> <span class="nav-text">属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#static-%E5%92%8C-class"><span class="nav-number">9.</span> <span class="nav-text">static 和 class</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Any-AnyObject-some"><span class="nav-number">10.</span> <span class="nav-text">Any AnyObject some</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#is-as-as%EF%BC%9Fas%EF%BC%81"><span class="nav-number">11.</span> <span class="nav-text">is as as？as！</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%83%E7%B1%BB%E5%9E%8B"><span class="nav-number">12.</span> <span class="nav-text">元类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#String-Array"><span class="nav-number">13.</span> <span class="nav-text">String Array</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6"><span class="nav-number">14.</span> <span class="nav-text">访问控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E9%92%88%E7%9A%84%E7%94%A8%E6%B3%95"><span class="nav-number">15.</span> <span class="nav-text">指针的用法</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">刘宏亮</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">刘宏亮</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"aliuhongliang.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="本文主要记录 路由器开发相关。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="路由器">
+<meta property="og:url" content="https://aliuhongliang.github.io/2025/11/29/%E8%B7%AF%E7%94%B1%E5%99%A8/index.html">
+<meta property="og:site_name" content="LiuHongLiang">
+<meta property="og:description" content="本文主要记录 路由器开发相关。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://aliuhongliang.github.io/images/has_client_ip.png">
+<meta property="og:image" content="https://aliuhongliang.github.io/images/no_client_ip.png">
+<meta property="article:published_time" content="2025-11-29T18:16:43.000Z">
+<meta property="article:modified_time" content="2025-12-24T02:00:26.354Z">
+<meta property="article:author" content="刘宏亮">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://aliuhongliang.github.io/images/has_client_ip.png">
+
+<link rel="canonical" href="https://aliuhongliang.github.io/2025/11/29/%E8%B7%AF%E7%94%B1%E5%99%A8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>路由器 | LiuHongLiang</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">LiuHongLiang</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">7</span></a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://aliuhongliang.github.io/2025/11/29/%E8%B7%AF%E7%94%B1%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="刘宏亮">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LiuHongLiang">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          路由器
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-11-29 18:16:43" itemprop="dateCreated datePublished" datetime="2025-11-29T18:16:43+00:00">2025-11-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-12-24 02:00:26" itemprop="dateModified" datetime="2025-12-24T02:00:26+00:00">2025-12-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%85%B6%E4%BB%96/" itemprop="url" rel="index"><span itemprop="name">其他</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">本文主要记录 路由器开发相关。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="路由器添加HttpsDns：-使用360DNS"><a href="#路由器添加HttpsDns：-使用360DNS" class="headerlink" title="路由器添加HttpsDns： 使用360DNS"></a>路由器添加HttpsDns： 使用360DNS</h2><h4 id="lua脚本部分："><a href="#lua脚本部分：" class="headerlink" title="lua脚本部分："></a>lua脚本部分：</h4><ul>
+<li>修改rpc后重启 oui 让rpc生效：service oui-httpd restart</li>
+<li>lua写rpc的例子 dohdns.lua 如下：</li>
+</ul>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> uci = <span class="built_in">require</span> <span class="string">&#x27;uci&#x27;</span></span><br><span class="line"><span class="keyword">local</span> fp = <span class="built_in">require</span> <span class="string">&quot;eco.file&quot;</span></span><br><span class="line"><span class="keyword">local</span> cjson = <span class="built_in">require</span> <span class="string">&quot;cjson&quot;</span></span><br><span class="line"><span class="keyword">local</span> M = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> PUBLIC_DNS = <span class="string">&quot;https://doh.360.cn/dns-query&quot;</span></span><br><span class="line"><span class="keyword">local</span> BOOTSTRAP_DNS = <span class="string">&quot;101.226.4.6,123.125.81.6,218.30.118.6,140.207.198.6,223.5.5.5,223.6.6.6,2400:3200::1,2400:3200:baba::1&quot;</span></span><br><span class="line"><span class="keyword">local</span> DOH_LISTEN_ADDR = <span class="string">&#x27;127.0.0.1&#x27;</span></span><br><span class="line"><span class="keyword">local</span> DOH_PRIMARY_PORT = <span class="string">&#x27;5053&#x27;</span></span><br><span class="line"><span class="keyword">local</span> DOH_BACKUP_PORT = <span class="string">&#x27;5054&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> TRADITIONAL_DNS = &#123;</span><br><span class="line">    <span class="string">&quot;223.5.5.5&quot;</span>,</span><br><span class="line">    <span class="string">&quot;8.8.8.8&quot;</span>,</span><br><span class="line">    <span class="string">&quot;114.114.114.114&quot;</span>,</span><br><span class="line">    <span class="string">&quot;1.1.1.1&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> <span class="function"><span class="keyword">function</span> <span class="title">ensure_config_file</span><span class="params">()</span></span></span><br><span class="line">    <span class="comment">-- 检查文件是否存在</span></span><br><span class="line">    <span class="keyword">local</span> file = <span class="built_in">io</span>.<span class="built_in">open</span>(<span class="string">&quot;/etc/config/doh_header&quot;</span>, <span class="string">&quot;r&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> file <span class="keyword">then</span></span><br><span class="line">        <span class="comment">-- 文件已存在</span></span><br><span class="line">        file:<span class="built_in">close</span>()</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">-- 文件不存在，使用 touch 创建</span></span><br><span class="line">    <span class="keyword">local</span> ret = <span class="built_in">os</span>.<span class="built_in">execute</span>(<span class="string">&quot;touch /etc/config/doh_header&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> ret == <span class="number">0</span> <span class="keyword">then</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- &#123;</span></span><br><span class="line"><span class="comment">--   &quot;enbale&quot;: &quot;1&quot;,</span></span><br><span class="line"><span class="comment">--   &quot;doh_server&quot;: &quot;&quot;,</span></span><br><span class="line"><span class="comment">--   &quot;sendHeader&quot;: &quot;1&quot;,</span></span><br><span class="line"><span class="comment">--   &quot;period&quot;: &quot;&quot;</span></span><br><span class="line"><span class="comment">-- &#125;</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">M.get_config</span><span class="params">()</span></span></span><br><span class="line">    <span class="keyword">local</span> res = &#123;</span><br><span class="line">        enable = <span class="string">&quot;0&quot;</span>,</span><br><span class="line">        url = <span class="string">&quot;&quot;</span>,</span><br><span class="line">        sendHeader = <span class="string">&quot;0&quot;</span>,</span><br><span class="line">        period = <span class="string">&quot;0&quot;</span>,</span><br><span class="line">        des = <span class="string">&quot;&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">local</span> c = uci.cursor()</span><br><span class="line">    </span><br><span class="line">    <span class="comment">-- 读取第一个 https-dns-proxy 实例的 URL</span></span><br><span class="line">    c:<span class="built_in">foreach</span>(<span class="string">&quot;https-dns-proxy&quot;</span>, <span class="string">&quot;https-dns-proxy&quot;</span>, <span class="function"><span class="keyword">function</span><span class="params">(s)</span></span></span><br><span class="line">        <span class="keyword">if</span> s.resolver_url <span class="keyword">then</span></span><br><span class="line">            res.url = s.resolver_url</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>  <span class="comment">-- 只读取第一个</span></span><br><span class="line">    <span class="keyword">end</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">-- 检查服务是否启用</span></span><br><span class="line">    <span class="keyword">local</span> handle = <span class="built_in">io</span>.<span class="built_in">popen</span>(<span class="string">&quot;/etc/init.d/https-dns-proxy status 2&gt;/dev/null&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> handle <span class="keyword">then</span></span><br><span class="line">        <span class="keyword">local</span> <span class="built_in">status</span> = handle:<span class="built_in">read</span>(<span class="string">&quot;*a&quot;</span>)</span><br><span class="line">        handle:<span class="built_in">close</span>()</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">status</span>:<span class="built_in">match</span>(<span class="string">&quot;running&quot;</span>) <span class="keyword">then</span></span><br><span class="line">            res.enable = <span class="string">&quot;1&quot;</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">-- 读取 doh_header 配置</span></span><br><span class="line">    <span class="keyword">local</span> sendHeader = c:get(<span class="string">&quot;doh_header&quot;</span>, <span class="string">&quot;config&quot;</span>, <span class="string">&quot;sendHeader&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> sendHeader <span class="keyword">then</span></span><br><span class="line">        res.sendHeader = sendHeader</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">local</span> period = c:get(<span class="string">&quot;doh_header&quot;</span>, <span class="string">&quot;config&quot;</span>, <span class="string">&quot;period&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> period <span class="keyword">then</span></span><br><span class="line">        res.period = period</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">M.set_period</span><span class="params">(params)</span></span></span><br><span class="line">    <span class="keyword">local</span> payload = params.period</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> payload <span class="keyword">then</span></span><br><span class="line">        <span class="keyword">return</span> &#123; code = <span class="number">-1</span>, msg = <span class="string">&quot;参数错误&quot;</span> &#125;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">local</span> c = uci.cursor()</span><br><span class="line">    <span class="keyword">local</span> period = <span class="built_in">tonumber</span>(payload) <span class="keyword">or</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">-------------------------------------------------------</span></span><br><span class="line">    <span class="comment">-- 1. 写入 doh_header 配置</span></span><br><span class="line">    <span class="comment">-------------------------------------------------------</span></span><br><span class="line">    <span class="comment">-- 检查 doh_header 配置文件是否存在</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> ensure_config_file() <span class="keyword">then</span></span><br><span class="line">        <span class="keyword">return</span> &#123; code = <span class="number">-1</span>, msg = <span class="string">&quot;无法创建 doh_header 配置文件&quot;</span> &#125;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">local</span> doh_header_exists = c:get(<span class="string">&quot;doh_header&quot;</span>, <span class="string">&quot;config&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> doh_header_exists <span class="keyword">then</span></span><br><span class="line">        <span class="comment">-- 创建 doh_header 配置段</span></span><br><span class="line">        c:set(<span class="string">&quot;doh_header&quot;</span>, <span class="string">&quot;config&quot;</span>, <span class="string">&quot;doh_header&quot;</span>)</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    </span><br><span class="line">    c:set(<span class="string">&quot;doh_header&quot;</span>, <span class="string">&quot;config&quot;</span>, <span class="string">&quot;period&quot;</span>, <span class="built_in">tostring</span>(period))</span><br><span class="line">    </span><br><span class="line">    <span class="comment">-- 提交 doh_header 配置</span></span><br><span class="line">    c:commit(<span class="string">&quot;doh_header&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> &#123; code = <span class="number">0</span>, msg = <span class="string">&quot;success&quot;</span> &#125;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">M.set_ipenable</span><span class="params">(params)</span></span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">local</span> payload = params.enable</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> payload <span class="keyword">then</span></span><br><span class="line">        <span class="keyword">return</span> &#123; code = <span class="number">-1</span>, msg = <span class="string">&quot;参数错误&quot;</span> &#125;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">local</span> c = uci.cursor()</span><br><span class="line">    <span class="keyword">local</span> sendHeader = payload <span class="keyword">or</span> <span class="string">&quot;0&quot;</span></span><br><span class="line">    <span class="comment">-------------------------------------------------------</span></span><br><span class="line">    <span class="comment">-- 1. 写入 doh_header 配置</span></span><br><span class="line">    <span class="comment">-------------------------------------------------------</span></span><br><span class="line">    <span class="comment">-- 检查 doh_header 配置文件是否存在</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> ensure_config_file() <span class="keyword">then</span></span><br><span class="line">        <span class="keyword">return</span> &#123; code = <span class="number">-1</span>, msg = <span class="string">&quot;无法创建 doh_header 配置文件&quot;</span> &#125;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">local</span> doh_header_exists = c:get(<span class="string">&quot;doh_header&quot;</span>, <span class="string">&quot;config&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> doh_header_exists <span class="keyword">then</span></span><br><span class="line">        <span class="comment">-- 创建 doh_header 配置段</span></span><br><span class="line">        c:set(<span class="string">&quot;doh_header&quot;</span>, <span class="string">&quot;config&quot;</span>, <span class="string">&quot;doh_header&quot;</span>)</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">-- 写入 sendHeader 和 period</span></span><br><span class="line">    c:set(<span class="string">&quot;doh_header&quot;</span>, <span class="string">&quot;config&quot;</span>, <span class="string">&quot;sendHeader&quot;</span>, sendHeader)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">-- 提交 doh_header 配置</span></span><br><span class="line">    c:commit(<span class="string">&quot;doh_header&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> &#123; code = <span class="number">0</span>, msg = <span class="string">&quot;success&quot;</span> &#125;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">M.set_config</span><span class="params">(params)</span></span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">local</span> payload = params.payload</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> payload <span class="keyword">then</span></span><br><span class="line">        <span class="keyword">return</span> &#123; code = <span class="number">-1</span>, msg = <span class="string">&quot;参数错误&quot;</span> &#125;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">local</span> c = uci.cursor()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">local</span> enable = payload.enable <span class="keyword">or</span> <span class="string">&quot;0&quot;</span></span><br><span class="line">    <span class="keyword">local</span> url = payload.url <span class="keyword">or</span> <span class="string">&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> enable == <span class="string">&quot;1&quot;</span> <span class="keyword">then</span></span><br><span class="line">        <span class="comment">-- 启用 DoH</span></span><br><span class="line">        <span class="keyword">if</span> url == <span class="string">&quot;&quot;</span> <span class="keyword">then</span></span><br><span class="line">            <span class="keyword">return</span> &#123; code = <span class="number">-2</span>, msg = <span class="string">&quot;DoH 服务器地址不能为空&quot;</span> &#125;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">-------------------------------------------------------</span></span><br><span class="line">        <span class="comment">-- 0. 配置 main 段（保留全局配置）</span></span><br><span class="line">        <span class="comment">-------------------------------------------------------</span></span><br><span class="line">        <span class="keyword">local</span> config_exists = c:get(<span class="string">&quot;https-dns-proxy&quot;</span>, <span class="string">&quot;config&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> config_exists <span class="keyword">then</span></span><br><span class="line">            c:set(<span class="string">&quot;https-dns-proxy&quot;</span>, <span class="string">&quot;config&quot;</span>, <span class="string">&quot;main&quot;</span>)</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        </span><br><span class="line">        c:set(<span class="string">&quot;https-dns-proxy&quot;</span>, <span class="string">&quot;config&quot;</span>, <span class="string">&quot;update_dnsmasq_config&quot;</span>, <span class="string">&quot;*&quot;</span>)</span><br><span class="line">        c:set(<span class="string">&quot;https-dns-proxy&quot;</span>, <span class="string">&quot;config&quot;</span>, <span class="string">&quot;force_dns&quot;</span>, <span class="string">&quot;1&quot;</span>)</span><br><span class="line">        c:delete(<span class="string">&quot;https-dns-proxy&quot;</span>, <span class="string">&quot;config&quot;</span>, <span class="string">&quot;force_dns_port&quot;</span>)</span><br><span class="line">        c:set(<span class="string">&quot;https-dns-proxy&quot;</span>, <span class="string">&quot;config&quot;</span>, <span class="string">&quot;force_dns_port&quot;</span>, &#123;<span class="string">&quot;53&quot;</span>, <span class="string">&quot;853&quot;</span>&#125;)</span><br><span class="line"></span><br><span class="line">        <span class="comment">-------------------------------------------------------</span></span><br><span class="line">        <span class="comment">-- 1. 删除已有的所有 https-dns-proxy 配置</span></span><br><span class="line">        <span class="comment">-------------------------------------------------------</span></span><br><span class="line">        c:<span class="built_in">foreach</span>(<span class="string">&quot;https-dns-proxy&quot;</span>, <span class="string">&quot;https-dns-proxy&quot;</span>, <span class="function"><span class="keyword">function</span><span class="params">(s)</span></span></span><br><span class="line">            c:delete(<span class="string">&quot;https-dns-proxy&quot;</span>, s[<span class="string">&quot;.name&quot;</span>])</span><br><span class="line">        <span class="keyword">end</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment">-------------------------------------------------------</span></span><br><span class="line">        <span class="comment">-- 2. 添加第一个 DOH 配置：用户自定义 URL</span></span><br><span class="line">        <span class="comment">-------------------------------------------------------</span></span><br><span class="line">        <span class="keyword">local</span> s1 = c:add(<span class="string">&quot;https-dns-proxy&quot;</span>, <span class="string">&quot;https-dns-proxy&quot;</span>)</span><br><span class="line">        c:set(<span class="string">&quot;https-dns-proxy&quot;</span>, s1, <span class="string">&quot;user&quot;</span>, <span class="string">&quot;nobody&quot;</span>)</span><br><span class="line">        c:set(<span class="string">&quot;https-dns-proxy&quot;</span>, s1, <span class="string">&quot;group&quot;</span>, <span class="string">&quot;nogroup&quot;</span>)</span><br><span class="line">        c:set(<span class="string">&quot;https-dns-proxy&quot;</span>, s1, <span class="string">&quot;resolver_url&quot;</span>, url)</span><br><span class="line">        c:set(<span class="string">&quot;https-dns-proxy&quot;</span>, s1, <span class="string">&quot;listen_addr&quot;</span>, DOH_LISTEN_ADDR)</span><br><span class="line">        c:set(<span class="string">&quot;https-dns-proxy&quot;</span>, s1, <span class="string">&quot;listen_port&quot;</span>, DOH_PRIMARY_PORT)</span><br><span class="line">        c:set(<span class="string">&quot;https-dns-proxy&quot;</span>, s1, <span class="string">&quot;bootstrap_dns&quot;</span>, BOOTSTRAP_DNS)</span><br><span class="line"></span><br><span class="line">        <span class="comment">-------------------------------------------------------</span></span><br><span class="line">        <span class="comment">-- 3. 第二个 DOH 配置：PUBLIC_DNS</span></span><br><span class="line">        <span class="comment">-------------------------------------------------------</span></span><br><span class="line">        <span class="keyword">local</span> s2 = c:add(<span class="string">&quot;https-dns-proxy&quot;</span>, <span class="string">&quot;https-dns-proxy&quot;</span>)</span><br><span class="line">        c:set(<span class="string">&quot;https-dns-proxy&quot;</span>, s2, <span class="string">&quot;user&quot;</span>, <span class="string">&quot;nobody&quot;</span>)</span><br><span class="line">        c:set(<span class="string">&quot;https-dns-proxy&quot;</span>, s2, <span class="string">&quot;group&quot;</span>, <span class="string">&quot;nogroup&quot;</span>)</span><br><span class="line">        c:set(<span class="string">&quot;https-dns-proxy&quot;</span>, s2, <span class="string">&quot;resolver_url&quot;</span>, PUBLIC_DNS)</span><br><span class="line">        c:set(<span class="string">&quot;https-dns-proxy&quot;</span>, s2, <span class="string">&quot;listen_addr&quot;</span>, DOH_LISTEN_ADDR)</span><br><span class="line">        c:set(<span class="string">&quot;https-dns-proxy&quot;</span>, s2, <span class="string">&quot;listen_port&quot;</span>, DOH_BACKUP_PORT)</span><br><span class="line">        c:set(<span class="string">&quot;https-dns-proxy&quot;</span>, s2, <span class="string">&quot;bootstrap_dns&quot;</span>, BOOTSTRAP_DNS)</span><br><span class="line">    </span><br><span class="line">        <span class="comment">-- 4. 提交配置</span></span><br><span class="line">        c:commit(<span class="string">&quot;https-dns-proxy&quot;</span>)</span><br><span class="line">    </span><br><span class="line">        <span class="comment">-- 5. 启用并重启服务</span></span><br><span class="line">        <span class="built_in">os</span>.<span class="built_in">execute</span>(<span class="string">&quot;/etc/init.d/https-dns-proxy enable &gt;/dev/null 2&gt;&amp;1&quot;</span>)</span><br><span class="line">        <span class="built_in">os</span>.<span class="built_in">execute</span>(<span class="string">&quot;/etc/init.d/https-dns-proxy restart &gt;/dev/null 2&gt;&amp;1&quot;</span>)</span><br><span class="line">        <span class="built_in">os</span>.<span class="built_in">execute</span>(<span class="string">&quot;sleep 2&quot;</span>)</span><br><span class="line">        <span class="built_in">os</span>.<span class="built_in">execute</span>(<span class="string">&quot;/etc/init.d/dnsmasq restart &gt;/dev/null 2&gt;&amp;1&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">-- 禁用 DoH</span></span><br><span class="line">        <span class="comment">-- 1. 停止并禁用服务</span></span><br><span class="line">        <span class="built_in">os</span>.<span class="built_in">execute</span>(<span class="string">&quot;/etc/init.d/https-dns-proxy stop &gt;/dev/null 2&gt;&amp;1&quot;</span>)</span><br><span class="line">        <span class="built_in">os</span>.<span class="built_in">execute</span>(<span class="string">&quot;/etc/init.d/https-dns-proxy disable &gt;/dev/null 2&gt;&amp;1&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">return</span> &#123; code = <span class="number">0</span>, msg = <span class="string">&quot;success&quot;</span> &#125;</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 健康检查函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">M.health_check</span><span class="params">()</span></span></span><br><span class="line">    <span class="keyword">local</span> dns_server = <span class="string">&quot;101.198.198.131&quot;</span></span><br><span class="line">    <span class="keyword">local</span> domain = <span class="string">&quot;hc.n.360.net&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">-- 使用 nslookup 查询 TXT 记录</span></span><br><span class="line">    <span class="keyword">local</span> cmd = <span class="built_in">string</span>.<span class="built_in">format</span>(<span class="string">&quot;nslookup -querytype=TXT %s %s 2&gt;/dev/null&quot;</span>, domain, dns_server)</span><br><span class="line">    <span class="keyword">local</span> handle = <span class="built_in">io</span>.<span class="built_in">popen</span>(cmd)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> handle <span class="keyword">then</span></span><br><span class="line">        <span class="keyword">return</span> &#123; code = <span class="number">-1</span>, msg = <span class="string">&quot;cmd error&quot;</span> &#125;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">local</span> <span class="built_in">output</span> = handle:<span class="built_in">read</span>(<span class="string">&quot;*a&quot;</span>)</span><br><span class="line">    handle:<span class="built_in">close</span>()</span><br><span class="line">    </span><br><span class="line">    <span class="comment">-- 解析输出，提取 TXT 记录</span></span><br><span class="line">    <span class="comment">-- nslookup 输出格式类似：</span></span><br><span class="line">    <span class="comment">-- hc.n.360.net        text = &quot;&#123;\&quot;protocol\&quot;:\&quot;UDP:53\&quot;,\&quot;client_status\&quot;:\&quot;360DNS Unregistered\&quot;...&#125;&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">-- local json_str = output:match(&quot;text%s*=%s*\&quot;(.*)\&quot;&quot;)</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">-- 找到第一个 text = &quot;</span></span><br><span class="line">    <span class="keyword">local</span> start_pos = <span class="built_in">output</span>:<span class="built_in">find</span>(<span class="string">&#x27;text%s*=%s*&quot;&#x27;</span>, <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> start_pos <span class="keyword">then</span></span><br><span class="line">        <span class="keyword">return</span> &#123; </span><br><span class="line">            code = <span class="number">1</span>, </span><br><span class="line">            msg = <span class="string">&quot;no data&quot;</span>,</span><br><span class="line">            raw_output = <span class="built_in">output</span>  <span class="comment">-- 调试用</span></span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">-- 从第一个 text= 开始查找 第一个 &#125;&quot;</span></span><br><span class="line">    <span class="keyword">local</span> end_pos = <span class="built_in">output</span>:<span class="built_in">find</span>(<span class="string">&#x27;&#125;&quot;&#x27;</span>, start_pos)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> end_pos <span class="keyword">then</span></span><br><span class="line">        <span class="keyword">return</span> &#123; </span><br><span class="line">            code = <span class="number">1</span>, </span><br><span class="line">            msg = <span class="string">&quot;no data&quot;</span>,</span><br><span class="line">            raw_output = <span class="built_in">output</span>  <span class="comment">-- 调试用</span></span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">-- 截取内容，并去掉外层的引号</span></span><br><span class="line">    <span class="keyword">local</span> raw = <span class="built_in">output</span>:<span class="built_in">sub</span>(start_pos, end_pos + <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">-- 提取内部真正 JSON</span></span><br><span class="line">    <span class="keyword">local</span> json_str = raw:<span class="built_in">match</span>(<span class="string">&#x27;text%s*=%s*&quot;(.*&#125;&quot;?)&quot;&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> json_str <span class="keyword">then</span></span><br><span class="line">        <span class="keyword">return</span> &#123; </span><br><span class="line">            code = <span class="number">1</span>, </span><br><span class="line">            msg = <span class="string">&quot;no data&quot;</span>,</span><br><span class="line">            raw_output = <span class="built_in">output</span>  <span class="comment">-- 调试用</span></span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    json_str = json_str:<span class="built_in">gsub</span>(<span class="string">&#x27;\\&quot;&#x27;</span>, <span class="string">&#x27;&quot;&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    <span class="comment">-- 解析 JSON</span></span><br><span class="line">    <span class="keyword">local</span> success, result = <span class="built_in">pcall</span>(cjson.decode, json_str)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> success <span class="keyword">then</span></span><br><span class="line">        <span class="keyword">return</span> &#123; </span><br><span class="line">            code = <span class="number">-2</span>, </span><br><span class="line">            msg = <span class="string">&quot;JSON decode error&quot;</span>,</span><br><span class="line">            raw_data = json_str</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">-- 返回解析后的数据</span></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        code = <span class="number">0</span>,</span><br><span class="line">        msg = <span class="string">&quot;success&quot;</span>,</span><br><span class="line">        data = &#123;</span><br><span class="line">            protocol = result.protocol <span class="keyword">or</span> <span class="string">&quot;&quot;</span>,</span><br><span class="line">            client_status = result.client_status <span class="keyword">or</span> <span class="string">&quot;&quot;</span>,</span><br><span class="line">            eid = result.eid <span class="keyword">or</span> <span class="string">&quot;&quot;</span>,</span><br><span class="line">            service = result.service <span class="keyword">or</span> <span class="string">&quot;&quot;</span>,</span><br><span class="line">            uid = result.uid <span class="keyword">or</span> <span class="string">&quot;&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> M</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>lua rpc 脚本的文件路径：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp /Users/wintop/MT7981-MT3000/package/jack/oui_rpc/files/rpc/dohdns.lua root@192.168.10.150:/usr/share/oui/rpc/</span><br></pre></td></tr></table></figure>
+
+<p>将 项目 MT7981-MT3000 下的 dohdns.lua 复制到 路由器下（192.168.10.150 是路由器的地址，如果是网线连接，那可以用192.168.1.1）的 &#x2F;usr&#x2F;share&#x2F;oui&#x2F;rpc&#x2F; 目录下</p>
+<h4 id="路由器配置"><a href="#路由器配置" class="headerlink" title="路由器配置"></a>路由器配置</h4><ul>
+<li>方式1: 让路由器可以使用ssh，进入luci页面，进入网络 - 防火墙 - 通讯规则 - 开启allow-ssh 即可</li>
+<li>方式2: 让路由器可以使用ssh，网线接入电脑，直接进入 ssh <a href="mailto:&#114;&#111;&#x6f;&#x74;&#64;&#x31;&#x39;&#50;&#x2e;&#x31;&#x36;&#x38;&#x2e;&#x31;&#x2e;&#x31;">root@192.168.1.1</a></li>
+</ul>
+<h4 id="dnsmasq配置"><a href="#dnsmasq配置" class="headerlink" title="dnsmasq配置"></a>dnsmasq配置</h4><p>openwrt 上的 dnsmasq 配置中 不支持 –add-subnet,需要改造启动文件<br>进入 &#x2F;etc&#x2F;init.d&#x2F;dnsmasq 找到添加配置的地方， 添加新的配置： append_parm “$cfg” “add_subnet” “–add-subnet”<br>进入 &#x2F;etc&#x2F;config&#x2F;dhcp 修改 dnsmasq 配置 添加 option add_subnet ‘32,128’ list listen_address ‘127.0.0.1’ list listen_address ‘192.168.1.1’<br>重启： &#x2F;etc&#x2F;init.d&#x2F;dnsmasq restart</p>
+<h4 id="udp抓包"><a href="#udp抓包" class="headerlink" title="udp抓包"></a>udp抓包</h4><ul>
+<li>d0.pcap 文件可以使用 wireshark 来解析<br><img src="/images/has_client_ip.png" alt="img"><br><img src="/images/no_client_ip.png" alt="img"></li>
+</ul>
+<h4 id="https-dns-proxy-源码改造，目的：传递dns的终端ip-连接路由器的-电脑、手机等终端设备"><a href="#https-dns-proxy-源码改造，目的：传递dns的终端ip-连接路由器的-电脑、手机等终端设备" class="headerlink" title="https-dns-proxy 源码改造，目的：传递dns的终端ip(连接路由器的 电脑、手机等终端设备)"></a>https-dns-proxy 源码改造，目的：传递dns的终端ip(连接路由器的 电脑、手机等终端设备)</h4><p>注意：dnsmasq 给到 https-dns-proxy 是不带 终端真实ip的，上面 dnsmasq配置 就是为了让 dnsmasq 来传递 真实ip<br>改造的 https-dns-proxy 的目的就是要将图上的真实ip解析到，然后添加到header中，传递给下游服务器<br>源码改造代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">待添加</span><br></pre></td></tr></table></figure>
+
+<h4 id="linux命令部分："><a href="#linux命令部分：" class="headerlink" title="linux命令部分："></a>linux命令部分：</h4><ul>
+<li><p>查看进程: ps</p>
+</li>
+<li><p>查看 xxx 的进程：ps | grep https-dns-proxy，这里的 xxx 就是 https-dns-proxy</p>
+</li>
+<li><p>查看文件： cat &#x2F;etc&#x2F;config&#x2F;dhcp</p>
+</li>
+<li><p>切换至root权限：sudo -i </p>
+</li>
+<li><p>杀死 xxxx 进程：killall -9 xxxx</p>
+</li>
+<li><p>复制文件到服务器：scp -O ~&#x2F;Desktop&#x2F;libcares1.34.5-1aarch64_cortex-a53.ipk <a href="mailto:&#114;&#111;&#x6f;&#x74;&#x40;&#x31;&#57;&#50;&#46;&#x31;&#x36;&#x38;&#46;&#x31;&#48;&#46;&#49;&#x35;&#x30;">root@192.168.10.150</a>:&#x2F;tmp&#x2F;  </p>
+<blockquote>
+<blockquote>
+<p>-O 是强制使用sftp，在路由器上的时候，不使用 -O copy总是失败<br>~&#x2F;Desktop&#x2F;libcares1.34.5-1aarch64_cortex-a53.ipk 要拷贝的文件<br><a href="mailto:&#x72;&#x6f;&#111;&#116;&#x40;&#x31;&#x39;&#50;&#x2e;&#49;&#54;&#56;&#46;&#x31;&#48;&#46;&#x31;&#53;&#x30;">root@192.168.10.150</a>:&#x2F;tmp&#x2F;  copy到服务器下的tmp文件夹</p>
+</blockquote>
+</blockquote>
+</li>
+<li><p>复制服务器文件到本地： scp -r <a href="mailto:&#x75;&#x62;&#x75;&#110;&#116;&#117;&#x40;&#49;&#57;&#50;&#46;&#49;&#x36;&#x38;&#46;&#49;&#x30;&#46;&#50;&#49;&#50;">ubuntu@192.168.10.212</a>:&#x2F;home&#x2F;ubuntu&#x2F;openwrt&#x2F;MT7981-MT3000&#x2F;build_dir&#x2F;target-aarch64_cortex-a53_musl&#x2F;dnsmasq-nodhcpv6&#x2F;dnsmasq-2.85&#x2F;src .&#x2F;</p>
+</li>
+<li><p>复制服务器文件到本地：scp -O <a href="mailto:&#x72;&#x6f;&#x6f;&#116;&#64;&#x31;&#x39;&#50;&#x2e;&#x31;&#x36;&#x38;&#46;&#49;&#x2e;&#x31;">root@192.168.1.1</a>:&#x2F;etc&#x2F;init.d&#x2F;dnsmasq .&#x2F;</p>
+</li>
+<li><p>安装包命令：opkg install xxxx</p>
+</li>
+<li><p>移除某个文件 rm &#x2F;etc&#x2F;config&#x2F;doh_log.log</p>
+</li>
+<li><p>文件移动，并重命名 mv &#x2F;etc&#x2F;config&#x2F;doh_log.log &#x2F;tmp&#x2F;doh.log</p>
+</li>
+<li><p>udp捉包 tcpdump -i lo udp port 5053</p>
+</li>
+<li><p>udp捉包并写入文件 tcpdump -i lo udp port 5053 -w d0.pcap</p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/02/12/%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9B%AE/" rel="prev" title="面试题目">
+      <i class="fa fa-chevron-left"></i> 面试题目
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/12/18/vue3%E9%A1%B9%E7%9B%AE%E5%87%86%E5%A4%87/" rel="next" title="vue3项目准备">
+      vue3项目准备 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E5%99%A8%E6%B7%BB%E5%8A%A0HttpsDns%EF%BC%9A-%E4%BD%BF%E7%94%A8360DNS"><span class="nav-number">1.</span> <span class="nav-text">路由器添加HttpsDns： 使用360DNS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#lua%E8%84%9A%E6%9C%AC%E9%83%A8%E5%88%86%EF%BC%9A"><span class="nav-number">1.0.1.</span> <span class="nav-text">lua脚本部分：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E5%99%A8%E9%85%8D%E7%BD%AE"><span class="nav-number">1.0.2.</span> <span class="nav-text">路由器配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#dnsmasq%E9%85%8D%E7%BD%AE"><span class="nav-number">1.0.3.</span> <span class="nav-text">dnsmasq配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#udp%E6%8A%93%E5%8C%85"><span class="nav-number">1.0.4.</span> <span class="nav-text">udp抓包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#https-dns-proxy-%E6%BA%90%E7%A0%81%E6%94%B9%E9%80%A0%EF%BC%8C%E7%9B%AE%E7%9A%84%EF%BC%9A%E4%BC%A0%E9%80%92dns%E7%9A%84%E7%BB%88%E7%AB%AFip-%E8%BF%9E%E6%8E%A5%E8%B7%AF%E7%94%B1%E5%99%A8%E7%9A%84-%E7%94%B5%E8%84%91%E3%80%81%E6%89%8B%E6%9C%BA%E7%AD%89%E7%BB%88%E7%AB%AF%E8%AE%BE%E5%A4%87"><span class="nav-number">1.0.5.</span> <span class="nav-text">https-dns-proxy 源码改造，目的：传递dns的终端ip(连接路由器的 电脑、手机等终端设备)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#linux%E5%91%BD%E4%BB%A4%E9%83%A8%E5%88%86%EF%BC%9A"><span class="nav-number">1.0.6.</span> <span class="nav-text">linux命令部分：</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">刘宏亮</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">刘宏亮</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

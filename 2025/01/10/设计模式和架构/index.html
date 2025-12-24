@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"aliuhongliang.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="本文主要介绍 架构设计、重构、性能优化。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式和架构">
+<meta property="og:url" content="https://aliuhongliang.github.io/2025/01/10/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E5%92%8C%E6%9E%B6%E6%9E%84/index.html">
+<meta property="og:site_name" content="LiuHongLiang">
+<meta property="og:description" content="本文主要介绍 架构设计、重构、性能优化。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-01-10T18:04:09.000Z">
+<meta property="article:modified_time" content="2025-12-24T02:00:26.354Z">
+<meta property="article:author" content="刘宏亮">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://aliuhongliang.github.io/2025/01/10/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E5%92%8C%E6%9E%B6%E6%9E%84/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>设计模式和架构 | LiuHongLiang</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">LiuHongLiang</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">7</span></a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://aliuhongliang.github.io/2025/01/10/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E5%92%8C%E6%9E%B6%E6%9E%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="刘宏亮">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LiuHongLiang">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          设计模式和架构
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-01-10 18:04:09" itemprop="dateCreated datePublished" datetime="2025-01-10T18:04:09+00:00">2025-01-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-12-24 02:00:26" itemprop="dateModified" datetime="2025-12-24T02:00:26+00:00">2025-12-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">本文主要介绍 架构设计、重构、性能优化。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="重构"><a href="#重构" class="headerlink" title="重构"></a>重构</h2><h2 id="架构设计"><a href="#架构设计" class="headerlink" title="架构设计"></a>架构设计</h2><h4 id="MVVVM"><a href="#MVVVM" class="headerlink" title="MVVVM"></a>MVVVM</h4><p>MVVM (Model-View-ViewModel) 将视图逻辑和业务逻辑解耦，明确职责分工：</p>
+<ul>
+<li>Model：处理数据和业务逻辑，与后端交互。</li>
+<li>View：负责 UI 展示，不包含业务逻辑。</li>
+<li>ViewModel：处理业务逻辑，绑定 Model 和 View。</li>
+</ul>
+<p>优点</p>
+<ul>
+<li>提升代码可测试性。</li>
+<li>ViewModel 独立于 View，便于复用。</li>
+<li>数据绑定机制（如 KVO 或 ReactiveCocoa）简化界面更新。</li>
+</ul>
+<p>具体实现示例,使用自定义观察者模式来解决数据绑定问题</p>
+<ul>
+<li>定义observer 弱引用：使用 NSMapTable 避免强引用循环问题。</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">.h</span><br><span class="line">#<span class="keyword">import</span> &lt;Foundation/Foundation.h&gt;</span><br><span class="line"></span><br><span class="line">typedef void (<span class="operator">^</span><span class="type">ObserverCallback</span>)(id _Nullable value);</span><br><span class="line"></span><br><span class="line"><span class="meta">@interface</span> <span class="type">Observable</span> : <span class="type">NSObject</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@property</span> (nonatomic, strong, nullable) id value;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加观察者，callback 是数据变化时的回调</span></span><br><span class="line"><span class="operator">-</span> (void)addObserver:(id _Nonnull)observer callback:(<span class="type">ObserverCallback</span> _Nonnull)callback;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 移除观察者</span></span><br><span class="line"><span class="operator">-</span> (void)removeObserver:(id _Nonnull)observer;</span><br><span class="line"></span><br><span class="line"><span class="meta">@end</span></span><br><span class="line"></span><br><span class="line">.m</span><br><span class="line">#<span class="keyword">import</span> &quot;Observable.h&quot;</span><br><span class="line"></span><br><span class="line"><span class="meta">@interface</span> <span class="type">Observable</span> ()</span><br><span class="line"><span class="comment">// 存储观察者及其对应的回调</span></span><br><span class="line"><span class="meta">@property</span> (nonatomic, strong) <span class="type">NSMapTable</span>&lt;id, <span class="type">ObserverCallback</span>&gt; <span class="operator">*</span>observers;</span><br><span class="line"><span class="meta">@end</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@implementation</span> <span class="type">Observable</span></span><br><span class="line"></span><br><span class="line"><span class="operator">-</span> (instancetype)<span class="keyword">init</span> &#123;</span><br><span class="line">    <span class="keyword">self</span> <span class="operator">=</span> [<span class="keyword">super</span> <span class="keyword">init</span>];</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">self</span>) &#123;</span><br><span class="line">        <span class="comment">// 使用弱引用存储观察者，防止循环引用</span></span><br><span class="line">        _observers <span class="operator">=</span> [<span class="type">NSMapTable</span> weakToStrongObjectsMapTable];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">self</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="operator">-</span> (void)setValue:(id)value &#123;</span><br><span class="line">    _value <span class="operator">=</span> value;</span><br><span class="line">    <span class="comment">// 通知所有观察者</span></span><br><span class="line">    [<span class="keyword">self</span> notifyObservers];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="operator">-</span> (void)addObserver:(id)observer callback:(<span class="type">ObserverCallback</span>)callback &#123;</span><br><span class="line">    <span class="keyword">if</span> (observer <span class="operator">&amp;&amp;</span> callback) &#123;</span><br><span class="line">        [<span class="keyword">self</span>.observers setObject:callback forKey:observer];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="operator">-</span> (void)removeObserver:(id)observer &#123;</span><br><span class="line">    <span class="keyword">if</span> (observer) &#123;</span><br><span class="line">        [<span class="keyword">self</span>.observers removeObjectForKey:observer];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="operator">-</span> (void)notifyObservers &#123;</span><br><span class="line">    <span class="keyword">for</span> (id observer <span class="keyword">in</span> <span class="keyword">self</span>.observers) &#123;</span><br><span class="line">        <span class="type">ObserverCallback</span> callback <span class="operator">=</span> [<span class="keyword">self</span>.observers objectForKey:observer];</span><br><span class="line">        <span class="keyword">if</span> (callback) &#123;</span><br><span class="line">            callback(<span class="keyword">self</span>.value);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@end</span> </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>ViewModel 层</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">#<span class="keyword">import</span> &lt;Foundation/Foundation.h&gt;</span><br><span class="line">#<span class="keyword">import</span> &quot;Observable.h&quot;</span><br><span class="line"></span><br><span class="line"><span class="meta">@interface</span> <span class="type">CounterViewModel</span> : <span class="type">NSObject</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@property</span> (nonatomic, strong, readonly) <span class="type">Observable</span> <span class="operator">*</span>counter;</span><br><span class="line"></span><br><span class="line"><span class="operator">-</span> (void)increment;</span><br><span class="line"></span><br><span class="line"><span class="meta">@end</span></span><br><span class="line"></span><br><span class="line">#<span class="keyword">import</span> &quot;CounterViewModel.h&quot;</span><br><span class="line"><span class="meta">@implementation</span> <span class="type">CounterViewModel</span></span><br><span class="line"></span><br><span class="line"><span class="operator">-</span> (instancetype)<span class="keyword">init</span> &#123;</span><br><span class="line">    <span class="keyword">self</span> <span class="operator">=</span> [<span class="keyword">super</span> <span class="keyword">init</span>];</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">self</span>) &#123;</span><br><span class="line">        _counter <span class="operator">=</span> [[<span class="type">Observable</span> alloc] <span class="keyword">init</span>];</span><br><span class="line">        _counter.value <span class="operator">=</span> @(<span class="number">0</span>); <span class="comment">// 初始值为 0</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">self</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="operator">-</span> (void)increment &#123;</span><br><span class="line">    <span class="type">NSInteger</span> currentValue <span class="operator">=</span> [<span class="keyword">self</span>.counter.value integerValue];</span><br><span class="line">    <span class="keyword">self</span>.counter.value <span class="operator">=</span> @(currentValue <span class="operator">+</span> <span class="number">1</span>); <span class="comment">// 更新值</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@end</span></span><br><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>View 层</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"> #<span class="keyword">import</span> &quot;ViewController.h&quot;</span><br><span class="line">#<span class="keyword">import</span> &quot;CounterViewModel.h&quot;</span><br><span class="line"></span><br><span class="line"><span class="meta">@interface</span> <span class="type">ViewController</span> ()</span><br><span class="line"></span><br><span class="line"><span class="meta">@property</span> (nonatomic, strong) <span class="type">UILabel</span> <span class="operator">*</span>counterLabel;</span><br><span class="line"><span class="meta">@property</span> (nonatomic, strong) <span class="type">UIButton</span> <span class="operator">*</span>incrementButton;</span><br><span class="line"><span class="meta">@property</span> (nonatomic, strong) <span class="type">CounterViewModel</span> <span class="operator">*</span>viewModel;</span><br><span class="line"></span><br><span class="line"><span class="meta">@end</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@implementation</span> <span class="type">ViewController</span></span><br><span class="line"></span><br><span class="line"><span class="operator">-</span> (void)viewDidLoad &#123;</span><br><span class="line">    [<span class="keyword">super</span> viewDidLoad];</span><br><span class="line">    <span class="keyword">self</span>.view.backgroundColor <span class="operator">=</span> [<span class="type">UIColor</span> whiteColor];</span><br><span class="line"></span><br><span class="line">    [<span class="keyword">self</span> setupUI];</span><br><span class="line">    [<span class="keyword">self</span> setupBindings];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="operator">-</span> (void)setupUI &#123;</span><br><span class="line">    <span class="keyword">self</span>.counterLabel <span class="operator">=</span> [[<span class="type">UILabel</span> alloc] initWithFrame:<span class="type">CGRectMake</span>(<span class="number">100</span>, <span class="number">200</span>, <span class="number">200</span>, <span class="number">40</span>)];</span><br><span class="line">    <span class="keyword">self</span>.counterLabel.textAlignment <span class="operator">=</span> <span class="type">NSTextAlignmentCenter</span>;</span><br><span class="line">    <span class="keyword">self</span>.counterLabel.text <span class="operator">=</span> @<span class="string">&quot;Counter: 0&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">self</span>.incrementButton <span class="operator">=</span> [<span class="type">UIButton</span> buttonWithType:<span class="type">UIButtonTypeSystem</span>];</span><br><span class="line">    <span class="keyword">self</span>.incrementButton.frame <span class="operator">=</span> <span class="type">CGRectMake</span>(<span class="number">100</span>, <span class="number">300</span>, <span class="number">200</span>, <span class="number">40</span>);</span><br><span class="line">    [<span class="keyword">self</span>.incrementButton setTitle:@<span class="string">&quot;Increment&quot;</span> forState:<span class="type">UIControlStateNormal</span>];</span><br><span class="line">    [<span class="keyword">self</span>.incrementButton addTarget:<span class="keyword">self</span> action:<span class="meta">@selector</span>(incrementButtonTapped) forControlEvents:<span class="type">UIControlEventTouchUpInside</span>];</span><br><span class="line"></span><br><span class="line">    [<span class="keyword">self</span>.view addSubview:<span class="keyword">self</span>.counterLabel];</span><br><span class="line">    [<span class="keyword">self</span>.view addSubview:<span class="keyword">self</span>.incrementButton];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="operator">-</span> (void)setupBindings &#123;</span><br><span class="line">    <span class="keyword">self</span>.viewModel <span class="operator">=</span> [[<span class="type">CounterViewModel</span> alloc] <span class="keyword">init</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 绑定观察者到 ViewModel 的 counter 属性</span></span><br><span class="line">    [<span class="keyword">self</span>.viewModel.counter addObserver:<span class="keyword">self</span> callback:<span class="operator">^</span>(id value) &#123;</span><br><span class="line">        <span class="keyword">if</span> (value) &#123;</span><br><span class="line">            <span class="keyword">self</span>.counterLabel.text <span class="operator">=</span> [<span class="type">NSString</span> stringWithFormat:@<span class="string">&quot;Counter: %@&quot;</span>, value];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="operator">-</span> (void)incrementButtonTapped &#123;</span><br><span class="line">    [<span class="keyword">self</span>.viewModel increment];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="operator">-</span> (void)dealloc &#123;</span><br><span class="line">    <span class="comment">// 移除观察者</span></span><br><span class="line">    [<span class="keyword">self</span>.viewModel.counter removeObserver:<span class="keyword">self</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@end</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="mvvm-swift-代码"><a href="#mvvm-swift-代码" class="headerlink" title="mvvm swift 代码"></a>mvvm swift 代码</h4><ul>
+<li>Observable.swift</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Observable</span>&lt;<span class="type">T</span>&gt; &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">var</span> listeners: [(<span class="type">T</span>) -&gt; <span class="type">Void</span>] <span class="operator">=</span> []</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> value: <span class="type">T</span> &#123;</span><br><span class="line">        <span class="keyword">didSet</span> &#123;</span><br><span class="line">            notifyListeners()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">init</span>(<span class="keyword">_</span> <span class="params">value</span>: <span class="type">T</span>) &#123;</span><br><span class="line">        <span class="keyword">self</span>.value <span class="operator">=</span> value</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">bind</span>(<span class="params">listener</span>: <span class="keyword">@escaping</span> (<span class="type">T</span>) -&gt; <span class="type">Void</span>) &#123;</span><br><span class="line">        listeners.append(listener)</span><br><span class="line">        listener(value)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">func</span> <span class="title function_">notifyListeners</span>() &#123;</span><br><span class="line">        <span class="keyword">for</span> listener <span class="keyword">in</span> listeners &#123;</span><br><span class="line">            listener(value)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>ViewModel.swift</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">CounterViewModel</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> counter: <span class="type">Observable</span>&lt;<span class="type">Int</span>&gt; <span class="operator">=</span> <span class="type">Observable</span>(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">increment</span>() &#123;</span><br><span class="line">        counter.value <span class="operator">+=</span> <span class="number">1</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>ViewController.swift</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> UIKit</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CounterViewController</span>: <span class="title class_ inherited__">UIViewController</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">let</span> counterLabel <span class="operator">=</span> <span class="type">UILabel</span>()</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">let</span> incrementButton <span class="operator">=</span> <span class="type">UIButton</span>(type: .system)</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">let</span> viewModel <span class="operator">=</span> <span class="type">CounterViewModel</span>()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="keyword">func</span> <span class="title function_">viewDidLoad</span>() &#123;</span><br><span class="line">        <span class="keyword">super</span>.viewDidLoad()</span><br><span class="line">        setupUI()</span><br><span class="line">        setupBindings()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">func</span> <span class="title function_">setupUI</span>() &#123;</span><br><span class="line">        view.backgroundColor <span class="operator">=</span> .white</span><br><span class="line"></span><br><span class="line">        counterLabel.translatesAutoresizingMaskIntoConstraints <span class="operator">=</span> <span class="literal">false</span></span><br><span class="line">        incrementButton.translatesAutoresizingMaskIntoConstraints <span class="operator">=</span> <span class="literal">false</span></span><br><span class="line">        incrementButton.setTitle(<span class="string">&quot;Increment&quot;</span>, for: .normal)</span><br><span class="line">        incrementButton.addTarget(<span class="keyword">self</span>, action: <span class="keyword">#selector</span>(didTapIncrement), for: .touchUpInside)</span><br><span class="line"></span><br><span class="line">        view.addSubview(counterLabel)</span><br><span class="line">        view.addSubview(incrementButton)</span><br><span class="line"></span><br><span class="line">        <span class="type">NSLayoutConstraint</span>.activate([</span><br><span class="line">            counterLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),</span><br><span class="line">            counterLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: <span class="operator">-</span><span class="number">20</span>),</span><br><span class="line">            incrementButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),</span><br><span class="line">            incrementButton.topAnchor.constraint(equalTo: counterLabel.bottomAnchor, constant: <span class="number">20</span>)</span><br><span class="line">        ])</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">func</span> <span class="title function_">setupBindings</span>() &#123;</span><br><span class="line">        viewModel.counter.bind &#123; [<span class="keyword">weak</span> <span class="keyword">self</span>] newCounter <span class="keyword">in</span></span><br><span class="line">            <span class="keyword">self</span><span class="operator">?</span>.counterLabel.text <span class="operator">=</span> <span class="string">&quot;Counter: <span class="subst">\(newCounter)</span>&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">@objc</span> <span class="keyword">private</span> <span class="keyword">func</span> <span class="title function_">didTapIncrement</span>() &#123;</span><br><span class="line">        viewModel.increment()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="组件化"><a href="#组件化" class="headerlink" title="组件化"></a>组件化</h4><ul>
+<li>业务隔离：不同功能模块之间互不依赖。</li>
+<li>高复用性：组件可以在多个项目中复用。</li>
+<li>易扩展：新增功能时，只需增加新组件。</li>
+</ul>
+<h4 id="模块间通信"><a href="#模块间通信" class="headerlink" title="模块间通信"></a>模块间通信</h4><ul>
+<li>方法 1：通过协议进行通信</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">// UserServiceProtocol.h</span></span><br><span class="line"><span class="meta">@protocol</span> <span class="type">UserServiceProtocol</span> <span class="operator">&lt;</span><span class="type">NSObject</span><span class="operator">&gt;</span></span><br><span class="line"><span class="operator">-</span> (<span class="type">NSString</span> <span class="operator">*</span>)getCurrentUserID;</span><br><span class="line"><span class="meta">@end</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@interface</span> <span class="type">UserService</span> : <span class="type">NSObject</span> <span class="operator">&lt;</span><span class="type">UserServiceProtocol</span><span class="operator">&gt;</span></span><br><span class="line"><span class="meta">@property</span> (nonatomic, strong) <span class="type">UserModel</span> <span class="operator">*</span>currentUser;</span><br><span class="line"><span class="meta">@end</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@implementation</span> <span class="type">UserService</span></span><br><span class="line"><span class="operator">-</span> (<span class="type">NSString</span> <span class="operator">*</span>)getCurrentUserID &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">self</span>.currentUser.userID;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// OrderViewController.m</span></span><br><span class="line">#<span class="keyword">import</span> &quot;UserServiceProtocol.h&quot;</span><br><span class="line"></span><br><span class="line">id<span class="operator">&lt;</span><span class="type">UserServiceProtocol</span><span class="operator">&gt;</span> userService <span class="operator">=</span> [<span class="type">ModuleManager</span> serviceForProtocol:<span class="meta">@protocol</span>(<span class="type">UserServiceProtocol</span>)];</span><br><span class="line"><span class="type">NSString</span> <span class="operator">*</span>currentUserID <span class="operator">=</span> [userService getCurrentUserID];</span><br><span class="line"><span class="type">NSLog</span>(@<span class="string">&quot;Current User ID: %@&quot;</span>, currentUserID);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>方法 2：通过 URL Scheme 或路由机制</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">定义路由规则：</span><br><span class="line"> [<span class="type">JLRoutes</span> addRoute:@<span class="string">&quot;/user/login&quot;</span> handler:<span class="operator">^</span><span class="type">BOOL</span>(<span class="type">NSDictionary</span> <span class="operator">*</span>parameters) &#123;</span><br><span class="line">    <span class="type">NSString</span> <span class="operator">*</span>username <span class="operator">=</span> parameters[@<span class="string">&quot;username&quot;</span>];</span><br><span class="line">    <span class="type">NSString</span> <span class="operator">*</span>password <span class="operator">=</span> parameters[@<span class="string">&quot;password&quot;</span>];</span><br><span class="line">    <span class="type">NSLog</span>(@<span class="string">&quot;Logging in with username: %@, password: %@&quot;</span>, username, password);</span><br><span class="line">    <span class="keyword">return</span> <span class="type">YES</span>;</span><br><span class="line">&#125;];</span><br><span class="line">调用路由：</span><br><span class="line">[<span class="type">JLRoutes</span> routeURL:[<span class="type">NSURL</span> <span class="type">URLWithString</span>:@<span class="string">&quot;myapp://user/login&quot;</span>] withParameters:@&#123;</span><br><span class="line">    @<span class="string">&quot;username&quot;</span>: @<span class="string">&quot;test&quot;</span>,</span><br><span class="line">    @<span class="string">&quot;password&quot;</span>: @<span class="string">&quot;1234&quot;</span></span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
+<ul>
+<li>方法 3：通过中间件或服务管理器 ModuleManager</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">// ModuleManager.h</span></span><br><span class="line"><span class="meta">@interface</span> <span class="type">ModuleManager</span> : <span class="type">NSObject</span></span><br><span class="line"><span class="operator">+</span> (void)registerService:(id)service forProtocol:(<span class="type">Protocol</span> <span class="operator">*</span>)<span class="keyword">protocol</span>;</span><br><span class="line"><span class="operator">+</span> (id)serviceForProtocol:(<span class="type">Protocol</span> <span class="operator">*</span>)<span class="keyword">protocol</span>;</span><br><span class="line"><span class="meta">@end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ModuleManager.m</span></span><br><span class="line"><span class="meta">@implementation</span> <span class="type">ModuleManager</span></span><br><span class="line"><span class="keyword">static</span> <span class="type">NSMutableDictionary</span> <span class="operator">*</span>services;</span><br><span class="line"></span><br><span class="line"><span class="operator">+</span> (void)initialize &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">self</span> <span class="operator">==</span> [<span class="type">ModuleManager</span> <span class="keyword">class</span>]) &#123;</span><br><span class="line">        services <span class="operator">=</span> [<span class="type">NSMutableDictionary</span> dictionary];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="operator">+</span> (void)registerService:(id)service forProtocol:(<span class="type">Protocol</span> <span class="operator">*</span>)<span class="keyword">protocol</span> &#123;</span><br><span class="line">    <span class="type">NSString</span> <span class="operator">*</span>key <span class="operator">=</span> <span class="type">NSStringFromProtocol</span>(<span class="keyword">protocol</span>);</span><br><span class="line">    services[key] <span class="operator">=</span> service;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="operator">+</span> (id)serviceForProtocol:(<span class="type">Protocol</span> <span class="operator">*</span>)<span class="keyword">protocol</span> &#123;</span><br><span class="line">    <span class="type">NSString</span> <span class="operator">*</span>key <span class="operator">=</span> <span class="type">NSStringFromProtocol</span>(<span class="keyword">protocol</span>);</span><br><span class="line">    <span class="keyword">return</span> services[key];</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@end</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">注册服务：</span><br><span class="line"><span class="comment">// 在 UserModule 初始化时注册服务</span></span><br><span class="line">[<span class="type">ModuleManager</span> registerService:[<span class="type">UserService</span> new] forProtocol:<span class="meta">@protocol</span>(<span class="type">UserServiceProtocol</span>)];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">使用服务：</span><br><span class="line">id<span class="operator">&lt;</span><span class="type">UserServiceProtocol</span><span class="operator">&gt;</span> userService <span class="operator">=</span> [<span class="type">ModuleManager</span> serviceForProtocol:<span class="meta">@protocol</span>(<span class="type">UserServiceProtocol</span>)];</span><br><span class="line"><span class="type">NSString</span> <span class="operator">*</span>userID <span class="operator">=</span> [userService getCurrentUserID];</span><br><span class="line"><span class="type">NSLog</span>(@<span class="string">&quot;User ID: %@&quot;</span>, userID);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="如何重构"><a href="#如何重构" class="headerlink" title="如何重构"></a>如何重构</h4><ul>
+<li>模块优先：优先重构高频使用或问题严重的模块。</li>
+<li>新功能使用新架构：老功能保持现状，新功能使用 MVVM 和组件化。</li>
+<li>创建适配层（Adapter Layer）来兼容老代码</li>
+</ul>
+<p>老代码</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@interface</span> <span class="type">UserManager</span> : <span class="type">NSObject</span></span><br><span class="line"><span class="operator">-</span> (<span class="type">NSString</span> <span class="operator">*</span>)currentUserID;</span><br><span class="line"><span class="meta">@end</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@implementation</span> <span class="type">UserManager</span></span><br><span class="line"><span class="operator">-</span> (<span class="type">NSString</span> <span class="operator">*</span>)currentUserID &#123;</span><br><span class="line">    <span class="keyword">return</span> @<span class="string">&quot;123&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@end</span> </span><br></pre></td></tr></table></figure>
+<p>新代码协议：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@protocol</span> <span class="type">UserServiceProtocol</span> <span class="operator">&lt;</span><span class="type">NSObject</span><span class="operator">&gt;</span></span><br><span class="line"><span class="operator">-</span> (<span class="type">NSString</span> <span class="operator">*</span>)getCurrentUserID;</span><br><span class="line"><span class="meta">@end</span></span><br></pre></td></tr></table></figure>
+
+<p>适配层代码：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@interface</span> <span class="type">UserManagerAdapter</span> : <span class="type">NSObject</span> <span class="operator">&lt;</span><span class="type">UserServiceProtocol</span><span class="operator">&gt;</span></span><br><span class="line"><span class="meta">@property</span> (nonatomic, strong) <span class="type">UserManager</span> <span class="operator">*</span>userManager;</span><br><span class="line"><span class="meta">@end</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@implementation</span> <span class="type">UserManagerAdapter</span></span><br><span class="line"><span class="operator">-</span> (instancetype)<span class="keyword">init</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">self</span> <span class="operator">=</span> [<span class="keyword">super</span> <span class="keyword">init</span>]) &#123;</span><br><span class="line">        <span class="keyword">self</span>.userManager <span class="operator">=</span> [[<span class="type">UserManager</span> alloc] <span class="keyword">init</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">self</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="operator">-</span> (<span class="type">NSString</span> <span class="operator">*</span>)getCurrentUserID &#123;</span><br><span class="line">    <span class="keyword">return</span> [<span class="keyword">self</span>.userManager currentUserID];</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@end</span></span><br></pre></td></tr></table></figure>
+
+<p>注册服务使用新代码逻辑</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[<span class="type">ModuleManager</span> registerService:[[<span class="type">UserManagerAdapter</span> alloc] <span class="keyword">init</span>] forProtocol:<span class="meta">@protocol</span>(<span class="type">UserServiceProtocol</span>)];</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/01/10/%E5%8A%A8%E6%80%81%E5%BA%93%E9%9D%99%E6%80%81%E5%BA%93/" rel="prev" title="动态库静态库">
+      <i class="fa fa-chevron-left"></i> 动态库静态库
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/01/13/%E5%8D%9A%E4%B8%BB/" rel="next" title="博主">
+      博主 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E6%9E%84"><span class="nav-number">1.</span> <span class="nav-text">重构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.</span> <span class="nav-text">架构设计</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#MVVVM"><span class="nav-number">2.0.1.</span> <span class="nav-text">MVVVM</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#mvvm-swift-%E4%BB%A3%E7%A0%81"><span class="nav-number">2.0.2.</span> <span class="nav-text">mvvm swift 代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E5%8C%96"><span class="nav-number">2.0.3.</span> <span class="nav-text">组件化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E9%97%B4%E9%80%9A%E4%BF%A1"><span class="nav-number">2.0.4.</span> <span class="nav-text">模块间通信</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E9%87%8D%E6%9E%84"><span class="nav-number">2.0.5.</span> <span class="nav-text">如何重构</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">刘宏亮</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">刘宏亮</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

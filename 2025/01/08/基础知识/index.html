@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"aliuhongliang.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="本文主要介绍 事件传递和响应、kvc&#x2F;kvo、 扩展&#x2F;代理、属性关键字。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基础知识">
+<meta property="og:url" content="https://aliuhongliang.github.io/2025/01/08/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/index.html">
+<meta property="og:site_name" content="LiuHongLiang">
+<meta property="og:description" content="本文主要介绍 事件传递和响应、kvc&#x2F;kvo、 扩展&#x2F;代理、属性关键字。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://aliuhongliang.github.io/images/qidong.png">
+<meta property="og:image" content="https://aliuhongliang.github.io/images/qidongxiangxi.png">
+<meta property="article:published_time" content="2025-01-08T17:03:20.000Z">
+<meta property="article:modified_time" content="2025-12-24T02:00:26.353Z">
+<meta property="article:author" content="刘宏亮">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://aliuhongliang.github.io/images/qidong.png">
+
+<link rel="canonical" href="https://aliuhongliang.github.io/2025/01/08/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>基础知识 | LiuHongLiang</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">LiuHongLiang</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">7</span></a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://aliuhongliang.github.io/2025/01/08/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="刘宏亮">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LiuHongLiang">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          基础知识
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-01-08 17:03:20" itemprop="dateCreated datePublished" datetime="2025-01-08T17:03:20+00:00">2025-01-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-12-24 02:00:26" itemprop="dateModified" datetime="2025-12-24T02:00:26+00:00">2025-12-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">本文主要介绍 事件传递和响应、kvc/kvo、 扩展/代理、属性关键字。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><h3 id="六大设计原则"><a href="#六大设计原则" class="headerlink" title="六大设计原则"></a>六大设计原则</h3><blockquote>
+<ol>
+<li>单一职责原则<blockquote>
+<p> 一个类应该只有一个职责，即它只负责完成一个功能</p>
+</blockquote>
+</li>
+<li>里氏替换原则<blockquote>
+<p>如果一个类是另一个类的子类，那么子类应该能够替代父类并在程序中正常工作，且不会改变程序的功能</p>
+</blockquote>
+</li>
+</ol>
+</blockquote>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Shape</span> &#123;</span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">draw</span>() &#123;</span><br><span class="line">        <span class="comment">// 默认绘制</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Circle</span>: <span class="title class_ inherited__">Shape</span> &#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="keyword">func</span> <span class="title function_">draw</span>() &#123;</span><br><span class="line">        <span class="comment">// 绘制圆形</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Square</span>: <span class="title class_ inherited__">Shape</span> &#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="keyword">func</span> <span class="title function_">draw</span>() &#123;</span><br><span class="line">        <span class="comment">// 绘制方形</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<blockquote>
+<ol start="3">
+<li>依赖倒置原则<blockquote>
+<p>高层模块不应依赖低层模块，二者都应依赖于抽象；抽象不应依赖于细节，细节应依赖于抽象。</p>
+</blockquote>
+</li>
+<li>接口隔离原则<blockquote>
+<p>1 一个类不应该强迫它依赖的类实现那些它不会使用的方法。应该将一个大接口分成多个小接口，客户端只需要关注自己感兴趣的接口。</p>
+</blockquote>
+</li>
+</ol>
+<p> 2 可以使用协议来分隔功能。<br>  <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protocol</span> <span class="title class_">FileUpload</span> &#123;</span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">uploadFile</span>(<span class="params">file</span>: <span class="type">Data</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protocol</span> <span class="title class_">DataStorage</span> &#123;</span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">saveData</span>(<span class="params">data</span>: <span class="type">String</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DataUploader</span>: <span class="title class_ inherited__">FileUpload</span> &#123;</span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">uploadFile</span>(<span class="params">file</span>: <span class="type">Data</span>) &#123;</span><br><span class="line">      <span class="comment">// 实现文件上传</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DataSaver</span>: <span class="title class_ inherited__">DataStorage</span> &#123;</span><br><span class="line">  <span class="keyword">func</span> <span class="title function_">saveData</span>(<span class="params">data</span>: <span class="type">String</span>) &#123;</span><br><span class="line">      <span class="comment">// 实现数据存储</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>5. 开闭原则</p>
+<blockquote>
+<p>对扩展开放，对修改关闭.可以使用协议和继承来实现这一原则</p>
+</blockquote>
+</blockquote>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protocol</span> <span class="title class_">PaymentMethod</span> &#123;</span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">processPayment</span>(<span class="params">amount</span>: <span class="type">Double</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AlipayPayment</span>: <span class="title class_ inherited__">PaymentMethod</span> &#123;</span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">processPayment</span>(<span class="params">amount</span>: <span class="type">Double</span>) &#123;</span><br><span class="line">        <span class="comment">// 实现支付宝支付</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">WeChatPayment</span>: <span class="title class_ inherited__">PaymentMethod</span> &#123;</span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">processPayment</span>(<span class="params">amount</span>: <span class="type">Double</span>) &#123;</span><br><span class="line">        <span class="comment">// 实现微信支付</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PaymentProcessor</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> paymentMethod: <span class="type">PaymentMethod</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">init</span>(<span class="params">paymentMethod</span>: <span class="type">PaymentMethod</span>) &#123;</span><br><span class="line">        <span class="keyword">self</span>.paymentMethod <span class="operator">=</span> paymentMethod</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">process</span>(<span class="params">amount</span>: <span class="type">Double</span>) &#123;</span><br><span class="line">        paymentMethod.processPayment(amount: amount)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<blockquote>
+<ol start="6">
+<li>迪米特法则</li>
+</ol>
+</blockquote>
+<h3 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h3><ul>
+<li>定义：<br>编译过程就是生成机器码的过程。</li>
+<li>编译器前端过程</li>
+</ul>
+<ol>
+<li>预处理阶段：import文件，宏定义处理，预编译(条件编译)指令处理</li>
+<li>词法分析：这一步把源文件中的代码转化为特殊的标记流，源码被分割成一个一个的字符和单词</li>
+<li>语法分析：这一步是把词法分析生成的标记流，解析成一个抽象语法树</li>
+<li>语义分析：类型检查、检查未定义、定义但是未使用的变量</li>
+<li>生成中间代码：</li>
+</ol>
+<ul>
+<li>编译器后端过程</li>
+</ul>
+<ol>
+<li>优化器bitcood，链接期优化：这就是优化器，可以独立出来（即：编译器前端、优化器、编译器后端）</li>
+<li>汇编，生成机器码：将中间代码转换各平台的机器码，产生.o文件</li>
+<li>链接：将main.o编译成对应的Mach-O文件，也就是我们常说的可执行文件</li>
+<li>打包 .ipa</li>
+</ol>
+<ul>
+<li><p>bitcode</p>
+<blockquote>
+<p>BitCode 其实就是 IR 代码的一种编码形式。 BitCode 是以 section 形式保存在可执行文件中。当我们把携带 BitCode 的 App 提交到 AppStore 后，苹果会提取出可执行文件中的 BitCode 段，然后针对不同的 CPU 架构编译和链接成不同的可执行文件变体(Variant)，不同 CPU 架构的设备会自动选择合适的架构的变体进行下载。而在 BitCode 之前，我们都是把所有需要的 CPU 架构集合打包成一个 Fat Binary，结果就是用户最终下载的安装包之中有很多冗余的 CPU 架构支持代码。开启BitCode之后，编译器后端(Backend)的工作都由 Apple 接管</p>
+</blockquote>
+</li>
+<li><p>中间代码IR<br>LLVM IR 有三种表现形式：  </p>
+<ul>
+<li>text：便于阅读的文本格式，类似于汇编语言，拓展名.ll</li>
+<li>bitcode：二进制格式，拓展名.bc</li>
+<li>memory：内存格式</li>
+</ul>
+</li>
+</ul>
+<h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><ul>
+<li>冷启动</li>
+</ul>
+<img src="/images/qidong.png" style="width: 40%;"/>
+
+<ol>
+<li><p>【内核态】先创建一个新的进程，加载 mach-o 可执行文件头信息，并启动dyld(动态链接)</p>
+</li>
+<li><p>【用户态】dyld 阶段</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> &quot;dyld&quot; 是苹果操作系统中的一个重要组件，它是动态链接器（dynamic linker）的缩写。动态链接器是操作系统加载和链接可执行文件所需的共享库的核心组件之一。</span><br><span class="line"> dyld 的主要功能是在程序启动时加载和链接程序所依赖的共享库，并将其映射到进程的内存空间中。它负责解析和处理共享库之间的符号依赖关系，以及处理运行时的符号重定位。</span><br><span class="line">   </span><br><span class="line">具体来说，dyld 的工作流程如下：</span><br><span class="line">1.加载：当一个可执行文件（如应用程序）启动时，dyld 负责加载可执行文件和它所依赖的共享库到内存中。</span><br><span class="line">2.符号解析：dyld 解析可执行文件和共享库中的符号引用，找到对应的符号定义，以便正确地链接和运行程序。</span><br><span class="line">3.符号重定位：在加载和链接过程中，dyld 会处理符号重定位，将程序中的符号引用指向正确的地址。</span><br><span class="line">4.启动程序：完成加载和链接后，dyld 将控制权转交给程序的入口点，使其开始执行。</span><br><span class="line"></span><br><span class="line">dyld 的存在使得应用程序可以动态地加载和链接共享库，从而实现了代码的共享和重用。这也是为什么在 iOS 开发中，我们可以使用各种系统提供的框架和库来构建应用程序。dyld 是苹果操作系统中负责动态加载和链接共享库的组件，它在应用程序启动时发挥着关键的作用，确保程序能够正确地加载和执行所需的代码和库。</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li><p>【用户态】main函数执行后的阶段（Post-main），指的是：从 main 函数执行开始，到 appDelegate 的 didFinishLaunchingWithOptions方法里首屏渲染相关方法执行完成。即，从main函数执行到设置self.window.rootViewController执行完成的阶段。</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">接下来就是 UIApplicationMain 函数，相关的调用了，Appdelegate会依次执行 对应的生命周期方法。</span><br><span class="line">创建整个app的autoreleasepool，初始化初始window，app界面开始展示。</span><br><span class="line">指定rootviewcontroller，调用业务代码，完成各阶段业务。</span><br><span class="line">main页面viewDidAppear 完成页面第一帧渲染。至此启动完成。</span><br></pre></td></tr></table></figure></li>
+</ol>
+<img src="/images/qidongxiangxi.png" style="width: 40%;"/>
+
+<ul>
+<li>热启动 app在系统中，不用创建进程</li>
+</ul>
+<h3 id="启动优化"><a href="#启动优化" class="headerlink" title="启动优化"></a>启动优化</h3><ul>
+<li>加载mach-o阶段</li>
+</ul>
+<ol>
+<li>二进制重排，重新排列函数符号位置，降低MACH-O文件载入内存时PageFault缺页中断频率 <ul>
+<li>一种是抖音的方案二进制重排。（官方说会有百分之30提升，自己尝试并没有太大提升。）</li>
+<li>另外是苹果推出的pgo。（大概有百分之10左右的提升）</li>
+</ul>
+</li>
+<li>二进制重排 是通过 采集 App 启动时的符号调用顺序（使用 sample、perf 或 XRay 等工具），生成 order file（符号排序文件），然后在 Xcode 的 Linker 选项中使用该 order file 进行编译打包，以优化二进制布局，提高 App 冷启动速度</li>
+</ol>
+<ul>
+<li>dyld阶段</li>
+</ul>
+<ol>
+<li>减少动态库 合并动态库</li>
+<li>减少oc 类 分类 方法 sel</li>
+<li>swift尽量使用struct</li>
+</ol>
+<ul>
+<li>runtime  阶段</li>
+</ul>
+<ol>
+<li>用+initialize方法和dispatch_once取代所有的__attribute__((constructor))、C++静态构造器、ObjC的+load</li>
+</ol>
+<ul>
+<li>main函数之后阶段</li>
+</ul>
+<ol>
+<li>在不影响用户体验的前提下，尽可能将一些操作延迟，不要全部都放在finishLaunching方法中</li>
+<li>启动任务的顺序调整优化</li>
+<li>视图懒加载</li>
+</ol>
+<h3 id="崩溃"><a href="#崩溃" class="headerlink" title="崩溃"></a>崩溃</h3><p><a target="_blank" rel="noopener" href="https://www.nowcoder.com/discuss/353148958161707008">崩溃收集1</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/u014600626/article/details/105347902">崩溃收集2</a><br><a target="_blank" rel="noopener" href="https://www.dog886.com/blog/article-395.html">崩溃收集3</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/mysweetAngleBaby/articles/17155460.html">崩溃类型EXC_BAD_ACCESS，SIGSEGV，SIGBUS，EXC_ARITHETIC，SIGABRT</a></p>
+<ol>
+<li><p>崩溃类型</p>
+<ul>
+<li>野指针</li>
+<li>线程问题</li>
+<li>数组越界</li>
+<li>死锁</li>
+<li>内存泄漏</li>
+</ul>
+</li>
+<li><p>崩溃日志收集</p>
+<ul>
+<li>日志信息<ul>
+<li>崩溃类型、崩溃时间戳、堆栈信息、系统信息（设备型号、iOS版本等）、应用状态（是否在后台、是否正在进行某些操作）</li>
+</ul>
+</li>
+<li>收集方式<ul>
+<li>使用 signal handler（如 signal(SIGSEGV, handler)）捕获信号异常。</li>
+<li>使用 NSException 捕获 Objective-C&#x2F;Swift 层面的异常</li>
+<li>自定义崩溃日志收集，结合 try-catch 捕获可预见的异常。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>选择时机上传</p>
+<ul>
+<li>上传方式 HTTP POST 请求：常用方式</li>
+<li>上传细节：<ul>
+<li>上传的 数据量过大：可以考虑对崩溃日志进行压缩处理，以减小数据传输的负担。</li>
+<li>断点续传：当上传崩溃日志时，若中断了网络连接，可以采用 断点续传 方案，确保上传的完整性。  </li>
+<li>线程问题：崩溃信息应通过 异步任务 上传，避免影响用户体验。</li>
+<li>上传时机，什么时机上传，对用户使用影响最小</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>崩溃日志解析</p>
+<ul>
+<li>手动符号化：使用 atos 或 symbolicatecrash 工具，将崩溃地址和对应的 dSYM 文件进行匹配，得到堆栈信息。</li>
+<li>在服务器端自动符号化</li>
+<li>dSYM 文件</li>
+</ul>
+</li>
+<li><p>其他</p>
+<ul>
+<li>崩溃日志保密性</li>
+<li>本地缓存与上传优化</li>
+<li>用户反馈：可以让用户通过手机设置中的同步改进来上传app崩溃信息</li>
+<li>通过xcode的统计信息</li>
+</ul>
+</li>
+</ol>
+<h3 id="卡顿-FPS"><a href="#卡顿-FPS" class="headerlink" title="卡顿 FPS"></a>卡顿 FPS</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/u014600626/article/details/122524652">参考</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903944867545096">参考</a><br>卡顿主要是主线程阻塞，导致界面无法流畅渲染表现为掉帧，按钮点击无响应，页面切换卡顿等等</p>
+<ul>
+<li>方案1 通过 监听 RunLoop 状态变化，如果检测到某个状态持续时间过长，就可以判断 App 是否发生卡顿。</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">#<span class="keyword">import</span> &lt;Foundation/Foundation.h&gt;</span><br><span class="line">#<span class="keyword">import</span> &lt;mach/mach.h&gt;</span><br><span class="line"></span><br><span class="line"><span class="meta">@interface</span> <span class="type">LagMonitor</span> : <span class="type">NSObject</span></span><br><span class="line"><span class="meta">@property</span> (nonatomic, assign) <span class="type">CFRunLoopObserverRef</span> observer;</span><br><span class="line"><span class="meta">@end</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@implementation</span> <span class="type">LagMonitor</span></span><br><span class="line"></span><br><span class="line"><span class="operator">+</span> (instancetype)sharedInstance &#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="type">LagMonitor</span> <span class="operator">*</span>instance;</span><br><span class="line">    <span class="keyword">static</span> dispatch_once_t onceToken;</span><br><span class="line">    dispatch_once(<span class="operator">&amp;</span>onceToken, <span class="operator">^</span>&#123;</span><br><span class="line">        instance <span class="operator">=</span> [[<span class="type">LagMonitor</span> alloc] <span class="keyword">init</span>];</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">return</span> instance;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="operator">-</span> (void)startMonitoring &#123;</span><br><span class="line">    <span class="type">CFRunLoopObserverContext</span> context <span class="operator">=</span> &#123;<span class="number">0</span>, (__bridge void <span class="operator">*</span>)<span class="keyword">self</span>, <span class="type">NULL</span>, <span class="type">NULL</span>, <span class="type">NULL</span>&#125;;</span><br><span class="line">    <span class="keyword">self</span>.observer <span class="operator">=</span> <span class="type">CFRunLoopObserverCreate</span>(kCFAllocatorDefault,</span><br><span class="line">                                            kCFRunLoopBeforeSources <span class="operator">|</span> kCFRunLoopAfterWaiting,</span><br><span class="line">                                            <span class="type">YES</span>, <span class="number">0</span>, runLoopCallback, <span class="operator">&amp;</span>context);</span><br><span class="line">    </span><br><span class="line">    <span class="type">CFRunLoopAddObserver</span>(<span class="type">CFRunLoopGetMain</span>(), <span class="keyword">self</span>.observer, kCFRunLoopCommonModes);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void runLoopCallback(<span class="type">CFRunLoopObserverRef</span> observer, <span class="type">CFRunLoopActivity</span> activity, void <span class="operator">*</span>info) &#123;</span><br><span class="line">    <span class="keyword">static</span> dispatch_once_t onceToken;</span><br><span class="line">    dispatch_once(<span class="operator">&amp;</span>onceToken, <span class="operator">^</span>&#123;</span><br><span class="line">        dispatch_async(dispatch_get_global_queue(<span class="type">DISPATCH_QUEUE_PRIORITY_HIGH</span>, <span class="number">0</span>), <span class="operator">^</span>&#123;</span><br><span class="line">            <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">                int64_t start <span class="operator">=</span> mach_absolute_time();</span><br><span class="line">                usleep(<span class="number">50000</span>); <span class="comment">// 50ms，模拟卡顿检测</span></span><br><span class="line">                int64_t end <span class="operator">=</span> mach_absolute_time();</span><br><span class="line">                </span><br><span class="line">                double elapsed <span class="operator">=</span> (double)(end <span class="operator">-</span> start) <span class="operator">/</span> <span class="type">NSEC_PER_MSEC</span>; <span class="comment">// 转换为 ms</span></span><br><span class="line">                <span class="keyword">if</span> (elapsed <span class="operator">&gt;</span> <span class="number">50</span>) &#123; <span class="comment">// 如果超时 50ms，则判定为卡顿</span></span><br><span class="line">                    <span class="type">NSLog</span>(@<span class="string">&quot;⚠️ 卡顿检测：主线程阻塞超过 %.2f ms&quot;</span>, elapsed);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@end</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>方案2 监测主线程的 CPU 使用率</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">#include <span class="operator">&lt;</span>mach<span class="operator">/</span>mach.h<span class="operator">&gt;</span></span><br><span class="line"></span><br><span class="line">double getMainThreadCPUUsage() &#123;</span><br><span class="line">    thread_act_array_t threads;</span><br><span class="line">    mach_msg_type_number_t threadCount <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    kern_return_t kr <span class="operator">=</span> task_threads(mach_task_self(), <span class="operator">&amp;</span>threads, <span class="operator">&amp;</span>threadCount);</span><br><span class="line">    <span class="keyword">if</span> (kr <span class="operator">!=</span> <span class="type">KERN_SUCCESS</span>) <span class="keyword">return</span> <span class="operator">-</span><span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    double totalUsage <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (int i <span class="operator">=</span> <span class="number">0</span>; i <span class="operator">&lt;</span> threadCount; i<span class="operator">++</span>) &#123;</span><br><span class="line">        thread_basic_info_data_t threadInfo;</span><br><span class="line">        mach_msg_type_number_t threadInfoCount <span class="operator">=</span> <span class="type">THREAD_BASIC_INFO_COUNT</span>;</span><br><span class="line">        </span><br><span class="line">        kr <span class="operator">=</span> thread_info(threads[i], <span class="type">THREAD_BASIC_INFO</span>, (thread_info_t)<span class="operator">&amp;</span>threadInfo, <span class="operator">&amp;</span>threadInfoCount);</span><br><span class="line">        <span class="keyword">if</span> (kr <span class="operator">==</span> <span class="type">KERN_SUCCESS</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (threadInfo.flags <span class="operator">&amp;</span> <span class="type">TH_FLAGS_IDLE</span>) <span class="keyword">continue</span>;</span><br><span class="line">            totalUsage <span class="operator">+=</span> threadInfo.cpu_usage <span class="operator">/</span> (double)<span class="type">TH_USAGE_SCALE</span> <span class="operator">*</span> <span class="number">100.0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> totalUsage;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 定期检查主线程 CPU</span></span><br><span class="line">dispatch_async(dispatch_get_global_queue(<span class="type">DISPATCH_QUEUE_PRIORITY_BACKGROUND</span>, <span class="number">0</span>), <span class="operator">^</span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        double cpuUsage <span class="operator">=</span> getMainThreadCPUUsage();</span><br><span class="line">        <span class="keyword">if</span> (cpuUsage <span class="operator">&gt;</span> <span class="number">80.0</span>) &#123;</span><br><span class="line">            <span class="type">NSLog</span>(@<span class="string">&quot;⚠️ 主线程 CPU 使用率过高：%.2f%%&quot;</span>, cpuUsage);</span><br><span class="line">        &#125;</span><br><span class="line">        sleep(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>方案3 利用 CADisplayLink 检测掉帧</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">CADisplayLink</span> 是 iOS 的 屏幕刷新监听器，每 <span class="number">16</span>.67ms 触发一次（对应 60FPS）</span><br><span class="line">如果 <span class="type">CADisplayLink</span> 两次回调时间间隔超过 <span class="number">16</span>.67ms，说明有掉帧现象，可能是卡顿的信号<span class="operator">。</span></span><br><span class="line"></span><br><span class="line">#<span class="keyword">import</span> &lt;QuartzCore/CADisplayLink.h&gt;</span><br><span class="line"></span><br><span class="line"><span class="meta">@interface</span> <span class="type">FPSMonitor</span> ()</span><br><span class="line"><span class="meta">@property</span> (nonatomic, strong) <span class="type">CADisplayLink</span> <span class="operator">*</span>displayLink;</span><br><span class="line"><span class="meta">@property</span> (nonatomic, assign) <span class="type">NSTimeInterval</span> lastTime;</span><br><span class="line"><span class="meta">@property</span> (nonatomic, assign) <span class="type">NSUInteger</span> frameCount;</span><br><span class="line"><span class="meta">@end</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@implementation</span> <span class="type">FPSMonitor</span></span><br><span class="line"></span><br><span class="line"><span class="operator">-</span> (void)startMonitoring &#123;</span><br><span class="line">    <span class="keyword">self</span>.displayLink <span class="operator">=</span> [<span class="type">CADisplayLink</span> displayLinkWithTarget:<span class="keyword">self</span> selector:<span class="meta">@selector</span>(tick:)];</span><br><span class="line">    [<span class="keyword">self</span>.displayLink addToRunLoop:[<span class="type">NSRunLoop</span> mainRunLoop] forMode:<span class="type">NSRunLoopCommonModes</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="operator">-</span> (void)tick:(<span class="type">CADisplayLink</span> <span class="operator">*</span>)link &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">self</span>.lastTime <span class="operator">==</span> <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">self</span>.lastTime <span class="operator">=</span> link.timestamp;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">self</span>.frameCount<span class="operator">++</span>;</span><br><span class="line">    <span class="type">NSTimeInterval</span> delta <span class="operator">=</span> link.timestamp <span class="operator">-</span> <span class="keyword">self</span>.lastTime;</span><br><span class="line">    <span class="keyword">if</span> (delta <span class="operator">&gt;=</span> <span class="number">1.0</span>) &#123;</span><br><span class="line">        float fps <span class="operator">=</span> <span class="keyword">self</span>.frameCount <span class="operator">/</span> delta;</span><br><span class="line">        <span class="type">NSLog</span>(@<span class="string">&quot;⚠️ 当前 FPS：%.2f&quot;</span>, fps);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// FPS 低于 30，说明 UI 卡顿</span></span><br><span class="line">        <span class="keyword">if</span> (fps <span class="operator">&lt;</span> <span class="number">30</span>) &#123;</span><br><span class="line">            <span class="type">NSLog</span>(@<span class="string">&quot;⚠️ 可能出现卡顿！&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">self</span>.frameCount <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">self</span>.lastTime <span class="operator">=</span> link.timestamp;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@end</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ul>
+<li>方案4 信号量 (Semaphore) 监测</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">-</span> (void)startMonitoring &#123;</span><br><span class="line">    dispatch_async(dispatch_get_global_queue(<span class="type">DISPATCH_QUEUE_PRIORITY_HIGH</span>, <span class="number">0</span>), <span class="operator">^</span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">            dispatch_semaphore_t semaphore <span class="operator">=</span> dispatch_semaphore_create(<span class="number">0</span>);</span><br><span class="line">            </span><br><span class="line">            dispatch_async(dispatch_get_main_queue(), <span class="operator">^</span>&#123;</span><br><span class="line">                dispatch_semaphore_signal(semaphore);</span><br><span class="line">            &#125;);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 等待 100ms，如果主线程未释放信号量，说明发生了卡顿</span></span><br><span class="line">            int timeout <span class="operator">=</span> dispatch_semaphore_wait(semaphore, dispatch_time(<span class="type">DISPATCH_TIME_NOW</span>, <span class="number">100</span> <span class="operator">*</span> <span class="type">NSEC_PER_MSEC</span>));</span><br><span class="line">            <span class="keyword">if</span> (timeout <span class="operator">!=</span> <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="type">NSLog</span>(@<span class="string">&quot;⚠️ 发现主线程卡顿&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            usleep(<span class="number">50000</span>); <span class="comment">// 50ms 检测一次</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line">主线程 每帧都会调用 dispatch_semaphore_signal(semaphore) 释放信号量<span class="operator">。</span></span><br><span class="line">子线程 通过 dispatch_semaphore_wait(semaphore, 100ms) 等待信号量释放<span class="operator">。</span></span><br><span class="line">如果 100ms 仍然没有释放，说明主线程阻塞，可能发生卡顿<span class="operator">。</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Instruments使用教程"><a href="#Instruments使用教程" class="headerlink" title="Instruments使用教程"></a>Instruments使用教程</h3><p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2343006">参考文章</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/strengthen/p/18164412">参考文章</a></p>
+<h3 id="事件传递和视图响应链"><a href="#事件传递和视图响应链" class="headerlink" title="事件传递和视图响应链"></a>事件传递和视图响应链</h3><blockquote>
+<p>只有继承了UIResponser的对象才能够接受处理事件。UIResponse是响应对象的基类，定义了处理各种事件的接口。在 UIKit 中我们使用响应者对象Responder接收和处理事件。一个响应者对象一般是 UIResponder 类的实例，它常见的子类包括 UIView，UIViewController 和 UIApplication，这意味着几乎所有我们日常使用的控件都是响应者，如 UIButton，UILabel 等等。</p>
+</blockquote>
+<ul>
+<li><p>响应链：由最基础的view向系统传递，first view -&gt; super view -&gt; … -&gt; view controller -&gt; window -&gt; Application -&gt; AppDelegate</p>
+</li>
+<li><p>传递链：由系统向最上层view传递，Application -&gt; window -&gt; root view -&gt; sub view -&gt; … -&gt; first view</p>
+</li>
+<li><p>手势传递有3个方向需要考虑UIResponder UIGestureRecognizer UIControl</p>
+</li>
+<li></li>
+</ul>
+<ol>
+<li><p>一般的事件响应流程是没有 UIGestureRecognizer 参与</p>
+</li>
+<li><p>当手势识别参与响应链</p>
+<blockquote>
+<ol>
+<li>在通过命中测试找到第一响应者之后，会将 UITouch 分发给 UIResponder的touches 系列方法，同时也会分发给手势识别系统，让这两个处理系统同时工作。</li>
+<li>当手势识别成功： 被触摸的那个视图，也就是第一响应者会收到touchesCancelled的消息，并且该视图不会再收到来自该 UITouch 的 touches 事件。同时也让该 UITouch 关联的其他手势也收到touchesCancelled，并且之后不再收到此 UITouch 的 touches事件。这样做就实现了该识别到的手势能够独占该 UITouch</li>
+<li>我们可以通过配置手势的属性来改变它的表现，下面介绍三个常用的属性：<br>1、cancelsTouchesInView：该属性默认是 true。顾名思义，如果设置成false，当手势识别成功时，将不会发送touchesCancelled给目标视图，从而也不会打断视图本身方法的触发，最后的结果是手势和本身方法同时触发。有的时候我们不希望手势覆盖掉视图本身的方法，就可以更改这个属性来达到效果。</li>
+</ol>
+<p>  2、delaysTouchesBegan：该属性默认是 false。在上个例子中我们得知，在手指触摸屏幕之后，手势处于 .possible 状态时，视图的 touches 方法已经开始触发了，当手势识别成功之后，才会取消视图的 touches 方法。当该属性时 true 时，视图的touches 方法会被延迟到手势识别成功或者失败之后才开始。也就是说，假如设置该属性为 true ，在整个过程中识别手势又是成功的话，视图的touches 系列方法将不会被触发。<br>  3、delaysTouchesEnded：该属性默认是 true。与上个属性类似，该属性为true时，视图的touchesEnded将会延迟大约 0.15s 触发。该属性常用于连击，比如我们需要触发一个双击手势，当我们手指离开屏幕时应当触发touchesEnded，如果这时该属性为 false，那就不会延迟视图的 touchesEnded方法，将会立马触发 ，那我们的双击就会被识别为两次单击。当该属性是 true 时，会延迟 touchesEnded 的触发，将两次单击连在一起，来正常识别这种双击手势。<br>  4、require(toFail:) 让手势等待按钮失败后触发</p>
+</blockquote>
+</li>
+<li><p>UIControl 与手势识别  </p>
+<ul>
+<li>当我们给一个已经拥有点击手势的视图，添加一个 UIControl 作为子视图，那么我们无论怎么给该 UIControl 添加点击类型的 target-action 方法，最后的结果都是触发其父视图的手势（因为在命中测试的过程中收集到了这个手势），并且中断 UIControl 的事件处理，导致添加的 target-action 方法永远无法触发。</li>
+<li>UIKit 对部分控件（同时也是 UIControl 的子类）做了特殊处理，当这些控件的父视图上有与该控件冲突功能的手势时，会优先触发控件自身的方法，不会触发其父视图上的那个手势.  </li>
+<li>当我们给一个已经拥有点击手势的视图，添加一个 UIButton作为子视图，并且给按钮添加点击类型的 target-action 方法，那么当点击按钮时，按钮的 target-action 方法会触发，手势的方法会被忽略。</li>
+<li>要在控件调用其操作方法之前处理任何手势，请在控件本身上安装手势识别器。手势识别器在它们所附加到的视图之前处理触摸事件</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://juejin.cn/post/7208823936300564539">很好的博客</a></li>
+<li><a target="_blank" rel="noopener" href="https://roadmap.isylar.com/Article/iOSUIResponderChain.html">如何响应需要判断 UIResponder UIGestureRecognizer UIControl</a></li>
+</ul>
+<hr>
+<ul>
+<li><p>事件传递</p>
+<ul>
+<li>事件产生后，UIApplication会将该事件分发给程序的主窗口</li>
+<li>主窗口会在视图结构中找到一个最合适的view来处理该事件，如何找到最合适的view 有几个关键方法</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">调用 hitTest(<span class="keyword">_</span>:with:) 方法，判断自己能否响应事件</span><br><span class="line">调用 point(inside:with:) 方法，判断触摸点是否在自己身上</span><br><span class="line">都满足倒序遍历 subviews 重复前面的步骤</span><br><span class="line">如果没有符合条件的 subview 那么自己就是最合适的view</span><br><span class="line"></span><br><span class="line">找到view后，就会调用 touches(<span class="keyword">_</span>:with:) 方法，将事件顺着 响应链 将事件交由下一个响应者去处理<span class="operator">【</span><span class="type">UIReponder</span> 的 next返回的就是下一个响应者<span class="operator">】</span></span><br><span class="line">如果一个 <span class="type">UIView</span> 是 <span class="type">UIViewController</span> 的主视图，那么 <span class="type">UIView</span> 的响应者是 <span class="type">UIViewController</span> 否则是 <span class="type">UIView</span> 的父视图</span><br></pre></td></tr></table></figure></li>
+<li><p>视图响应</p>
+<ul>
+<li>找到最适合的 view 接收事件后，如果不重写实现该 view 的 touches(_:with:) 方法，那么这些方法的默认实现是将事件顺着响应者链向下传递， 将事件交给下一个响应者去处理。UIReponder().next返回 下一个响应者。UIApplication 对象的 next 则通常返回 nil</li>
+</ul>
+</li>
+<li><p>应用：</p>
+<ul>
+<li>重写 touches(_:with:) 处理触摸事件，或者阻止事件传递</li>
+<li>利用事件响应来实现跨层处理事件</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> UIKit</span><br><span class="line"><span class="keyword">extension</span> <span class="title class_">UIResponder</span> &#123;</span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">router</span>(<span class="params">withEventName</span> <span class="params">eventName</span>: <span class="type">String</span>, <span class="params">userInfo</span>: [<span class="params">String</span>: <span class="keyword">Any</span>]) &#123;</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">let</span> next <span class="operator">=</span> <span class="keyword">self</span>.next &#123;</span><br><span class="line">            next.router(withEventName: eventName, userInfo: userInfo)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// UIViewController</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyViewController</span>: <span class="title class_ inherited__">UIViewController</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="keyword">func</span> <span class="title function_">router</span>(<span class="params">withEventName</span> <span class="params">eventName</span>: <span class="type">String</span>, <span class="params">userInfo</span>: [<span class="params">String</span>: <span class="keyword">Any</span>]) &#123;</span><br><span class="line">        <span class="keyword">if</span> eventName <span class="operator">==</span> <span class="string">&quot;YFTransferNameEvent&quot;</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">let</span> name <span class="operator">=</span> userInfo[<span class="string">&quot;YFUserName&quot;</span>] <span class="keyword">as?</span> <span class="type">String</span> &#123;</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;用户的姓名为: <span class="subst">\(name)</span>&quot;</span>)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Cell</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyTableViewCell</span>: <span class="title class_ inherited__">UITableViewCell</span> &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> userName: <span class="type">String</span> <span class="operator">=</span> <span class="string">&quot;John Doe&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">@IBAction</span> <span class="keyword">func</span> <span class="title function_">buttonClickAction</span>(<span class="keyword">_</span> <span class="params">sender</span>: <span class="type">UIButton</span>) &#123;</span><br><span class="line">        <span class="keyword">self</span>.router(withEventName: <span class="string">&quot;YFTransferNameEvent&quot;</span>, userInfo: [<span class="string">&quot;YFUserName&quot;</span>: <span class="keyword">self</span>.userName])</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="手势冲突、无响应处理"><a href="#手势冲突、无响应处理" class="headerlink" title="手势冲突、无响应处理"></a>手势冲突、无响应处理</h3><ul>
+<li>如果超出父控件想添加事件</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">-</span> (<span class="type">UIView</span> <span class="operator">*</span>)hitTest:(<span class="type">CGPoint</span>)point withEvent:(<span class="type">UIEvent</span> <span class="operator">*</span>)event &#123;</span><br><span class="line">    <span class="type">UIView</span> <span class="operator">*</span>view <span class="operator">=</span> [<span class="keyword">super</span> hitTest:point withEvent:event];</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    在这里处理 需要处理事件的真正视图</span></span><br><span class="line"><span class="comment">    if (view == nil &amp;&amp; !self.voicetableview.hidden) &#123;</span></span><br><span class="line"><span class="comment">        for (UIView *subView in self.subviews) &#123;</span></span><br><span class="line"><span class="comment">            CGPoint p = [subView convertPoint:point fromView:self];</span></span><br><span class="line"><span class="comment">            if (CGRectContainsPoint(subView.bounds, p)) &#123;</span></span><br><span class="line"><span class="comment">                view = subView;</span></span><br><span class="line"><span class="comment">            &#125;</span></span><br><span class="line"><span class="comment">        &#125;</span></span><br><span class="line"><span class="comment">    &#125;</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="keyword">return</span> view;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>手势和手势冲突  <blockquote>
+<p>当自定义手势和系统手势冲突，可以使用手势的两个属性：cancelsTouchesInView、delaysTouchesBegan进行处理。<br>例如：页面添加自定义手势 UIPanGestureRecognizer，与页面上的系统手势 touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) 回调方法冲突，可利用该属性屏蔽掉系统手势。</p>
+<ol>
+<li>cancelsTouchesInView（是否取消向事件响应链传递）：<br>默认 YES，自定义的手势响应后，系统手势不再响应，但自定义手势识别前，会先执行系统手势。<br>设置为 NO 后，自定义手势和系统手势会同时识别响应。<blockquote>
+<ol start="2">
+<li>delaysTouchesBegan（延迟响应链的识别）：<br>默认 NO，先执行响应链中的方法（系统方法），识别到自定义手势后，不再执行系统方法。<br>设置为 YES 后，优先识别自定义手势，当自定义手势识别失败后才会响应系统方法</li>
+</ol>
+</blockquote>
+</li>
+</ol>
+</blockquote>
+</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// MARK: - 阻止手势向事件传递链传递</span></span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">test_2</span>() &#123;</span><br><span class="line">        <span class="keyword">let</span> panGes <span class="operator">=</span> <span class="type">UIPanGestureRecognizer</span>(target: <span class="keyword">self</span>, action: <span class="keyword">#selector</span>(panGestureAction(panGes:)))</span><br><span class="line">        <span class="comment">// 阻止手势向事件传递链执行 默认是 YES</span></span><br><span class="line">        <span class="comment">// panGes.cancelsTouchesInView = false</span></span><br><span class="line">        <span class="comment">// 延迟手势向事件传递链执行 默认是 NO</span></span><br><span class="line">        panGes.delaysTouchesBegan <span class="operator">=</span> <span class="literal">true</span></span><br><span class="line">        <span class="keyword">self</span>.view.addGestureRecognizer(panGes)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">@objc</span> <span class="keyword">func</span> <span class="title function_">panGestureAction</span>(<span class="params">panGes</span>: <span class="type">UIPanGestureRecognizer</span>) &#123;</span><br><span class="line">        <span class="keyword">let</span> point <span class="operator">=</span> panGes.location(in: <span class="keyword">self</span>.view)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;********************&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;W ==&gt; <span class="subst">\(point.x)</span>&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;H ==&gt; <span class="subst">\(point.y)</span>&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">override</span> <span class="keyword">func</span> <span class="title function_">touchesMoved</span>(<span class="keyword">_</span> <span class="params">touches</span>: <span class="type">Set</span>&lt;<span class="type">UITouch</span>&gt;, <span class="params">with</span> <span class="params">event</span>: <span class="type">UIEvent</span>?) &#123;</span><br><span class="line">        <span class="keyword">let</span> point <span class="operator">=</span> touches.first<span class="operator">?</span>.location(in: <span class="keyword">self</span>.view)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;=====================&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;W ==&gt; <span class="subst">\(String(describing: point<span class="operator">?</span>.x))</span>&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;H ==&gt; <span class="subst">\(String(describing: point<span class="operator">?</span>.y))</span>&quot;</span>)</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="kvc-kvo"><a href="#kvc-kvo" class="headerlink" title="kvc&#x2F;kvo"></a>kvc&#x2F;kvo</h3><ol>
+<li><p>kvo 键值监听，kvo是对观察者模式的一种实现，底层是通过isa混写技术实现的  </p>
+<ol>
+<li>什么是isa混写？kvo的底层实现？</li>
+</ol>
+<ul>
+<li>当调用addObserver:forKeyPath添加监听对象A属性的时候，系统会在运行时动态的创建一个类NSKVONotifying_A的类，然后将对象A的isa指针指向生成的类NSKVONotifying_A，将原有类的isa动态的修改就是isa混写技术</li>
+<li>NSKVONotifying_A是继承自A，目的是重写原类中的set方法，达到通知所有观察者的目的</li>
+<li>在NSKVONotifying_A 中，重写setter方法的时候，实现了两个方法willchangeValueForKey 和 didchangeValueForKey，didchangeValueForKey将会触发监听回调observeValueForKeyPath方法</li>
+</ul>
+<ol start="2">
+<li>通过kvc是否会触发kvo？通过设置成员变量是否可以触发kvo？</li>
+</ol>
+<ul>
+<li>kvc：可以触发。成员变量：不可以触发</li>
+</ul>
+<ol start="3">
+<li>如果监听数组的变化</li>
+</ol>
+<ul>
+<li>不能监听count属性，因为它是只读的</li>
+<li>可以手动实现，回答kvo的问题，都基于原理重写set了方法来找答案</li>
+<li>使用kvc，mutableArrayValueForKey <a target="_blank" rel="noopener" href="https://blog.csdn.net/Margaret_MO/article/details/108181859">参考链接</a><blockquote>
+<p>总结: 回答kvo的问题，都基于原理重写set了方法来找答案</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>kvc 键值编码,允许动态地访问和修改对象的属性包括私有属性<br> 两个主要方法如下</p>
+<blockquote>
+<p>valueForKey： 获取值。 setValue：forKey： 设置值  </p>
+</blockquote>
+<p> 底层原理  </p>
+<ul>
+<li>valueForKey：流程</li>
+</ul>
+<ol>
+<li>通过key判断对应的实例变量是否有getter方法（getKey，key，isKey）</li>
+<li>判断实例变量是否存在(_key,_isKey,key,isKey)，受方法(bool)accessInstanceVariablesDirectly返回值的控制</li>
+<li>都找不到 通过方法valueForUndefinedKey报错</li>
+</ol>
+<ul>
+<li>setValue：forKey：流程</li>
+</ul>
+<ol>
+<li>通过key判断对应的实例变量是否有setter方法（setKey，key，isKey）</li>
+<li>判断实例变量是否存在(_key,_isKey,key,isKey)，受方法(bool)accessInstanceVariablesDirectly返回值的控制</li>
+<li>都找不到 通过方法-setValue:forUndefinedKey:报错</li>
+</ol>
+</li>
+</ol>
+<h3 id="扩展-代理-通知"><a href="#扩展-代理-通知" class="headerlink" title="扩展&#x2F;代理&#x2F;通知"></a>扩展&#x2F;代理&#x2F;通知</h3><ol>
+<li>扩展的用途</li>
+</ol>
+<ul>
+<li>声明私有方法、私有属性</li>
+</ul>
+<ol start="2">
+<li>扩展的特点</li>
+</ol>
+<ul>
+<li>编译时决议</li>
+</ul>
+<ol start="3">
+<li>代理 是一种设计模式，代理模式</li>
+<li>通知 是观察者模式实现的，可以跨层传递消息</li>
+<li>代理和通知的区别</li>
+</ol>
+<ul>
+<li>代理是一对一的关系，通知是一对多的关系<blockquote>
+<p>知识点: 使用数组可以实现模拟多代理的方式</p>
+</blockquote>
+</li>
+</ul>
+  <figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Foundation</span><br><span class="line"></span><br><span class="line"><span class="keyword">protocol</span> <span class="title class_">MultiDelegateProtocol</span>: <span class="title class_ inherited__">AnyObject</span> &#123;</span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">didReceiveEvent</span>(<span class="params">data</span>: <span class="type">String</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MultiDelegateManager</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">var</span> delegates <span class="operator">=</span> <span class="type">NSPointerArray</span>.weakObjects()</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 添加代理</span></span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">addDelegate</span>(<span class="keyword">_</span> <span class="params">delegate</span>: <span class="type">MultiDelegateProtocol</span>) &#123;</span><br><span class="line">        delegates.addPointer(<span class="type">Unmanaged</span>.passUnretained(delegate).toOpaque())</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 移除代理</span></span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">removeDelegate</span>(<span class="keyword">_</span> <span class="params">delegate</span>: <span class="type">MultiDelegateProtocol</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (index, pointer) <span class="keyword">in</span> delegates.allObjects.enumerated() &#123;</span><br><span class="line">            <span class="keyword">if</span> pointer <span class="operator">===</span> delegate &#123;</span><br><span class="line">                delegates.removePointer(at: index)</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 广播事件</span></span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">notifyDelegates</span>(<span class="params">data</span>: <span class="type">String</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> delegate <span class="keyword">in</span> delegates.allObjects &#123;</span><br><span class="line">            (delegate <span class="keyword">as?</span> <span class="type">MultiDelegateProtocol</span>)<span class="operator">?</span>.didReceiveEvent(data: data)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ol start="6">
+<li>如何实现通知机制？<ul>
+<li>数据结构使用字典</li>
+<li>将监听的名称作为key，将监听者和需要执行的method包装为字典，作为value</li>
+<li>发送通知的时候，根据名称找到监听者和执行方法</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line">#<span class="keyword">import</span> &lt;Foundation/Foundation.h&gt;</span><br><span class="line"></span><br><span class="line">typedef void (<span class="operator">^</span><span class="type">NotificationCallback</span>)(<span class="type">NSDictionary</span> <span class="operator">*</span>userInfo);</span><br><span class="line"></span><br><span class="line"><span class="meta">@interface</span> <span class="type">CustomNotificationCenter</span> : <span class="type">NSObject</span></span><br><span class="line"></span><br><span class="line"><span class="operator">+</span> (instancetype)sharedCenter;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加观察者</span></span><br><span class="line"><span class="operator">-</span> (void)addObserver:(id)observer</span><br><span class="line">           forName:(<span class="type">NSString</span> <span class="operator">*</span>)name</span><br><span class="line">          callback:(<span class="type">NotificationCallback</span>)callback;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 移除观察者</span></span><br><span class="line"><span class="operator">-</span> (void)removeObserver:(id)observer forName:(<span class="type">NSString</span> <span class="operator">*</span>)name;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发送通知</span></span><br><span class="line"><span class="operator">-</span> (void)postNotificationWithName:(<span class="type">NSString</span> <span class="operator">*</span>)name userInfo:(<span class="type">NSDictionary</span> <span class="operator">*</span>)userInfo;</span><br><span class="line"></span><br><span class="line"><span class="meta">@end</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@implementation</span> <span class="type">CustomNotificationCenter</span> &#123;</span><br><span class="line">    <span class="type">NSMutableDictionary</span>&lt;<span class="type">NSString</span> *, <span class="type">NSMutableArray</span> *&gt; <span class="operator">*</span>_observersi; <span class="comment">// 存储通知名称和观察者列表</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="operator">+</span> (instancetype)sharedCenter &#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="type">CustomNotificationCenter</span> <span class="operator">*</span>center;</span><br><span class="line">    <span class="keyword">static</span> dispatch_once_t onceToken;</span><br><span class="line">    dispatch_once(<span class="operator">&amp;</span>onceToken, <span class="operator">^</span>&#123;</span><br><span class="line">        center <span class="operator">=</span> [[<span class="type">CustomNotificationCenter</span> alloc] <span class="keyword">init</span>];</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">return</span> center;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="operator">-</span> (instancetype)<span class="keyword">init</span> &#123;</span><br><span class="line">    <span class="keyword">self</span> <span class="operator">=</span> [<span class="keyword">super</span> <span class="keyword">init</span>];</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">self</span>) &#123;</span><br><span class="line">        _observers <span class="operator">=</span> [<span class="type">NSMutableDictionary</span> dictionary];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">self</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="operator">-</span> (void)addObserver:(id)observer</span><br><span class="line">           forName:(<span class="type">NSString</span> <span class="operator">*</span>)name</span><br><span class="line">          callback:(<span class="type">NotificationCallback</span>)callback &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="operator">!</span>name <span class="operator">||</span> <span class="operator">!</span>observer <span class="operator">||</span> <span class="operator">!</span>callback) <span class="keyword">return</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@synchronized</span> (<span class="keyword">self</span>) &#123;</span><br><span class="line">        <span class="type">NSMutableArray</span> <span class="operator">*</span>observerList <span class="operator">=</span> _observers[name];</span><br><span class="line">        <span class="keyword">if</span> (<span class="operator">!</span>observerList) &#123;</span><br><span class="line">            observerList <span class="operator">=</span> [<span class="type">NSMutableArray</span> array];</span><br><span class="line">            _observers[name] <span class="operator">=</span> observerList;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 存储观察者信息</span></span><br><span class="line">        <span class="type">NSDictionary</span> <span class="operator">*</span>observerInfo <span class="operator">=</span> @&#123;@<span class="string">&quot;observer&quot;</span>: observer, @<span class="string">&quot;callback&quot;</span>: callback&#125;;</span><br><span class="line">        [observerList addObject:observerInfo];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="operator">-</span> (void)removeObserver:(id)observer forName:(<span class="type">NSString</span> <span class="operator">*</span>)name &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="operator">!</span>name <span class="operator">||</span> <span class="operator">!</span>observer) <span class="keyword">return</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@synchronized</span> (<span class="keyword">self</span>) &#123;</span><br><span class="line">        <span class="type">NSMutableArray</span> <span class="operator">*</span>observerList <span class="operator">=</span> _observers[name];</span><br><span class="line">        <span class="keyword">if</span> (observerList) &#123;</span><br><span class="line">            [observerList filterUsingPredicate:[<span class="type">NSPredicate</span> predicateWithBlock:<span class="operator">^</span><span class="type">BOOL</span>(<span class="type">NSDictionary</span> <span class="operator">*</span>info, <span class="type">NSDictionary</span> <span class="operator">*</span>bindings) &#123;</span><br><span class="line">                <span class="keyword">return</span> info[@<span class="string">&quot;observer&quot;</span>] <span class="operator">!=</span> observer;</span><br><span class="line">            &#125;]];</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> (observerList.count <span class="operator">==</span> <span class="number">0</span>) &#123;</span><br><span class="line">                [_observers removeObjectForKey:name];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="operator">-</span> (void)postNotificationWithName:(<span class="type">NSString</span> <span class="operator">*</span>)name userInfo:(<span class="type">NSDictionary</span> <span class="operator">*</span>)userInfo &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="operator">!</span>name) <span class="keyword">return</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@synchronized</span> (<span class="keyword">self</span>) &#123;</span><br><span class="line">        <span class="type">NSArray</span> <span class="operator">*</span>observerList <span class="operator">=</span> _observers[name];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">NSDictionary</span> <span class="operator">*</span>info <span class="keyword">in</span> observerList) &#123;</span><br><span class="line">            <span class="type">NotificationCallback</span> callback <span class="operator">=</span> info[@<span class="string">&quot;callback&quot;</span>];</span><br><span class="line">            <span class="keyword">if</span> (callback) &#123;</span><br><span class="line">                callback(userInfo);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@end</span></span><br><span class="line">     </span><br></pre></td></tr></table></figure>
+
+<h3 id="属性关键字"><a href="#属性关键字" class="headerlink" title="属性关键字"></a>属性关键字</h3><p>读写属性：readonly、readwrite(默认)<br>原子性： atomic(默认)、 nonatomic<br>引用计数：retain&#x2F;strong、 unsafe_unretained&#x2F;assign、weak、copy<br>strong：修饰对象，会增加引用计数<br>weak： 修饰对象，不会增加引用计数，引用对象释放后，会自动置为nil，没有内存风险<br>assign：1. 修饰基本数据类型  2.如果修饰对象，不会增加引用计数，引用对象释放后，再次访问，会有野指针访问风险<br>copy：</p>
+<ul>
+<li>浅拷贝：不开辟新内存，对内存地址的copy，两个对象指向同一块内存，增加引用计数</li>
+<li>深拷贝：开辟新内存，两个对象指向不同的内存空间，不会增加原有对象的引用计数</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>对象</th>
+<th>拷贝方式</th>
+<th>新对象</th>
+<th>类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>可变对象</td>
+<td>copy</td>
+<td>不可变对象</td>
+<td>深拷贝</td>
+</tr>
+<tr>
+<td>可变对象</td>
+<td>mutablecopy</td>
+<td>可变对象</td>
+<td>深拷贝</td>
+</tr>
+<tr>
+<td>不可变对象</td>
+<td>copy</td>
+<td>不可变对象</td>
+<td>浅拷贝</td>
+</tr>
+<tr>
+<td>不可变对象</td>
+<td>mutablecopy</td>
+<td>可变对象</td>
+<td>深拷贝</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>数组&#x2F;字符串&#x2F;字典等，由A控制器传递给B控制器时，如果A的数组是可变的，但是B中修饰使用copy，在B中使用数组时要特别注意，因为此时的数组已经是不可变数组了。</p>
+</blockquote>
+<h3 id="编译时语言和动态时语言的区别？"><a href="#编译时语言和动态时语言的区别？" class="headerlink" title="编译时语言和动态时语言的区别？"></a>编译时语言和动态时语言的区别？</h3><ul>
+<li>动态时语言可以将函数决议推迟到运行时，使用@dynamic关键字</li>
+<li>编译时语言在编译时就进行了函数决议。在运行时，无法修改</li>
+</ul>
+<h3 id="load和initialize的区别"><a href="#load和initialize的区别" class="headerlink" title="load和initialize的区别"></a>load和initialize的区别</h3><ul>
+<li><p>load方法</p>
+<ul>
+<li><p>调用时机</p>
+<blockquote>
+<p>当我们启动程序时，参与了编译的类、分类都会被加载进内存，load方法就是在这个类被加载的时候调用的(前提是这个类有实现load方法)，这个过程与这个类是否被使用是无关的，也就是说如果有一个类(MyClass)即使在整个程序中都没有用到，甚至没有任何一个文件去引入MyClass的头文件，MyClass的的load的方法一样会被调用。等所有的类、分类都加载进内存后才会调用程序的main函数，所以所有类的load方法都是在main函数之前被调用的。而且每个类、分类的load方法只会被调用一次</p>
+</blockquote>
+</li>
+<li><p>调用顺序</p>
+<blockquote>
+<p>一个程序中如果所有的类、分类都实现了load方法，那么所有的load方法都会被调用。它们的执行顺序遵循以下规则：</p>
+<ul>
+<li>先执行所有类的load方法，再执行所有分类的load方法。</li>
+<li>执行类的load方法时，是按照参与编译的顺序，先编译的类先执行，但是如果某个类是继承自另一个类，那么会先执行父类的load方法个再执行自己的load方法。</li>
+<li>执行分类的load方法时，是按照分类参与编译的顺序，先编译的分类先执行。</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>编译顺序，我们可以在项目的Build Phases –&gt; Compile Sources查看，最上面的就最先编译，我们可以拖动文件来调整编译顺序。</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>initialize方法</p>
+<ul>
+<li>调用时机<blockquote>
+<p>initialize方法是在类或它的子类收到第一条消息时被调用的，这里的消息就是指实例方法或类方法的调用，所以所有类的initialize调用是在执行main函数之后调用的。而且一个类只会调用一次initialize方法。如果一个类在程序运行过程中一直没有被使用过，那这个类的initialize方法也就不会被调用，这一点和load方法是不一样的。</p>
+</blockquote>
+</li>
+<li>调用方式<blockquote>
+<p>initialize方法的调用和普通方法调用一样，也是走的objc_msgSend流程。所以如果一个类和它的分类都实现了initialize方法，那最终调用的会是分类中的方法。<br>如果子类和父类都实现了initialize方法，那么会先调用父类的方法，然后调用子类的方法个(这里注意子类中不需要写[super initialize]来调用父类的方法，通过查看源码得知它是在底层实现过程中主动调用的父类的initialize方法)。</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>使用注意事项</p>
+<blockquote>
+<p>虽然使用initialize要比使用load安全(因为在调用initialize时所有类已经被加载进内存了)，但我们还是要尽量少用initialize这个方法个，尤其要谨慎在分类中实现initialize方法，因为如果在分类中实现了，本类实现的initialize方法将不会被调用。实际开发中initialize方法一般用于初始化全局变量或静态变量</p>
+</blockquote>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844904040703197191">参考文章</a></p>
+</li>
+</ul>
+<h3 id="单元测试"><a href="#单元测试" class="headerlink" title="单元测试"></a>单元测试</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Margaret_MO/article/details/115420007">参考链接</a></p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// InAppPurchaseManager.swift</span></span><br><span class="line"><span class="keyword">import</span> Foundation</span><br><span class="line"><span class="keyword">import</span> SwiftyStoreKit</span><br><span class="line"></span><br><span class="line"><span class="keyword">protocol</span> <span class="title class_">StoreKitWrapper</span> &#123;</span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">purchase</span>(<span class="params">productId</span>: <span class="type">String</span>, <span class="params">completion</span>: <span class="keyword">@escaping</span> (<span class="type">Result</span>&lt;<span class="type">PurchaseDetails</span>, <span class="type">Error</span>&gt;) -&gt; <span class="type">Void</span>)</span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">restorePurchases</span>(<span class="params">completion</span>: <span class="keyword">@escaping</span> ([<span class="type">String</span>]) -&gt; <span class="type">Void</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SwiftyStoreKitWrapper</span>: <span class="title class_ inherited__">StoreKitWrapper</span> &#123;</span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">purchase</span>(<span class="params">productId</span>: <span class="type">String</span>, <span class="params">completion</span>: <span class="keyword">@escaping</span> (<span class="type">Result</span>&lt;<span class="type">PurchaseDetails</span>, <span class="type">Error</span>&gt;) -&gt; <span class="type">Void</span>) &#123;</span><br><span class="line">        <span class="type">SwiftyStoreKit</span>.purchaseProduct(productId, atomically: <span class="literal">true</span>) &#123; result <span class="keyword">in</span></span><br><span class="line">            <span class="keyword">switch</span> result &#123;</span><br><span class="line">            <span class="keyword">case</span> .success(<span class="keyword">let</span> purchase):</span><br><span class="line">                completion(.success(purchase))</span><br><span class="line">            <span class="keyword">case</span> .error(<span class="keyword">let</span> error):</span><br><span class="line">                completion(.failure(error))</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">restorePurchases</span>(<span class="params">completion</span>: <span class="keyword">@escaping</span> ([<span class="type">String</span>]) -&gt; <span class="type">Void</span>) &#123;</span><br><span class="line">        <span class="type">SwiftyStoreKit</span>.restorePurchases &#123; results <span class="keyword">in</span></span><br><span class="line">            <span class="keyword">let</span> restored <span class="operator">=</span> results.restoredPurchases.map &#123; <span class="variable">$0</span>.productId &#125;</span><br><span class="line">            completion(restored)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">InAppPurchaseManager</span> &#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">let</span> shared <span class="operator">=</span> <span class="type">InAppPurchaseManager</span>()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">let</span> storeKitWrapper: <span class="type">StoreKitWrapper</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">init</span>(<span class="params">storeKitWrapper</span>: <span class="type">StoreKitWrapper</span> <span class="operator">=</span> <span class="type">SwiftyStoreKitWrapper</span>()) &#123;</span><br><span class="line">        <span class="keyword">self</span>.storeKitWrapper <span class="operator">=</span> storeKitWrapper</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">setup</span>() &#123;</span><br><span class="line">        <span class="type">SwiftyStoreKit</span>.completeTransactions(atomically: <span class="literal">true</span>) &#123; purchases <span class="keyword">in</span></span><br><span class="line">            <span class="keyword">for</span> purchase <span class="keyword">in</span> purchases &#123;</span><br><span class="line">                <span class="keyword">switch</span> purchase.transaction.transactionState &#123;</span><br><span class="line">                <span class="keyword">case</span> .purchased, .restored:</span><br><span class="line">                    <span class="built_in">print</span>(<span class="string">&quot;Purchase/Restore successful: <span class="subst">\(purchase.productId)</span>&quot;</span>)</span><br><span class="line">                    <span class="type">SwiftyStoreKit</span>.finishTransaction(purchase.transaction)</span><br><span class="line">                <span class="keyword">case</span> .failed, .purchasing, .deferred:</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                <span class="keyword">@unknown</span> <span class="keyword">default</span>:</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">purchase</span>(<span class="params">productId</span>: <span class="type">String</span>, <span class="params">completion</span>: <span class="keyword">@escaping</span> (<span class="type">Result</span>&lt;<span class="type">PurchaseDetails</span>, <span class="type">Error</span>&gt;) -&gt; <span class="type">Void</span>) &#123;</span><br><span class="line">        storeKitWrapper.purchase(productId: productId, completion: completion)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">restorePurchases</span>(<span class="params">completion</span>: <span class="keyword">@escaping</span> ([<span class="type">String</span>]) -&gt; <span class="type">Void</span>) &#123;</span><br><span class="line">        storeKitWrapper.restorePurchases(completion: completion)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// MockStoreKitWrapper.swift</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MockStoreKitWrapper</span>: <span class="title class_ inherited__">StoreKitWrapper</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> purchaseResult: <span class="type">Result</span>&lt;<span class="type">PurchaseDetails</span>, <span class="type">Error</span>&gt;?</span><br><span class="line">    <span class="keyword">var</span> restoredProducts: [<span class="type">String</span>] <span class="operator">=</span> []</span><br><span class="line"></span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">purchase</span>(<span class="params">productId</span>: <span class="type">String</span>, <span class="params">completion</span>: <span class="keyword">@escaping</span> (<span class="type">Result</span>&lt;<span class="type">PurchaseDetails</span>, <span class="type">Error</span>&gt;) -&gt; <span class="type">Void</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">let</span> result <span class="operator">=</span> purchaseResult &#123;</span><br><span class="line">            completion(result)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">restorePurchases</span>(<span class="params">completion</span>: <span class="keyword">@escaping</span> ([<span class="type">String</span>]) -&gt; <span class="type">Void</span>) &#123;</span><br><span class="line">        completion(restoredProducts)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// InAppPurchaseManagerTests.swift</span></span><br><span class="line"><span class="keyword">import</span> XCTest</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">InAppPurchaseManagerTests</span>: <span class="title class_ inherited__">XCTestCase</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> mockStoreKitWrapper: <span class="type">MockStoreKitWrapper</span>!</span><br><span class="line">    <span class="keyword">var</span> manager: <span class="type">InAppPurchaseManager</span>!</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="keyword">func</span> <span class="title function_">setUp</span>() &#123;</span><br><span class="line">        <span class="keyword">super</span>.setUp()</span><br><span class="line">        mockStoreKitWrapper <span class="operator">=</span> <span class="type">MockStoreKitWrapper</span>()</span><br><span class="line">        manager <span class="operator">=</span> <span class="type">InAppPurchaseManager</span>(storeKitWrapper: mockStoreKitWrapper)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">testPurchaseSuccess</span>() &#123;</span><br><span class="line">        <span class="keyword">let</span> expectedProductId <span class="operator">=</span> <span class="string">&quot;com.example.app.product1&quot;</span></span><br><span class="line">        mockStoreKitWrapper.purchaseResult <span class="operator">=</span> .success(<span class="type">PurchaseDetails</span>(productId: expectedProductId, transaction: <span class="literal">nil</span>, needsFinishTransaction: <span class="literal">false</span>))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">let</span> expectation <span class="operator">=</span> <span class="keyword">self</span>.expectation(description: <span class="string">&quot;Purchase should succeed&quot;</span>)</span><br><span class="line">        manager.purchase(productId: expectedProductId) &#123; result <span class="keyword">in</span></span><br><span class="line">            <span class="keyword">switch</span> result &#123;</span><br><span class="line">            <span class="keyword">case</span> .success(<span class="keyword">let</span> purchase):</span><br><span class="line">                <span class="type">XCTAssertEqual</span>(purchase.productId, expectedProductId)</span><br><span class="line">            <span class="keyword">case</span> .failure:</span><br><span class="line">                <span class="type">XCTFail</span>(<span class="string">&quot;Purchase failed unexpectedly&quot;</span>)</span><br><span class="line">            &#125;</span><br><span class="line">            expectation.fulfill()</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        waitForExpectations(timeout: <span class="number">1</span>, handler: <span class="literal">nil</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">testRestorePurchases</span>() &#123;</span><br><span class="line">        mockStoreKitWrapper.restoredProducts <span class="operator">=</span> [<span class="string">&quot;com.example.app.product1&quot;</span>, <span class="string">&quot;com.example.app.product2&quot;</span>]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">let</span> expectation <span class="operator">=</span> <span class="keyword">self</span>.expectation(description: <span class="string">&quot;Restore should succeed&quot;</span>)</span><br><span class="line">        manager.restorePurchases &#123; restoredProducts <span class="keyword">in</span></span><br><span class="line">            <span class="type">XCTAssertEqual</span>(restoredProducts, [<span class="string">&quot;com.example.app.product1&quot;</span>, <span class="string">&quot;com.example.app.product2&quot;</span>])</span><br><span class="line">            expectation.fulfill()</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        waitForExpectations(timeout: <span class="number">1</span>, handler: <span class="literal">nil</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>当前的 testPurchaseSuccess 测试 100% 返回成功，看起来失去了现实意义。但这种方式的目的不是验证 SwiftyStoreKit 本身，而是验证我们封装的逻辑是否正确处理了各种返回结果。</p>
+</blockquote>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://roadmap.isylar.com/iOS/UIKit/UIResponder.html">参考重新整理基础博客</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2025/01/08/UIView%E5%8E%9F%E7%90%86/" rel="next" title="UIView原理">
+      UIView原理 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="nav-number">1.</span> <span class="nav-text">基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%AD%E5%A4%A7%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99"><span class="nav-number">1.1.</span> <span class="nav-text">六大设计原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%AF%91"><span class="nav-number">1.2.</span> <span class="nav-text">编译</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8"><span class="nav-number">1.3.</span> <span class="nav-text">启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E4%BC%98%E5%8C%96"><span class="nav-number">1.4.</span> <span class="nav-text">启动优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B4%A9%E6%BA%83"><span class="nav-number">1.5.</span> <span class="nav-text">崩溃</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%A1%E9%A1%BF-FPS"><span class="nav-number">1.6.</span> <span class="nav-text">卡顿 FPS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Instruments%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B"><span class="nav-number">1.7.</span> <span class="nav-text">Instruments使用教程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E4%BC%A0%E9%80%92%E5%92%8C%E8%A7%86%E5%9B%BE%E5%93%8D%E5%BA%94%E9%93%BE"><span class="nav-number">1.8.</span> <span class="nav-text">事件传递和视图响应链</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%8B%E5%8A%BF%E5%86%B2%E7%AA%81%E3%80%81%E6%97%A0%E5%93%8D%E5%BA%94%E5%A4%84%E7%90%86"><span class="nav-number">1.9.</span> <span class="nav-text">手势冲突、无响应处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#kvc-kvo"><span class="nav-number">1.10.</span> <span class="nav-text">kvc&#x2F;kvo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%A9%E5%B1%95-%E4%BB%A3%E7%90%86-%E9%80%9A%E7%9F%A5"><span class="nav-number">1.11.</span> <span class="nav-text">扩展&#x2F;代理&#x2F;通知</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%9E%E6%80%A7%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-number">1.12.</span> <span class="nav-text">属性关键字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E6%97%B6%E8%AF%AD%E8%A8%80%E5%92%8C%E5%8A%A8%E6%80%81%E6%97%B6%E8%AF%AD%E8%A8%80%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="nav-number">1.13.</span> <span class="nav-text">编译时语言和动态时语言的区别？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#load%E5%92%8Cinitialize%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">1.14.</span> <span class="nav-text">load和initialize的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95"><span class="nav-number">1.15.</span> <span class="nav-text">单元测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">1.16.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">刘宏亮</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">刘宏亮</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

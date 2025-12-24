@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"aliuhongliang.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="本文主要介绍 网络协议。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络协议">
+<meta property="og:url" content="https://aliuhongliang.github.io/2025/01/10/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/index.html">
+<meta property="og:site_name" content="LiuHongLiang">
+<meta property="og:description" content="本文主要介绍 网络协议。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://aliuhongliang.github.io/images/deepseek_mermaid_20250904_bf1823.png">
+<meta property="article:published_time" content="2025-01-10T18:02:44.000Z">
+<meta property="article:modified_time" content="2025-12-24T02:00:26.354Z">
+<meta property="article:author" content="刘宏亮">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://aliuhongliang.github.io/images/deepseek_mermaid_20250904_bf1823.png">
+
+<link rel="canonical" href="https://aliuhongliang.github.io/2025/01/10/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>网络协议 | LiuHongLiang</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">LiuHongLiang</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">7</span></a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://aliuhongliang.github.io/2025/01/10/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="刘宏亮">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LiuHongLiang">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          网络协议
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-01-10 18:02:44" itemprop="dateCreated datePublished" datetime="2025-01-10T18:02:44+00:00">2025-01-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-12-24 02:00:26" itemprop="dateModified" datetime="2025-12-24T02:00:26+00:00">2025-12-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">本文主要介绍 网络协议。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="http"><a href="#http" class="headerlink" title="http"></a>http</h3><ul>
+<li><p>get post head put delete options</p>
+</li>
+<li><p>get 参数有限制 post没有。get是用来获取资源的，post是用来处理资源的</p>
+</li>
+<li><p>幂等操作，执行一次和执行多次效果是一样的</p>
+</li>
+<li><p>状态码 1xx  2xx ：成功 3xx：重定向 4xx：客户端异常 5xx：服务端异常</p>
+</li>
+<li><p>三次握手</p>
+<ul>
+<li>客户端发送syn同步报文到服务端</li>
+<li>服务端返回syn 和 ack 报文给客户端</li>
+<li>客户端返回ack确认报文给服务端</li>
+<li>连接后进行数据传输</li>
+</ul>
+</li>
+<li><p>四次挥手</p>
+<ul>
+<li>客户端发送fin终止报文到服务端</li>
+<li>服务端返回 ack 报文给客户端</li>
+<li>服务端发送 fin 和 ack 报文给客户端</li>
+<li>客户端返回 ack报文给服务端</li>
+</ul>
+</li>
+<li><p>http长久连接</p>
+<ul>
+<li>减少tcp连接次数，提升网络请求效率</li>
+<li>头部字段有 connect：keep-alive，  time 20s ， max 10 等</li>
+<li>既然是长久连接，如何判断一个请求已经结束了？<ul>
+<li>头部字段有，content-length：1024，客户端可以根据接受的字节数是否达到了这个值来判断</li>
+<li>chuncked，根据空chuncked来判断</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>抓包原理</p>
+<ul>
+<li>利用了http中间人攻击漏洞来实现的。</li>
+<li>客户端和服务端之间多了一层，可以理解为代理，中间人可以篡改数据。</li>
+</ul>
+<p>chalse捉包 原理：HTTP&#x2F;HTTPS 代理【http捉包】 和 中间人攻击【https捉包】<br>  <img src="/images/deepseek_mermaid_20250904_bf1823.png" alt="img"></p>
+<p>  核心一：HTTP代理 (HTTP Proxy)<br>  这是最简单也是基础的模式，主要针对未加密的HTTP流量。</p>
+<p>  设置代理：你将你的设备（电脑或手机）的网络代理设置指向 Charles 运行的机器IP和端口（默认是 8888）。</p>
+<p>  流量转发：此后，你设备上所有的HTTP请求都不会直接发送给目标服务器，而是先被发送到 Charles 这个“代理服务器”上。</p>
+<p>  拦截与转发：Charles 接收到请求后，可以对其进行记录、分析甚至修改，然后再代表你的设备将请求转发给真正的目标服务器。</p>
+<p>  接收响应：服务器返回的响应同样先回到 Charles，Charles 记录后再返回给你的设备。</p>
+<p>  结果：这样，Charles 就成为了所有网络流量的“中转站”，自然就能抓到所有的包。</p>
+<p>  核心二：中间人攻击 (MITM) - 用于HTTPS<br>  HTTPS 的目的是为了安全，防止中间人窃听和篡改。而 Charles 抓取 HTTPS 包的本质就是一个受你控制的、合法的“中间人攻击”。它需要你的主动配合（安装证书）来取得你设备的信任。</p>
+<p>  关键步骤：<br>  安装Charles根证书：</p>
+<p>  当你在设备上安装并信任了 Charles 的自定义根证书（CA Certificate） 后，你的设备就意味着：“我完全信任由 Charles 这张证书签发的任何网站证书”。</p>
+<p>  这是最关键的一步，是所有HTTPS抓包的前提。</p>
+<p>  SSL代理握手过程（配合上图理解）：</p>
+<p>  当你的设备（客户端）试图与 <a target="_blank" rel="noopener" href="https://example.com/">https://example.com</a> 建立安全连接时，这个请求首先被发往 Charles。</p>
+<p>  Charles 拦截这次握手，并立即动态地伪造一张属于 example.com 的“假”证书。这张假证书由之前安装的 Charles 根证书签名。</p>
+<p>  由于你的设备信任 Charles 的根证书，因此它也会信任这张伪造的 example.com 证书。Charles 成功“骗”过了你的设备。</p>
+<p>  你的设备会与 Charles 基于这张假证书建立一个独立的HTTPS连接。</p>
+<p>  与真实服务器的握手：</p>
+<p>  与此同时，Charles 会以客户端的身份，与真实的 <a target="_blank" rel="noopener" href="https://example.com/">https://example.com</a> 服务器建立另一个独立的、真正的HTTPS连接。Charles会验证服务器证书的真实性。</p>
+<p>  解密、记录、再加密（中间人工作）：</p>
+<p>  现在，Charles 坐在两段安全的HTTPS连接中间：</p>
+<p>  一段是：你的设备 ←→ Charles (加密，但Charles可解密)</p>
+<p>  另一段是：Charles ←→ 真实服务器 (加密)</p>
+<p>  你的设备发送给 example.com 的加密数据，会先被 Charles 用自己的私钥解密（解开第一段连接），从而看到明文内容。Charles 记录下这些明文。</p>
+<p>  然后，Charles 再将你的请求内容，用真实服务器的公钥重新加密（建立第二段连接），发送给服务器。</p>
+<p>  服务器返回的加密响应，流程相反：Charles 先解密看到明文并记录，然后再用为你设备生成的假证书密钥重新加密，发回给你的设备。</p>
+<p>  结果：Charles 成功扮演了“中间人”的角色，对于你的设备和真实服务器来说，它们都以为自己在与对方直接进行安全的加密通信，但实际上它们都是在和 Charles 通信。Charles 得以窥见所有流量的明文内容。</p>
+<p>  总结：Charles 抓包原理的核心要点</p>
+<table>
+<thead>
+<tr>
+<th>机制</th>
+<th>针对协议</th>
+<th>是否需要安装证书</th>
+<th>原理</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>HTTP 代理</td>
+<td>HTTP</td>
+<td>不需要</td>
+<td>通过设置系统代理，让所有流量先经过Charles，直接记录明文。</td>
+</tr>
+<tr>
+<td>SSL 代理 (MITM)</td>
+<td>HTTPS</td>
+<td>必须安装并信任</td>
+<td>通过受控的“中间人攻击”，动态伪造证书，解密</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h3 id="https和网络安全"><a href="#https和网络安全" class="headerlink" title="https和网络安全"></a>https和网络安全</h3><ul>
+<li><p>https和http的区别  https是由http和ssl&#x2F;tls组成的</p>
+<ul>
+<li>客户端 发送 tls版本号，支持的加密算法，随机数C</li>
+<li>服务端 返回 使用的加密算法，随机数S，server证书</li>
+<li>客户端 验证 server证书，验证公钥</li>
+<li>客户端 组装 会话秘钥：随机数C+随机数S+预主密钥</li>
+<li>客户端 发送 通过server的公钥对预主密钥加密传输（公钥加密）</li>
+<li>服务端 通过私钥对预主密钥解密（私钥加密）</li>
+<li>服务端 组装 会话秘钥：随机数C+随机数S+预主密钥</li>
+<li>客户端 发送 加密的握手消息</li>
+<li>服务端 发送 加密的握手消息</li>
+<li>最后两步骤就是验证加密通道是否连接完成</li>
+<li>建立完成后，使用对称加密对数据进行加密传输</li>
+</ul>
+<p>HTTPS 工作流程<br>HTTPS 会对 URL 的 path、query 参数加密，外部看不到请求的路径和参数。不会加密域名，因为域名在 TLS 握手时就需要暴露。所以：外部能看到你访问了 example.com，但不知道你访问了 example.com&#x2F;abc?password&#x3D;123。</p>
+<ol>
+<li>客户端发起请求</li>
+</ol>
+<p>  用户在浏览器输入 <a target="_blank" rel="noopener" href="https://example.com,客户端告诉服务器它要进行/">https://example.com，客户端告诉服务器它要进行</a> HTTPS 通信。</p>
+<p>  客户端会发送一个 ClientHello 消息，其中包含：</p>
+<p>  支持的 TLS 版本（如 TLS1.2 &#x2F; TLS1.3）</p>
+<p>  支持的加密套件（RSA&#x2F;ECDHE&#x2F;AES 等）</p>
+<p>  一个随机数（client random）</p>
+<ol start="2">
+<li>服务器响应</li>
+</ol>
+<p>  服务器返回一个 ServerHello 消息，包含：</p>
+<p>  确认使用的 TLS 版本和加密套件</p>
+<p>  一个随机数（server random）</p>
+<p>  同时，服务器会把自己的 数字证书（包含服务器公钥、公钥签名、域名信息等）发给客户端。</p>
+<ol start="3">
+<li>客户端验证证书</li>
+</ol>
+<p>  客户端验证服务器证书是否可信：</p>
+<p>  检查证书是否过期</p>
+<p>  检查证书是否由受信任 CA 签发</p>
+<p>  检查证书上的域名是否与访问的域名一致</p>
+<p>  验证通过后，进入密钥交换阶段。</p>
+<ol start="4">
+<li>密钥协商（核心部分）</li>
+</ol>
+<p>  有两种常见方式：</p>
+<p>  (1) RSA 密钥交换（较老）</p>
+<p>  客户端生成一个 对称密钥（pre-master secret）。</p>
+<p>  用服务器公钥（来自证书）加密该对称密钥并发给服务器。</p>
+<p>  服务器用私钥解密得到对称密钥。</p>
+<p>  (2) ECDHE 密钥交换（推荐，支持前向保密 PFS）</p>
+<p>  客户端和服务器各自产生一对临时密钥对（椭圆曲线 Diffie-Hellman）。</p>
+<p>  双方交换公钥，并使用对方公钥和自己私钥计算出相同的 会话密钥。</p>
+<p>  这个密钥不会被窃听者推导出来。</p>
+<ol start="5">
+<li>生成会话密钥</li>
+</ol>
+<p>  客户端和服务器通过 随机数（client random + server random）+ pre-master secret 共同计算出最终的 会话密钥。</p>
+<p>  后续所有通信都使用该会话密钥进行 对称加密。</p>
+<ol start="6">
+<li>握手完成</li>
+</ol>
+<p>  双方互相发送一个 Finished 消息，表示握手成功。</p>
+<p>  之后的 HTTP 请求&#x2F;响应就通过 TLS 加密的通道传输。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">浏览器校验证书的原理</span><br><span class="line"></span><br><span class="line">举个例子</span><br><span class="line"></span><br><span class="line">你访问 https:<span class="comment">//www.baidu.com</span></span><br><span class="line"></span><br><span class="line">百度的服务器返回一个 服务器证书（由<span class="operator">「</span><span class="type">GlobalSign</span><span class="operator">」</span>或<span class="operator">「</span><span class="type">DigiCert</span><span class="operator">」</span>这样的 <span class="type">CA</span> 签发）<span class="operator">。</span></span><br><span class="line"></span><br><span class="line">这个服务器证书通常是链条的一部分：</span><br><span class="line"></span><br><span class="line">服务器证书 <span class="operator">←</span> 中间 <span class="type">CA</span> 证书 <span class="operator">←</span> 根 <span class="type">CA</span> 证书</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">浏览器会去找<span class="operator">「</span>根 <span class="type">CA</span> 证书<span class="operator">」</span>，如果它在本地的 信任根存储 里，就认为整个证书链可信<span class="operator">。</span></span><br><span class="line"></span><br><span class="line">📦 那么<span class="operator">「</span>信任根<span class="operator">」</span>在哪？</span><br><span class="line"></span><br><span class="line"><span class="type">Windows：有一个</span><span class="operator">「</span>受信任的根证书颁发机构<span class="operator">」</span>存储区，微软会通过系统更新维护<span class="operator">。</span></span><br><span class="line"></span><br><span class="line">macOS <span class="operator">/</span> iOS：<span class="type">Keychain（钥匙串）里有一组</span> <span class="type">Apple</span> 维护的根证书<span class="operator">。</span></span><br><span class="line"></span><br><span class="line"><span class="type">Linux：一般在</span> <span class="regexp">/etc/</span>ssl<span class="regexp">/certs/</span> 或 ca<span class="operator">-</span>certificates 包里，由发行版维护<span class="operator">。</span></span><br><span class="line"></span><br><span class="line">浏览器（<span class="type">Firefox</span> 特殊）：大多数浏览器直接用操作系统的信任库，但 <span class="type">Firefox</span> 有自己的内置证书库<span class="operator">。</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>TCP UDP</p>
+</li>
+<li><p>tcp：传输控制协议</p>
+<ul>
+<li>特点：面向连接，可靠传输，面向字节流，流量控制，拥塞控制<ul>
+<li>面向连接：数据传输时，需要先建立连接，结束时，需要断开连接，3次握手，4次挥手。<br>为什么不能两次握手，如果第一次syn发送超时的时候，客户端会重传，如果只有2次，这一次就建立连接了，如果第一次超时的syn这时候再传输到服务器，这是可能服务器就理解为再一次连接。<br>为什么是4次？客户端和服务端是全双工通讯，两端都可以发送和接受，所以要分别断开。</li>
+<li>可靠传输：无差错，不丢失，不重复，按序到达。解答：每次数据传递都有确认机制来保证可靠</li>
+<li>面向字节流</li>
+<li>流量控制：根据滑动窗口协议实现的。根据报文头中的数据，动态调解发送窗口的大小，来实现流量控制。发送方和接收方都有一个数据缓存，如果接收方来不及处理发送方数据的时候，就是告诉发送方少发一点。同理接受窗口类似</li>
+<li>拥塞控制：慢开始避免拥塞、快恢复快重传。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>udp：用户数据包协议</p>
+<ul>
+<li>特点：无连接、不保证可靠传输、对报文不合并也不拆分<ul>
+<li>功能：复用，分用，差错检测</li>
+<li>复用：同一个ip 不同的端口，都可以通过udp传输</li>
+<li>分用：数据报通过ip层到udp层，可以根据目的端口分发到对应的端口</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>dns</p>
+</li>
+<li><p>域名到ip地址的映射，dns解析请求是通过udp数据报并且是明文的。 client 1、向 dns服务器 获取ip  2、向server请求<br>查询方式：递归查询（一层一层的问）、迭代查询（其他dns告诉本地dns问谁要ip）</p>
+</li>
+<li><p>dns解析存在的问题？</p>
+<ul>
+<li>dns劫持：dns是明文传输，就有可能被劫持篡改。dns发送在http连接之前</li>
+<li>解析转发：举例：本该是移动的ip结果被转发给了电信的ip</li>
+<li>如何解决劫持。httpDNS，使用http协议向dns服务器的80端口进行请求。长连接，使用长连server，客户端和长连server连接，长连server和服务端进行http通讯</li>
+</ul>
+</li>
+<li><p>session  cookie</p>
+<ul>
+<li>为了解决http无状态的特点，http不知道上一次请求的用户，引入了session和cookie。cookie是用来记录用户状态，用来区分用户，状态存在于客户端，每次请求的时候，服务端生成cookie，通过响应报文传递给客户端，客户端保存cookie，后续的请求客户端需要在请求报文中携带cookie传递给服务端。</li>
+</ul>
+</li>
+</ul>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://xiaolincoding.com/network/3_tcp/tcp_interview.html">最全网络协议</a></li>
+<li><a target="_blank" rel="noopener" href="https://javaguide.cn/cs-basics/network/tcp-connection-and-disconnection.html#%E6%96%AD%E5%BC%80%E8%BF%9E%E6%8E%A5-tcp-%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B">网络协议</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/01/10/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="prev" title="多线程">
+      <i class="fa fa-chevron-left"></i> 多线程
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/01/10/Block/" rel="next" title="Block">
+      Block <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#http"><span class="nav-number">1.</span> <span class="nav-text">http</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#https%E5%92%8C%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8"><span class="nav-number">2.</span> <span class="nav-text">https和网络安全</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="nav-number">3.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">刘宏亮</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">刘宏亮</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

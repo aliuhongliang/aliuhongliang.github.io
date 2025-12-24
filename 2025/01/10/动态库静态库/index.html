@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"aliuhongliang.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="本文主要介绍 静态库和动态库。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="动态库静态库">
+<meta property="og:url" content="https://aliuhongliang.github.io/2025/01/10/%E5%8A%A8%E6%80%81%E5%BA%93%E9%9D%99%E6%80%81%E5%BA%93/index.html">
+<meta property="og:site_name" content="LiuHongLiang">
+<meta property="og:description" content="本文主要介绍 静态库和动态库。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-01-10T18:03:46.000Z">
+<meta property="article:modified_time" content="2025-12-24T02:00:26.353Z">
+<meta property="article:author" content="刘宏亮">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://aliuhongliang.github.io/2025/01/10/%E5%8A%A8%E6%80%81%E5%BA%93%E9%9D%99%E6%80%81%E5%BA%93/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>动态库静态库 | LiuHongLiang</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">LiuHongLiang</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">7</span></a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://aliuhongliang.github.io/2025/01/10/%E5%8A%A8%E6%80%81%E5%BA%93%E9%9D%99%E6%80%81%E5%BA%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="刘宏亮">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LiuHongLiang">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          动态库静态库
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-01-10 18:03:46" itemprop="dateCreated datePublished" datetime="2025-01-10T18:03:46+00:00">2025-01-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-12-24 02:00:26" itemprop="dateModified" datetime="2025-12-24T02:00:26+00:00">2025-12-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">本文主要介绍 静态库和动态库。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h3><h4 id="静态库（-a和-framework）"><a href="#静态库（-a和-framework）" class="headerlink" title="静态库（.a和.framework）"></a>静态库（.a和.framework）</h4><ul>
+<li><p>静态库：链接时完整地拷贝至可执行文件中，被多次使用就有多份冗余拷贝</p>
+</li>
+<li><p>静态函数库编译成的文件比较大</p>
+<blockquote>
+<ul>
+<li>.a是一个纯二进制文件，不能直接拿来使用，需要配合头文件、资源文件一起使用。</li>
+<li>将静态库打包的时候，只能打包代码资源，图片、本地json文件和xib等资源文件无法打包进去，使用.a静态库的时候需要三个组成部分：.a文件+需要暴露的头文件+资源文件</li>
+<li>.framework中除了有二进制文件之外还有资源文件，可以拿来直接使用。</li>
+</ul>
+</blockquote>
+</li>
+<li><p>静态库的资源文件</p>
+<blockquote>
+<ul>
+<li>图片资源的处理：两种静态库，一般都是把图片文件单独的放在一个.bundle文件中，一般.bundle的名字和.a或.framework的名字相同。</li>
+<li>.bundle文件很好弄，新建一个文件夹，把它改名为.bundle就可以了，右键，显示包内容可以向其中添加图片资源。 </li>
+<li>category是我们实际开发项目中经常用到的，把category打成静态库是没有问题的，但是在用这个静态库的工程中，调用category中的方法时会有找不到该方法的运行时错误（selector not recognized）</li>
+<li>解决办法是：在使用静态库的工程中配置other linkerflags的值为-ObjC。</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<h4 id="动态库（-dylib和-framework）"><a href="#动态库（-dylib和-framework）" class="headerlink" title="动态库（.dylib和.framework）"></a>动态库（.dylib和.framework）</h4><ul>
+<li>链接时不复制，程序运行时由系统动态加载到内存，供程序调用，系统只加载一次，多个程序共用，节省内存</li>
+<li>由于函数库没有被整合进你的程序，而是程序运行时动态的申请并调用，所以程序的运行环境中必须提供相应的库</li>
+<li>动态函数库的改变并不影响你的程序，所以动态函数库的升级比较方便</li>
+</ul>
+<h4 id="制作动态库和静态库"><a href="#制作动态库和静态库" class="headerlink" title="制作动态库和静态库"></a>制作动态库和静态库</h4><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/lyz0925/article/details/131342100">参考文章</a></li>
+</ul>
+<h4 id="动态库签名"><a href="#动态库签名" class="headerlink" title="动态库签名"></a>动态库签名</h4><ul>
+<li><a target="_blank" rel="noopener" href="https://juejin.cn/post/6937842912612843556">参考文章</a></li>
+<li><blockquote>
+<p>动态库签名问题:这个没用过，需要测试</p>
+</blockquote>
+</li>
+</ul>
+<p>静态库（Static Library）</p>
+<ul>
+<li><p>编译阶段就把库的代码 拷贝进最终可执行文件。</p>
+</li>
+<li><p>文件扩展名通常是 .a（Archive）。</p>
+</li>
+<li><p>链接后，库的代码成为 app 的一部分。</p>
+</li>
+</ul>
+<p>特点：</p>
+<ul>
+<li><p>不需要在运行时加载，启动快。</p>
+</li>
+<li><p>不会被多个 app 共享，每个 app 都有自己拷贝。</p>
+</li>
+<li><p>无法在运行时更新库，需要重新编译。</p>
+</li>
+</ul>
+<p>动态库（Dynamic Library &#x2F; Framework）</p>
+<ul>
+<li><p>运行时才加载，文件扩展名是 .dylib 或 .framework（动态 Framework）。</p>
+</li>
+<li><p>可以多个 app 共用同一个动态库（在 iOS 上受限制，普通第三方动态库需要随 app 打包）。</p>
+</li>
+</ul>
+<p>特点：</p>
+<ul>
+<li><p>支持 按需加载，app 启动更快。</p>
+</li>
+<li><p>支持 热更新（理论上，iOS 限制第三方不能随意热更新系统库）。</p>
+</li>
+<li><p>可以被多个 app 或模块共享（macOS、iOS 系统库就是动态库）。</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>静态库 (.a)</th>
+<th>动态库 (.framework&#x2F;.dylib)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>编译阶段</td>
+<td>编译时链接进可执行文件</td>
+<td>运行时加载</td>
+</tr>
+<tr>
+<td>文件大小</td>
+<td>增加 app 可执行文件大小</td>
+<td>app 大小略小（库外部独立）</td>
+</tr>
+<tr>
+<td>共享性</td>
+<td>无法共享</td>
+<td>可以共享（受 iOS 限制）</td>
+</tr>
+<tr>
+<td>更新</td>
+<td>需要重新编译打包</td>
+<td>可以单独更新（开发中可用）</td>
+</tr>
+<tr>
+<td>启动速度</td>
+<td>较快</td>
+<td>稍慢（需加载动态库）</td>
+</tr>
+<tr>
+<td>依赖管理</td>
+<td>较简单</td>
+<td>需处理签名和嵌入路径</td>
+</tr>
+</tbody></table>
+<h4 id="自己的理解"><a href="#自己的理解" class="headerlink" title="自己的理解"></a>自己的理解</h4><ul>
+<li><p>静态库使用</p>
+<ul>
+<li>我们制作静态库 A.framework, A.framework 包含了 头文件以及二进制文件。拖入项目中，使用即可，如果找不到，配置一下头文件搜索路径，在 setting 中 搜索 search</li>
+</ul>
+</li>
+<li><p>静态库依赖静态库使用</p>
+<ul>
+<li>制作 A.framework 的时候，将 third.framework 引入，但是不要勾选 add target，开发完毕后，将 A.framework 和third.framework 一同给到用户使用。不将 third.framework add to target 的目的就是为了防止 A.framework 将 third.framework编译进去，用户使用的时候会报重复错误</li>
+</ul>
+</li>
+<li><p>动态库使用</p>
+<ul>
+<li>单个动态库使用同静态库，注意 Embed 选择 embed&amp;sign</li>
+</ul>
+</li>
+<li><p>动态库依赖静态库</p>
+<ul>
+<li>动态库是可以将静态库一起打包的，直接将动态库给到用户使用即可</li>
+<li>配置静态库framework路径：在buildsetting中搜索 framework search，添加第三方SDK的文件路径 </li>
+<li>配置静态库header路径：在buildsetting中搜索 header search，添加第三方SDK的头文件路径</li>
+</ul>
+</li>
+<li><p>制作sdk的时候用到了第三方，处理方式和静态库依赖静态库差不多</p>
+</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">自己的sdk创建 profile 文件，添加如下：</span><br><span class="line">platform :ios, &#x27;<span class="number">9.0</span>&#x27;</span><br><span class="line">   use_frameworks<span class="operator">!</span></span><br><span class="line">   target &#x27;<span class="type">JingYuanSDK</span>&#x27; <span class="keyword">do</span></span><br><span class="line">   pod &#x27;<span class="type">MQTTClient</span>&#x27;</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line">执行pod install 安装三方库</span><br><span class="line"></span><br><span class="line">使用sdk的时候，别人也要将该三方库pod到自己的项目，同时引入sdk，即可使用</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>总结：针对sdk是静态库的情况，项目和sdk 同时依赖同一个 库，原则就是要么项目引入，要么sdk引入，否则就会冲突。<br>一般是由主项目引入，然后引入我们的静态库sdk这样使用。</p>
+</blockquote>
+<h4 id="制作cocapods"><a href="#制作cocapods" class="headerlink" title="制作cocapods"></a>制作cocapods</h4><h3 id="iOS利用动态库实现动态更新"><a href="#iOS利用动态库实现动态更新" class="headerlink" title="iOS利用动态库实现动态更新"></a>iOS利用动态库实现动态更新</h3><p>将 app 中的某个模块（比如一个 tab）的内容独立成一个 framework 的形式动态加载，在 app 的 main bundle 中，当 app 启动时从服务器上下载新版本的 framework 并加载即可达到动态更新的目的</p>
+<ul>
+<li>使用NSBundle加载动态库 实现代码如下：</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">-</span> (<span class="type">IBAction</span>)onBundleLoadAtPathAction1:(id)sender</span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">NSString</span> <span class="operator">*</span>documentsPath <span class="operator">=</span> [<span class="type">NSString</span> stringWithFormat:@<span class="string">&quot;%@/Documents/Dylib.framework&quot;</span>,<span class="type">NSHomeDirectory</span>()];</span><br><span class="line">    [<span class="keyword">self</span> bundleLoadDylibWithPath:documentsPath];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="operator">-</span> (void)bundleLoadDylibWithPath:(<span class="type">NSString</span> <span class="operator">*</span>)path</span><br><span class="line">&#123;</span><br><span class="line">    _libPath <span class="operator">=</span> path;</span><br><span class="line">    <span class="type">NSError</span> <span class="operator">*</span>err <span class="operator">=</span> <span class="literal">nil</span>;</span><br><span class="line">    <span class="type">NSBundle</span> <span class="operator">*</span>bundle <span class="operator">=</span> [<span class="type">NSBundle</span> bundleWithPath:path];</span><br><span class="line">    <span class="keyword">if</span> ([bundle loadAndReturnError:<span class="operator">&amp;</span>err]) &#123;</span><br><span class="line">        <span class="type">NSLog</span>(@<span class="string">&quot;bundle load framework success.&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="type">NSLog</span>(@<span class="string">&quot;bundle load framework err:%@&quot;</span>,err);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 完整加载代码</span></span><br><span class="line"><span class="operator">-</span> (<span class="type">UIViewController</span> <span class="operator">*</span>)loadFrameworkNamed:(<span class="type">NSString</span> <span class="operator">*</span>)bundleName &#123;</span><br><span class="line">    <span class="type">NSArray</span><span class="operator">*</span> paths <span class="operator">=</span> <span class="type">NSSearchPathForDirectoriesInDomains</span>(<span class="type">NSDocumentDirectory</span>, <span class="type">NSUserDomainMask</span>, <span class="type">YES</span>);</span><br><span class="line">    <span class="type">NSString</span> <span class="operator">*</span>documentDirectory <span class="operator">=</span> <span class="literal">nil</span>;</span><br><span class="line">    <span class="keyword">if</span> ([paths count] <span class="operator">!=</span> <span class="number">0</span>) &#123;</span><br><span class="line">        documentDirectory <span class="operator">=</span> [paths objectAtIndex:<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">NSFileManager</span> <span class="operator">*</span>manager <span class="operator">=</span> [<span class="type">NSFileManager</span> defaultManager];</span><br><span class="line">    <span class="type">NSString</span> <span class="operator">*</span>bundlePath <span class="operator">=</span> [documentDirectory stringByAppendingPathComponent:[bundleName stringByAppendingString:@<span class="string">&quot;.framework&quot;</span>]];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Check if new bundle exists</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="operator">!</span>[manager fileExistsAtPath:bundlePath]) &#123;</span><br><span class="line">        <span class="type">NSLog</span>(@<span class="string">&quot;No framework update&quot;</span>);</span><br><span class="line">        bundlePath <span class="operator">=</span> [[<span class="type">NSBundle</span> mainBundle]</span><br><span class="line">                      pathForResource:bundleName ofType:@<span class="string">&quot;framework&quot;</span>];</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Check if default bundle exists</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="operator">!</span>[manager fileExistsAtPath:bundlePath]) &#123;</span><br><span class="line">            <span class="type">UIAlertView</span> <span class="operator">*</span>alertView <span class="operator">=</span> [[<span class="type">UIAlertView</span> alloc] initWithTitle:@<span class="string">&quot;Oooops&quot;</span> message:@<span class="string">&quot;Framework not found&quot;</span> delegate:<span class="literal">nil</span> cancelButtonTitle:@<span class="string">&quot;OK&quot;</span> otherButtonTitles:<span class="literal">nil</span>, <span class="literal">nil</span>];</span><br><span class="line">            [alertView show];</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">nil</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Load bundle</span></span><br><span class="line">    <span class="type">NSError</span> <span class="operator">*</span>error <span class="operator">=</span> <span class="literal">nil</span>;</span><br><span class="line">    <span class="type">NSBundle</span> <span class="operator">*</span>frameworkBundle <span class="operator">=</span> [<span class="type">NSBundle</span> bundleWithPath:bundlePath];</span><br><span class="line">    <span class="keyword">if</span> (frameworkBundle <span class="operator">&amp;&amp;</span> [frameworkBundle loadAndReturnError:<span class="operator">&amp;</span>error]) &#123;</span><br><span class="line">        <span class="type">NSLog</span>(@<span class="string">&quot;Load framework successfully&quot;</span>);</span><br><span class="line">    &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="type">NSLog</span>(@<span class="string">&quot;Failed to load framework with err: %@&quot;</span>,error);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nil</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Load class</span></span><br><span class="line">    <span class="type">Class</span> <span class="type">PublicAPIClass</span> <span class="operator">=</span> <span class="type">NSClassFromString</span>(@<span class="string">&quot;PublicAPI&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (<span class="operator">!</span><span class="type">PublicAPIClass</span>) &#123;</span><br><span class="line">        <span class="type">NSLog</span>(@<span class="string">&quot;Unable to load class&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nil</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">NSObject</span> <span class="operator">*</span>publicAPIObject <span class="operator">=</span> [<span class="type">PublicAPIClass</span> new];</span><br><span class="line">    <span class="keyword">return</span> [publicAPIObject performSelector:<span class="meta">@selector</span>(mainViewController)];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>通过上述任一一种方式加载的动态库后，就可以使用动态库中的代码文件了，以Dylib.framework中的Person类的使用为例：</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">-</span> (<span class="type">IBAction</span>)onTriggerButtonAction:(id)sender</span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">Class</span> rootClass <span class="operator">=</span> <span class="type">NSClassFromString</span>(@<span class="string">&quot;Person&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (rootClass) &#123;</span><br><span class="line">        id object <span class="operator">=</span> [[rootClass alloc] <span class="keyword">init</span>];</span><br><span class="line">        [(<span class="type">Person</span> <span class="operator">*</span>)object run];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="framework-和-工程资源共用-待商榷"><a href="#framework-和-工程资源共用-待商榷" class="headerlink" title="framework 和 工程资源共用(待商榷)"></a>framework 和 工程资源共用(<font style="color: red">待商榷</font>)</h4><ul>
+<li>第方三库<blockquote>
+<p>Class XXX is implemented in both XXX and XXX. One of the two will be used. Which one is undefined. 这是当 framework 工程和 host 工程链接了相同的第三方库或者类造成的。<br>为了让打出的 framework 中不包含 host 工程中已包含的三方库（如 cocoapods 工程编译出的 .a 文件），可以这样：<br>删除 Build Phases &gt; Link Binary With Libraries 中的内容（如有）。此时编译会提示三方库中包含的符号找不到。<br>在 framework 的 Build Settings &gt; Other Linker Flags 添加 -undefined dynamic_lookup。必须保证 host 工程编译出的二进制文件中包含这些符号。</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="openssl编译"><a href="#openssl编译" class="headerlink" title="openssl编译"></a>openssl编译</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zbblog/p/14736000.html">参考文章</a></li>
+<li><a target="_blank" rel="noopener" href="https://wiki.openssl.org/index.php/Compilation_and_Installation#iOS">官方文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/gustavogenovese/curl-android-ios">脚本1</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/lkun2002/article/details/129595631">脚本2</a></li>
+</ul>
+<h3 id="xcode-引入库的相关问题"><a href="#xcode-引入库的相关问题" class="headerlink" title="xcode 引入库的相关问题"></a>xcode 引入库的相关问题</h3><ul>
+<li>Do Not Embed<ul>
+<li>适用于 静态库（Static Libraries） 或 动态库（Dynamic Frameworks）在某些情况下（如父项目已经嵌入该框架）。</li>
+<li>因为静态库会被打包进二进制文件，静态库可以直接使用。所以不需要嵌入</li>
+</ul>
+</li>
+<li>Sign &amp; Embed<ul>
+<li>将框架嵌入到最终的应用程序包中，并对框架签名。应用程序运行时可以直接加载该框架，确保运行时动态链接成功。</li>
+</ul>
+</li>
+<li>为什么需要“嵌入”？<ul>
+<li>对于动态库（Dynamic Framework），应用在运行时并不会将库的内容直接包含在可执行文件中，而是动态加载库文件。如果动态库没有正确嵌入到 .app 包中，运行时会找不到库文件，从而导致错误<blockquote>
+<p>自己的总结（<font style="color: red">待商榷</font>）<br>一般动态库才需要嵌入，但是只要嵌入一次即可，Sign &amp; Embed意思只是将库嵌入到app，保证使用的时候能找到，一个动态库多次引用，只保证一次Sign &amp; Embed即可</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/01/10/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/" rel="prev" title="数据结构和算法">
+      <i class="fa fa-chevron-left"></i> 数据结构和算法
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/01/10/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E5%92%8C%E6%9E%B6%E6%9E%84/" rel="next" title="设计模式和架构">
+      设计模式和架构 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%BA%E5%88%AB"><span class="nav-number">1.</span> <span class="nav-text">区别</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%BA%93%EF%BC%88-a%E5%92%8C-framework%EF%BC%89"><span class="nav-number">1.1.</span> <span class="nav-text">静态库（.a和.framework）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E5%BA%93%EF%BC%88-dylib%E5%92%8C-framework%EF%BC%89"><span class="nav-number">1.2.</span> <span class="nav-text">动态库（.dylib和.framework）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%B6%E4%BD%9C%E5%8A%A8%E6%80%81%E5%BA%93%E5%92%8C%E9%9D%99%E6%80%81%E5%BA%93"><span class="nav-number">1.3.</span> <span class="nav-text">制作动态库和静态库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E5%BA%93%E7%AD%BE%E5%90%8D"><span class="nav-number">1.4.</span> <span class="nav-text">动态库签名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%87%AA%E5%B7%B1%E7%9A%84%E7%90%86%E8%A7%A3"><span class="nav-number">1.5.</span> <span class="nav-text">自己的理解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%B6%E4%BD%9Ccocapods"><span class="nav-number">1.6.</span> <span class="nav-text">制作cocapods</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#iOS%E5%88%A9%E7%94%A8%E5%8A%A8%E6%80%81%E5%BA%93%E5%AE%9E%E7%8E%B0%E5%8A%A8%E6%80%81%E6%9B%B4%E6%96%B0"><span class="nav-number">2.</span> <span class="nav-text">iOS利用动态库实现动态更新</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#framework-%E5%92%8C-%E5%B7%A5%E7%A8%8B%E8%B5%84%E6%BA%90%E5%85%B1%E7%94%A8-%E5%BE%85%E5%95%86%E6%A6%B7"><span class="nav-number">2.1.</span> <span class="nav-text">framework 和 工程资源共用(待商榷)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#openssl%E7%BC%96%E8%AF%91"><span class="nav-number">3.</span> <span class="nav-text">openssl编译</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#xcode-%E5%BC%95%E5%85%A5%E5%BA%93%E7%9A%84%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98"><span class="nav-number">4.</span> <span class="nav-text">xcode 引入库的相关问题</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">刘宏亮</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">刘宏亮</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

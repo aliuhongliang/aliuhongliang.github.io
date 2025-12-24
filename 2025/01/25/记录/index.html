@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"aliuhongliang.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="本文主要介绍 进制转换。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记录">
+<meta property="og:url" content="https://aliuhongliang.github.io/2025/01/25/%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:site_name" content="LiuHongLiang">
+<meta property="og:description" content="本文主要介绍 进制转换。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-01-25T11:46:04.000Z">
+<meta property="article:modified_time" content="2025-12-24T02:00:26.354Z">
+<meta property="article:author" content="刘宏亮">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://aliuhongliang.github.io/2025/01/25/%E8%AE%B0%E5%BD%95/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>记录 | LiuHongLiang</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">LiuHongLiang</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">7</span></a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://aliuhongliang.github.io/2025/01/25/%E8%AE%B0%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="刘宏亮">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LiuHongLiang">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          记录
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-01-25 11:46:04" itemprop="dateCreated datePublished" datetime="2025-01-25T11:46:04+00:00">2025-01-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-12-24 02:00:26" itemprop="dateModified" datetime="2025-12-24T02:00:26+00:00">2025-12-24</time>
+              </span>
+
+          
+            <div class="post-description">本文主要介绍 进制转换。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>##基础知识</p>
+<ul>
+<li><p>let 常量，不要求编译时确定，但是在使用前必须赋值1次</p>
+</li>
+<li><p>let 必须在实例的初始化方法完成之前就拥有值</p>
+</li>
+<li><p>常量和变量在初始化之前，不能使用</p>
+</li>
+<li><p>数据类型</p>
+<ul>
+<li><p>值类型</p>
+<ul>
+<li>枚举：optional</li>
+<li>结构体： bool、int、float、double、character、string、array、dictionary、set<ul>
+<li>好处：可以在结构体定义属性，方法，来调用，方便扩展，给编码带来了更多的可能性</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>引用类型 ：class</p>
+</li>
+<li><p>类型转换：</p>
+<ul>
+<li>Int(要转换的值)</li>
+<li>as</li>
+</ul>
+</li>
+<li><p>元祖</p>
+<ul>
+<li>let tuple &#x3D; (1, 2)</li>
+<li>获取值 let (value1, value2) &#x3D; tuple，或者 tuple.0  tuple.1</li>
+<li>let tuple &#x3D; (name1: 1, nam2: 2)</li>
+<li>获取值tuple.name1  tuple.nam2</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>区间</p>
+<ul>
+<li>a…b:  a&lt;&#x3D; 取值 &lt;&#x3D;b</li>
+<li>a..&lt;b: a&lt;&#x3D; 取值 &lt;b</li>
+<li>a…   : 从a到最大</li>
+<li>…a  :  从无穷小到a</li>
+<li>..&lt;a :   从无穷小到a(不包含a)</li>
+<li>间隔(步进)：stride(from: 开始 through: 结束 by: 步进)</li>
+<li>数组中的使用 list[0…3]</li>
+</ul>
+</li>
+<li><p>Switch</p>
+<ul>
+<li><p>fallthrough 在Switch中实现贯穿效果</p>
+</li>
+<li><p>区间匹配、元祖匹配，case“a”，“b”：</p>
+</li>
+<li><p>值绑定 case(let x, 0):  在语句中就可以使用x的值了</p>
+</li>
+<li><p>case let(x, y) where x &#x3D;&#x3D; y :</p>
+</li>
+<li><p>let numbers  &#x3D; [10, 20, 30, -10, -20] ; for num in numbers where num &gt; 0 {}</p>
+</li>
+<li><p>底层实现：</p>
+<ul>
+<li>1</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>函数</p>
+<ul>
+<li>func xxx(参数) -&gt; 返回值类型 { }</li>
+<li>函数重载：函数名相同，参数个数，标签，类型不同</li>
+<li>内联函数：将函数调用展开为函数体<ul>
+<li>不会变为内联函数的情况<ul>
+<li>动态派发函数(多态)</li>
+<li>递归</li>
+<li>函数体很多</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>嵌套函数：函数内写func函数</li>
+</ul>
+</li>
+<li><p>枚举</p>
+<ul>
+<li><p>有关联值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">enum TestEnum &#123;</span><br><span class="line">    case  test1(int, int, int)</span><br><span class="line">    case  test2(int, int)</span><br><span class="line">    case  test3(bool)</span><br><span class="line">    case  test4		</span><br><span class="line">&#125;</span><br><span class="line">一个int占4个字节，最多的有3个int，所以需要24个字节来存储关联值，还有一个字节用来存储成员值，就是是取的test1，还是test2这种，所以总共需要25个字节，有需要内存对齐，分配32个字节。</span><br></pre></td></tr></table></figure></li>
+<li><p>没有关联值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line">      enum TestEnum &#123;</span><br><span class="line">          case  test1</span><br><span class="line">          case  test2</span><br><span class="line">          case  test3</span><br><span class="line">          case  test4		</span><br><span class="line">      &#125;</span><br><span class="line">      用一个字节用来存储成员值，就是是取的test1，还是test2这种，		```</span><br><span class="line"></span><br><span class="line">- 汇编语言</span><br><span class="line">    - 程序是在硬盘上</span><br><span class="line">    - 双击打开的时候（机器语言）就加载到内存</span><br><span class="line">    - cpu会读取内存中的指令</span><br><span class="line">    - cpu有寄存器和运算器，cpu先内存中的数据存储到寄存器，然后再进行运算</span><br><span class="line">    - 寄存器操作；movq 就是赋值操作，如果操作的是地址，那么其实是将地址的值赋值</span><br><span class="line">    - 寄存器操作；addq 相加操作</span><br><span class="line">    - 寄存器操作；leaq 取内存地址，赋值，这里的赋值是直接将地址赋值</span><br><span class="line">    - 寄存器操作；jmp</span><br><span class="line">    - 寄存器操作；movl/movb/leaw 操作数长度 b：8bit，s：16bit，w：16bit，l：32bit，q：64bit(8字节)，t：80bit</span><br><span class="line">    - 寄存器操作；callq 调用函数，call后面的就是存储函数的地址，</span><br><span class="line">    - 寄存器操作；retq 是 return</span><br><span class="line">    - 寄存器操作；pushq</span><br><span class="line">    - 寄存器操作；xor 位运算符异或</span><br><span class="line">    - 寄存器操作；and 位运算符</span><br><span class="line">    - r开头的是指的64位机器上的寄存器，每个占8字节，e开头的是32位机器上的寄存器，每个占4字节</span><br><span class="line"></span><br><span class="line">    - 高级语言 --  汇编语言 -- 机器语言 -- 运行到计算机</span><br><span class="line">    - 手机 用的是ARM汇编  iOS模拟器x64架构 对应的是AT&amp;T汇编</span><br><span class="line">    - 0x4bdc(%rip), 一般是全局变量 （数据段）</span><br><span class="line">    - -0x78(%rbp),一般是局部变量（栈）</span><br><span class="line">    - 0x10(%rax),一般是堆空间</span><br><span class="line">    - 全局变量，是程序运行时内存已经是固定的，而且只有一份内存</span><br><span class="line"></span><br><span class="line">    - 经验</span><br><span class="line">        - 看到 eip 其实对应的是rip</span><br><span class="line">        - rip存储的是下一次的寄存器的地址值</span><br><span class="line">        - 寄存器的地址值就是汇编代码最前面的那串地址</span><br><span class="line">        - rsp rbp 用于栈操作</span><br><span class="line">        - rdi rsi rcx r8 r9 用于存储函数参数</span><br><span class="line">        - rax rdx存储函数调用后返回的地址</span><br><span class="line">        - eax edx 一般就是rax  rdx</span><br><span class="line">        - rax一般是调用函数后返回的地址存在rax中</span><br><span class="line"></span><br><span class="line">- lldb指令</span><br><span class="line">    -  regist read rax</span><br><span class="line">    -  regist write rax 10</span><br><span class="line">    -  regist read  获取寄存器</span><br><span class="line">    -  x 内存地址：获取内存地址</span><br><span class="line">    -  x/3xw 内存地址 : 获取内存地址的值，3：表示输出几组，x：表示16进制（d：10进制 ），w：表示4字节（b：1字节，h：2字节，w：4字节，g：8字节）</span><br><span class="line">    -  memory write 内存地址 往内存地址中写值</span><br><span class="line">    -  po</span><br><span class="line">    -  print</span><br><span class="line">    -  po/x  16进制输出    po/d  10进制输出</span><br><span class="line">    -  n 断点执行下一步</span><br><span class="line">    -  s 断点进入子函数</span><br><span class="line">    -  ni 汇编层面，断点进行下一步</span><br><span class="line">    -  si 汇编层面，断点进入子函数</span><br><span class="line">    -  finish 汇编层面，跳过当前函数</span><br><span class="line"></span><br><span class="line">- 结构体和类的内存结构</span><br><span class="line">    - 结构体（里面的属性的学名叫存储属性）</span><br><span class="line">        -  结构体默认生成 初始化器（构造方法）可能是多个初始化器 ：目的是保证所有的存储属性初始化后都要有初始值</span><br><span class="line">        -  如果自己定义了初始化器，那么系统就不会自动生成了。</span><br><span class="line">    - 类</span><br><span class="line">        - 没有生成可以传入属性值的初始化器，所以类的属性必须要告诉编译器它是有值的</span><br><span class="line">        -  如果类的属性都有值，编译器会生成无参的初始化器</span><br><span class="line">        -  内存，前8个字节存储类的相关信息(指向类对象的地址)，再8个字节存储引用计数信息，后面就是属性的存储字节数。</span><br><span class="line">    - 两者的本质区别</span><br><span class="line">        - 结构体是值类型，类是引用类型</span><br><span class="line">        - 结构体不能继承，类可以继承</span><br><span class="line">        -  值类型是深拷贝，类是拷贝的是地址，相当于浅拷贝</span><br><span class="line">    - 注意点</span><br><span class="line">        - 结构体赋值是深拷贝，var s1 = &quot;&quot; , var s2 = s1 ,但是如果s2 没有修改值，系统为了节省内存，这时候是没有产生新地址的，两者指向了同一个地址。（这是特殊情况）也就是只有发现有写的时候，才进行深拷贝</span><br><span class="line"></span><br><span class="line">- 内存分布</span><br><span class="line">    - 如果一个函数a在函数b内定义的，那么函数a肯定在栈内存储</span><br><span class="line">    - 函数b是在代码段存储的</span><br><span class="line">    - 类 alloc后会在堆内申请空间来存储</span><br><span class="line">    - 初始化的全局变量 ---  数据段（已初始化的全局区）</span><br><span class="line">    - 未初始化的全局变量和静态变量 ---- bss段（未初始化）</span><br><span class="line"></span><br><span class="line">- 内存管理</span><br><span class="line">    - person() 对象初始化后，无主引用计数位1 强引用计数为0, 赋值后 var p = person(), 无主引用计数位1 强引用计数为1</span><br><span class="line">    - [基础内存结构](https://github.com/LeoMobileDeveloper/Blogs/blob/master/Swift/Method%20Dispatch%20and%20Memory%20Layout.md)</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>struct Person1 {<br>   lazy var num: Int &#x3D; 0<br>}<br>struct Person2 {</p>
+<pre><code>var num: Int
+</code></pre>
+<p>}</p>
+<p>Person1 和Person2 占多少字节<br>person1 是 16字节   Person2 是8字节<br>由于是结构体类型，属于值类型，所以存储在栈上，8字节是int占的值，但是由于person1用了懒加载，又多了这一份开销，系统分配了8字节来存储。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">    - 前8个字节存储 类型的相关信息</span><br><span class="line">    - 后8个字节存储引用计数相关</span><br><span class="line">    - 后面存储属性值等等</span><br><span class="line">    - 所以一个对象的内存至少是16个字节。因为内存对齐的问题，所以一般对象的内存大小是16的倍数</span><br><span class="line">    - 辅助理解（结合oc）</span><br><span class="line">        - 一个类也是一个类对象，类的实例的前8个字节可以理解成isa，指向的是类对象的地址，类对象存储的是类相关的信息。这些信息存储在全局区</span><br><span class="line"></span><br><span class="line">    - 自动引用计数ARC  strong(默认)  weak   unowned(实例销毁后，仍然存储该内存地址，再次访问会有野指针错误，好处是不用使用?)</span><br><span class="line">    - weak 必须是var 必须是可选，因为系统要自动给它设置为nil ，这里牵扯改变值(var), 置为nil(可选)，不会触发属性观察器</span><br><span class="line">    - 如果unowned修饰的对象的生命周期保持和当前类同步，那么可以使用unowned</span><br><span class="line">    - 自动释放池 autoreleasepool  使用  autoreleasepool &#123;  &#125;</span><br><span class="line"></span><br><span class="line">- 闭包</span><br><span class="line">    - 捕获局部变量，在堆空间分配了一块内存来存储局部变量，每一次调用闭包，都会给局部变量重新分配一块新的内存，比如num + 1，两个闭包调用对num执行+操作，得到的值是不影响的，就是因为每次调用闭包都给捕获的局部变量分配了新的内存。</span><br><span class="line">    - 闭包是16个字节，前8个字节就是存的实际调用函数的地址，后8个字节如果捕获了变量就是存储的变量在堆空间的地址，如果没有捕获就是0</span><br><span class="line">    - 全局变量不捕获，直接使用</span><br><span class="line">    - 引用捕获 [捕获](https://blog.csdn.net/qq_20255275/article/details/130702550)</span><br><span class="line"></span><br><span class="line">    - 逃逸闭包</span><br><span class="line">        - 脱离了当前函数作用域，在函数外调用的闭包，需要标记为逃逸</span><br><span class="line">        - 逃逸闭包会影响self的生命周期，如果是强引用，那么会导致延迟销毁，如果是弱引用就不会。有一系列的面试题，想想之前afn调用请求强引用self的情况，是请求结束后self才销毁的。因为它强引用了self。</span><br><span class="line">        - 逃逸闭包不能捕获inout参数。因为逃逸闭包如果捕获了该地址，如果是一个局部变量的地址被捕获，逃逸闭包的执行可能在局部变量销毁之后，这样会有危险。</span><br><span class="line"></span><br><span class="line">  ````</span><br><span class="line">  func test() -&gt; fn &#123;</span><br><span class="line">      func plus() &#123; &#125;</span><br><span class="line">      return plus</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">   test() 的返回值 也是一个逃逸闭包，因为返回值是一个函数，该函数什么时候被调用不清楚，出了test的作用域了。</span><br><span class="line">  ````</span><br><span class="line"></span><br><span class="line">- 自动闭包</span><br><span class="line">    - 有时候我们需要传递闭包，但是传入的时候只是一个值，这时候用自动闭包</span><br><span class="line"></span><br><span class="line">- inout</span><br><span class="line">    -  本质就是引用传毒</span><br><span class="line">    - 注意：具体的地址值不一定是谁的，见例子中的计算属性。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<pre><code>struct Circle &#123;
+    var width: Double = 1
+    var side: Int &#123;
+        willSet &#123;
+        &#125;
+        didSet &#123;
+        &#125;
+    &#125;
+    var test: Int &#123;
+        set &#123;
+        &#125;
+        get &#123;
+            3
+        &#125;
+    &#125;
+&#125;
+
+var c = Circle()
+【存储属性】c的地址值就是 和c中width的地址是一样的：width就是在c的第一个位置， 指针指的一个地方。结构体第一个属性的地址值就是结构体变量的地址值。
+所以当传递 &amp;c.width 的时候，实际传递的就是c的地址值。
+总结：普通存储属性传递的就是该属性的引用地址。
+
+【计算属性】结构体中计算属性test，因为它不占内存，所有不可能传递test的内存，具体实现：首先调用get方法，将值存入栈上一个临时地址，将这个临时地址传递给 inout，然后修改临时地址的值，最后调用set方法。
+
+【有观察器的存储属性】传递带属性观察的存储属性例如side。&amp;c.side,会将side存储的值，存到栈上一个临时地址，将这个临时地址传递给 inout，在方法中修改这个临时地址的值，函数调用完成后，将临时地址的值赋值给side，完成修改。使用临时地址是为了触发willset和didset
+</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 属性</span><br><span class="line">    - 存储属性</span><br><span class="line">        - 结构题和类才能有存储属性，枚举不可以</span><br><span class="line">        - 创建类或者结构体的时候，必须位所有的存储属性设置一个合适的初始值</span><br><span class="line">    - 计算属性</span><br><span class="line">        - 本质是方法，不占用实例对象的内存，也就是计算属性没有内存地址（这一块和inout牵扯面试）</span><br><span class="line">        - 枚举、结构题和类都可以定义计算属性</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<pre><code>    struct Circle &#123;
+        var radius: Double
+        var diameter: Double &#123;
+            set &#123;
+                radius = newValue / 2
+            &#125;
+            get &#123;
+                radius * 2
+            &#125;
+        &#125;
+    &#125;
+    
+    MemoryLayout&lt;Circle&gt;.stride  占用8个字节 diameter本质是方法，不占用内存
+    
+    属性A的值和某个存储属性的值有逻辑关系的时候，可以将属性A设置为计算属性
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">- 延迟存储属性  lazy var test = Test()</span><br><span class="line">    -  表示该属性第一次被使用的时候才初始化</span><br><span class="line">    -  如果多线程同时第一次访问lazy属性，无法保证属性被初始化1次 （非线程安全）</span><br><span class="line">    -  不能使用 let</span><br><span class="line">    -  结构体包含延迟属性的时候，创建该结构体如果使用let修饰，不能访问延迟属性，只能使用var修饰才可以访问延迟属性</span><br><span class="line">        -  解释：结构体是值类型，使用let修饰，说明结构体的内存不能被修改，而延迟属性的特点是访问的时候才被赋值，赋值操作就是修改内存，所以使用let和存储属性相违背，会报错</span><br><span class="line"></span><br><span class="line">- 属性观察器</span><br><span class="line">    - 非lazy的var存储属性，才可以设置属性观察器</span><br><span class="line">    - 初始化方法中设置属性值，不会触发willSet、didSet</span><br><span class="line">    - 可以在子类中为父类增加属性观察器（除了只读，let属性）</span><br><span class="line">    - 子类中初始化赋值会触发父类的属性观察器</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</code></pre>
+<p>struct Circle {</p>
+<pre><code>var radius: Double &#123;
+    willSet &#123;
+        print(newValue)
+    &#125;
+    didSet &#123;
+        print(oldValue, radius)
+    &#125;
+&#125;
+</code></pre>
+<p>}</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 类型属性</span><br><span class="line">    - 整个程序运行过程中，就只有一份内存(类似全局变量)，不占用所在类的内存</span><br><span class="line">    - 不需要在初始化的时候给定值</span><br><span class="line">    - 在第一次使用的时候被初始化</span><br><span class="line">    - 线程安全的</span><br><span class="line">    - 可以使用 let 因为类型属性不存在初始化的问题。</span><br><span class="line">    - static 修饰</span><br><span class="line">    - 如果是类，使用static 或者 class来定义类型属性</span><br><span class="line">        - 继承的时候有区别？？？？</span><br><span class="line">    - static实现单利</span><br><span class="line">    - 存储属性不允许被class修饰</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<pre><code>1、static修饰的属性，第一次使用的时候才被初始化(lazy 特性)，内部代码会调用swift_once，以及dispatch_once，所以该属性也是线程安全的。
+class Car &#123;
+    static var num = 1
+&#125;
+2、调用完初始化后返回的就是num的地址。每一次访问Car.num 都是获取同一份地址，所以它相当于一个全局变量，但是是有命名空间的，是有作用域的。访问方式只能是 Car.num = 10
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">- 枚举</span><br><span class="line">    - 内存占用：如果没有关联值，只需要1个字节就行了，如果有关联值，就得看关联值占多少字节</span><br><span class="line">    - rawValue  获取枚举的原始值。【内部实现是使用的计算属性】</span><br><span class="line">    - 可以定义类型属性</span><br><span class="line">    - 可以定义计算属性（本质是方法）</span><br><span class="line"></span><br><span class="line">枚举是值类型，其内存需要根据不同的 case 动态分配。每个 case 可能携带不同类型的关联值（Associated Values），导致枚举实例的内存大小不固定。如果允许定义存储属性，所有 case 必须为这个属性预留固定内存空间，无论是否需要。这会导致：</span><br><span class="line">内存浪费：例如 case c 不需要 value，但仍需占用 8 字节。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</code></pre>
+<p>enum test {<br>    case dog(a: Int, b: Int),<br>    case cat(a: Int),<br>    case car<br>}<br>var t &#x3D; test.dog(a:1, b2)<br>2个int占16字节，然后加上1字节存储成员值（case的值：dog、cat、car），总共是17个字节，根据内存对齐，最终分配24个字节。<br>var t &#x3D; test.cat(a:1,)<br>1个int占8字节，然后加上1字节存储成员值（case的值：dog、cat、ca），总共是9个字节，根据内存对齐，最终分配16个字节。</p>
+<p>变量的内存地址指向的内存就是枚举的内存结构，有关联值，根据关联值和属性值分配内存，没有关联值就只有属性值，那么就占1个字节</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 方法</span><br><span class="line">    - 实例方法</span><br><span class="line">    - 类型方法</span><br><span class="line">    - 值类型的方法</span><br><span class="line">        - 方法不允许修改结构体，枚举中的属性。如果要修改需要用mutating修饰方法</span><br><span class="line"></span><br><span class="line">- 下标</span><br><span class="line">    - 可以给任意类型增加下标功能</span><br><span class="line">    - 可以使用static修饰</span><br><span class="line">    - 本质就是方法</span><br><span class="line">    - 必须有get方法</span><br><span class="line">    - 如果只实现了get方法，表示是只读的，不能修改值(注意值类型和引用类型)，值类型不能修改值，即使是结构体，里面的属性也不能修改。引用类型不能修改这个变量，但是能修改变量的值</span><br><span class="line"></span><br><span class="line">- 继承</span><br><span class="line">    - 只有引用类型才有继承，值类型没有继承</span><br><span class="line">    - 没有父类的类，就是基类</span><br><span class="line">    - 子类可以重写 下标，方法，属性，必须加上override</span><br><span class="line">    - 被static修饰的方法 下标 属性不能被重写</span><br><span class="line">    - 被class 修饰的方法 下标 属性可以被重写</span><br><span class="line">    - 子类可以将父类的属性(存储，计算)重写为计算属性。（在子类中使用super.父类属性，这样使用）不能重写let 属性</span><br><span class="line">    - 被final修饰的禁止继承</span><br><span class="line"></span><br><span class="line">- 多态 ： 父类指针执行子类对象</span><br><span class="line">    - 实现原理：虚函数表</span><br><span class="line">    - 结构体的方法，编译的时候就确定了。</span><br><span class="line">    - 引用类型，需要调用的时候才能确定。</span><br><span class="line">    - 原理：将对象将来要调用的方法提前放在了类型信息中。类型信息编译的时候也是确定的</span><br><span class="line"></span><br><span class="line">- 初始化器</span><br><span class="line">    - 作用就是 初始化后保证属性都有值</span><br><span class="line">    - 指定初始化器，</span><br><span class="line">    - 便捷初始化器 convenience，必须调用指定初始化器</span><br><span class="line">    - 子类的指定初始化器要调用父类的指定初始化器，而且顺序是先赋值自己的属性再调用super</span><br><span class="line">    - 一个指定初始化器作为主要，使用便捷初始化器给外界使用</span><br><span class="line">    - 必须先给存储属性赋值后才能调用类中的其他方法，闭包等（二段式）</span><br><span class="line">    - 子类没有自定义指定初始化器，默认继承父类所有的指定初始化器</span><br><span class="line">    - required 修饰指定初始化器，子类必须实现</span><br><span class="line">    - 可失败初始化 inti？</span><br><span class="line">    - deinit 反初始化器，先执行自己的deinit 后执行父类的deinit。子类会继承父类的deinit</span><br><span class="line"></span><br><span class="line">- 可选绑定的原理</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>var p: Person? &#x3D; Person()<br>p?.eat()<br>swift调用方法，默认返回值是Void 也就是空元祖()。所以可以<br>var res &#x3D; p?.eat()。如果是 p为nil 那么res就是nil ，如果p不是nil，那么返回空元祖。<br>所以 res 的类型其实是空元祖的可选类型，所以解包的写法就是<br>if let res &#x3D; p?.eat() {<br>    &#x2F;&#x2F; 这样判断就是看看这个方法有没有调用成功<br>}</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 协议</span><br><span class="line">    - 可以定义 方法 属性 下标的声明，可以被枚举 结构体 类 遵守，多个协议用逗号隔开</span><br><span class="line">    - 协议方法中不能有默认参数</span><br><span class="line">    - 协议定义的属性必须是var</span><br><span class="line">    - 协议定义的类方法 类属性 类下标 必须是static 不能使用class</span><br><span class="line">    - 默认需要实现所有方法，后续添加可选</span><br><span class="line">    - 如果给结构体定义协议，并且该协议方法需要修改结构体属性的值，需要在协议方法中用mutating修饰。而不能说协议方法不用mutating，在实现的时候用mutating修饰。</span><br><span class="line">    - 协议定义初始化器的时候，如果不是final类，必须加上required，这是因为子类默认继承协议，为了要保证子类也实现协议方法，在父类使用required来修饰该协议方法</span><br><span class="line">    - 协议可以继承</span><br><span class="line">    - 协议组合 func test(obj: protocol1 &amp; protocol2 &amp; protocol3) &#123;&#125;,协议组合中最多只能有一个类类型class，可以有多个协议类型</span><br></pre></td></tr></table></figure>
+<p>  protocol Proto {<br>      func draw()<br>      var x: Int { set get }<br>      var y: Int { get }<br>      subscript(index: Int) -&gt; Int { set get }<br>  }</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">	- 只有类才能使用的协议，协议需要遵守 class AnyObject</span><br><span class="line">	- 可选协议 使用 @objc 修饰后，使用optional</span><br><span class="line"></span><br><span class="line">- Any  AnyObject</span><br><span class="line">    - Any 代表 任意类型 （结构体、类、枚举、函数类型）</span><br><span class="line">    - AnyObject 代表 任意类类型</span><br><span class="line"></span><br><span class="line">- is as as？as！</span><br><span class="line">    - is     判断是否为某种类型</span><br><span class="line">    - as    强制类型转换</span><br><span class="line">    - as?  类型转换 返回可选类型</span><br><span class="line">    - as!   类型转换 并强制解包</span><br><span class="line"></span><br><span class="line">- 元类型</span><br><span class="line">    - X.self          Person.self: 元类型的地址，</span><br><span class="line">    - X.Type 是一个类型       X.self 是 X.Type 类型</span><br><span class="line">    - AnyClass  是 Anyobject.Type</span><br><span class="line">    - 类.self 理解为获取的是类对象 ，类对象的类型是 类.Type. 任意类对象的类型 是Anyobject.Type 也就是AnyClass</span><br><span class="line">    - type(of: 实例) 获取对象的类型 它的值是类对象 类型是 X.Type。【它的实质不是调用方法，而是直接将实例对象的前8个字节取出来返回】</span><br><span class="line">    - 应用</span><br><span class="line">        - 创建 var p = Person()</span><br><span class="line">        - var type = Person.self  var p = type.init()。要求类必须有init方法，所以反推，这个init必须是required的，它能保证类以及子类都有init初始化器</span><br><span class="line">    - Self 一般作为返回值类型，可以类比oc中的instancetype，表示当前类型。Self可以直接使用 Self.count 访问count类属性</span><br><span class="line">    - class_getInstanceSize()  获取该类型的内存大小</span><br><span class="line">    - class_getSuperClass() 获取父类</span><br><span class="line"></span><br><span class="line">- 错误</span><br><span class="line">    - 自定义Error，遵守Error协议</span><br><span class="line">    - 处理 do &#123; &#125; catch let error&#123; &#125; 、do &#123; &#125; catch &#123; &#125; 、do &#123; &#125; catch &#123; &#125; default: 等等方式  使用catch 捕捉异常 ,  抛出异常的函数需要 throws 修饰</span><br><span class="line">    - 调用 try try? try!</span><br><span class="line">    - rethrows 关键字使用，带 throws的函数作为某函数的参数的时候使用</span><br><span class="line">    - defer: 当函数运行结束时候，调用defer的代码，无论函数是正常退出还是异常退出</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<pre><code>      func test() throws &#123;
+          let file = open(fileName)
+          defer &#123;
+              close(file)
+          &#125;
+      &#125;
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 泛型</span><br><span class="line">    - 提高代码复用率，减少代码量</span><br><span class="line">    - 方法中的泛型</span><br><span class="line">    - 类的泛型</span><br><span class="line">    - 结构体的泛型</span><br><span class="line">    - 枚举的泛型</span><br><span class="line">    - 协议中【不能使用泛型】</span><br><span class="line">    - 必须确定类型</span><br><span class="line">    - 实现原理？？？</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</code></pre>
+<p> func test&lt;T, T1&gt;(n1: T, n2: T1) { }</p>
+<p> class Stack<E> {<br> 	var elements &#x3D; <a href="">E</a><br> }<br> var stack &#x3D; Stack<Int>()</p>
+<p> struct Stack<E> {<br>	 var elements &#x3D; <a href="">E</a><br> }<br> 注意点：如果是结构体，方法要修改结构体的属性值，需要使用mutating来修饰</p>
+<p> enum Score<T> {<br> 	case point(T)<br> 	case grade(String)<br> }</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 关联类型</span><br><span class="line">    - 协议中定义类型 关键字 associatedtype、 遵守协议的类实现类型的关键字 typealias</span><br><span class="line">    - 如果协议中需要使用泛型，可以使用关联类型</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>protocol Stackable {<br>	associatedtype Element;<br>	或者 	associatedtype Element ： Equatable; 表示这个泛型需要遵守Equatable协议<br>}</p>
+<p>class Statck: Stackable {<br>	typealias Element &#x3D; String<br>}</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 类型约束</span><br><span class="line">    - &lt;T: Person &amp; Runnable&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>  func equal&lt;S1: Stackable, S2: Stackable&gt;(_ s1: S1, _ s2: S2) -&gt; Bool where S1.Element &#x3D;&#x3D; S2.Element {</p>
+<p>  }</p>
+<p>  S1.Element &#x3D;&#x3D; S2.Element 表示要求 S1 和 S2 的关联类型必须相等<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 不透明类型</span><br><span class="line">    - some 类型 可以用来解决协议中有关联类型的情况</span><br><span class="line">    - 用some修饰后，只能是一种类型</span><br><span class="line">    - 类型包含了 普通的类型 协议类型</span><br><span class="line">    - 可以用了隐藏真实类型，值暴露协议的方法或者属性</span><br><span class="line"></span><br></pre></td></tr></table></figure><br>protocol Runable {<br>	associatedtype Speed<br>	var speed: Speed { get }<br>}</p>
+<p>class Person: Runable {<br>	var speed: Double { 10.0 }<br>}</p>
+<p>class Car: Runable {<br>	var speed: Int { 1 }<br>}</p>
+<p>func get(_ type: Int) -&gt; some Runable {<br>	return Car()<br>}</p>
+<p>这里的返回值由于用some 修饰了，就必须返回确定的某一种遵守了Runable协议的类型 要么是car 要么是 person</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">- String底层</span><br><span class="line">    - 占用内存  16个字节</span><br><span class="line">        - 如果不超过15个字符，直接用16个字节存储字符串的ASCII码值。一个字节标识长度</span><br><span class="line">        - 超过15个字节，前8个字节存储字符串长度， 后8个字节存储的是字符串真正内容的地址，存储在常量区</span><br><span class="line">        - 字符串拼接后，如果未超过15个字符，依然存储在地址中。如果超过，需要新分配内存来存储，新的内存在堆区。在堆区malloc开辟新空间存储</span><br><span class="line">    -  字符串的初始化是动态绑定的</span><br><span class="line">- Array底层</span><br><span class="line">    - 占用内存  8个字节</span><br><span class="line">        - 存储的是堆空间的地址，这个地址指向的内存就是用来存储arr的信息。前32个字节存储arr信息，比如引用计数，数组长度，数组容量等，后面存储arr里的值</span><br><span class="line"></span><br><span class="line">- 动态数组是怎么实现的？一般是新开辟新的内存，然后将老的值copy到新内存</span><br><span class="line"></span><br><span class="line">- 字符串一般放在常量区</span><br><span class="line"></span><br><span class="line">- 可选类型的本质 是枚举</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>var age: Int? &#x3D; 10</p>
+<p>switch age {<br>	case let a?:<br>		print(a)<br>	case nil:<br>		print(‘nil’)	<br>}</p>
+<p>由于可选是枚举类型，有两个值，一个是none 一个是some()可以用下面的写法<br>switch age {<br>	case let .some(a) :<br>		print(a)<br>	case .none:<br>		print(‘nil’)	<br>}</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 溢出运算符， &amp;+  &amp;-  &amp;*   UInt8  最大是255  255 &amp;+ 1 = 0，就是从头开始。  0 &amp;- 1 = 255</span><br><span class="line"></span><br><span class="line">- 运算符重载</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>   static func + (参数，参数) -&gt; 返回值 { } 如果该函数写在类或者结构体中，必须使用static</p>
+<p>   判断两个实例是否等价，遵守 Equatable协议，重载 &#x3D;&#x3D;<br>   Equatable协议  &#x3D;&#x3D; 方法   !&#x3D; 隐式方法</p>
+<p>   Equatable 默认实现<br>       没有关联值的枚举值<br>       有关联值，关联值必须遵守Equatable<br>       结构体，属性值必须都遵守Equatable</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- Comparable 协议  遵守协议  重载 &lt;   &gt;  &lt;=  &gt;=  方法，可实现比较大小</span><br><span class="line">- 自定义运算符 operator</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>  声明<br>  prefix  operator  +++   前缀运算符<br>  postfix operator —   后缀运算符<br>  infix operator +&#x3D;         中间运算符<br>  实现<br>  func +&#x3D; () -&gt; bool  {  }<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 比较地址相等  使用  ===   !==</span><br><span class="line"></span><br><span class="line">- 扩展</span><br><span class="line">    - 枚举、结构体、类、协议 添加新的功能</span><br><span class="line">    - 方法、计算属性、下标、便捷初始化器、协议、嵌套类型（在一个类选中，定义另一个类型）</span><br><span class="line">    - 不能覆盖原有功能</span><br><span class="line">    - 不能添加存储属性，不能像已有属性添加属性观察器： 存储属性再编译阶段就确定了，扩展肯定不能影响类的内存结构，添加存储属性肯定会影响内存结构，所以不能添加</span><br><span class="line">    - 不能添加父类  extension Son :  Person  这样不可以，可能会影响内存结构</span><br><span class="line">    - 不能添加指定初始化器 （只有 类有指定初始化器的概念）required 初始化器不能在扩展中</span><br><span class="line"></span><br><span class="line">    - 使用场景</span><br><span class="line">        - 给数组添加下标方法，来预防越界</span><br><span class="line">        - 数组Array 的 下标 startIndex  endIndex</span><br><span class="line">        - 给结构体定义初始化器，因为结构体自定义初始化器后，系统的默认生成的初始化器就没有了，如果我们在扩展中定义我们的初始化器，不会影响结构体的系统生成的初始化器</span><br><span class="line"></span><br><span class="line">    - 方法调用</span><br><span class="line"></span><br></pre></td></tr></table></figure><br>  protocol TestProtocol {<br>      func test1()<br>  }</p>
+<p>  extension TestProtocol {<br>      func test1() { }<br>      func test2() { }<br>  }</p>
+<p>  class TestClass: TestProtocol {<br>      func test1() { }<br>      func test2() { }<br>  }</p>
+<p>  var cls &#x3D; TestClass()<br>  cls.test1()<br>  cls.test2()</p>
+<p>  这里的cls 是TestClass 类型，调用方法时候，首先看协议中定义的方法，优先去 TestClass 中找方法的实现，没有就去类的扩展中找实现，还没有就去协议的扩展中找方法的实现。如果调用的方法没有在协议中定义，那么直接去类、类的扩展中找方法的实现</p>
+<p>  var cls: TestProtocol &#x3D; TestClass()<br>  cls.test1()<br>  cls.test2()</p>
+<p>  这里cls 是 TestProtocol 协议类型，调用方法时候，首先看协议中定义的方法，优先去 TestClass 中找方法的实现，没有就去类的扩展中找实现，还没有就去协议的扩展中找方法的实现。如果调用的方法没有在协议中定义，那么直接去协议的扩展中找方法的实现<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">    - 扩展中可以使用类的泛型</span><br><span class="line"></span><br><span class="line">- fatalError  assert 断言闪退，退出app</span><br><span class="line"></span><br><span class="line">- 访问控制</span><br><span class="line">    - open ：模块中和模块外 可以访问和继承，只能类使用，结构体不行</span><br><span class="line">    - public： 模块中和模块外可以访问，模块外不能继承</span><br><span class="line">    - internal：模块中可以访问，模块外不能访问</span><br><span class="line">    - fileprivate： 只能在当前文件中访问。</span><br><span class="line">    - private:： 只能在定义的&#123; &#125;中，和当前文件中 该类或结构体的扩展中访问</span><br><span class="line">    - 类是fileprivate，里面的属性、方法默认都是fileprivate，如果要自定义只能定义比fileprivate低的访问权限</span><br><span class="line"></span><br><span class="line">- 访问权限</span><br><span class="line">    - 禁止使用init  private init() &#123;&#125;</span><br><span class="line"></span><br><span class="line">- swift的局部作用域</span><br><span class="line"></span><br></pre></td></tr></table></figure><br>  oc :<br>      {</p>
+<pre><code>  &#125;
+</code></pre>
+<p>  swift:	<br>      do {</p>
+<pre><code>  &#125;
+</code></pre>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 内存访问冲突</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>var step &#x3D; 1</p>
+<p>func plus(_ num: inout Int) {<br>	num +&#x3D; step<br>}</p>
+<p>plus(&amp;step)<br>函数内同时修改和读取同一份内存 step，会造成内存访问冲突</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 指针，这里的指针是一个类型，是不安全的</span><br><span class="line">    - UnsafePointer&lt;Pointee&gt;	类似		const Pointee*</span><br><span class="line">    -  UnsafeMutablePointer&lt;Pointee&gt;  类似	Pointee*</span><br><span class="line">    -  UnsageRawPointer   类似		const void*</span><br><span class="line">    -  UnsageMutableRawPointer 类似	void*</span><br><span class="line">    - Pointee 是泛型</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>var num &#x3D; 10<br>func test1(_ ptr: UnsafePointer<Int>) {<br>    &#x2F;&#x2F; 获取值<br>    print(ptr.pointee)<br>}</p>
+<p>func test2(_ ptr: UnsafeMutablePointer<Int>) {<br>    &#x2F;&#x2F; 修改值<br>    ptr.pointee &#x3D; 20<br>}</p>
+<p>test1(&amp;num)<br>test2(&amp;num)</p>
+<p>func test3(_ ptr: UnsafeRawPointer) {<br>    &#x2F;&#x2F; 获取值<br>    print(ptr.load(as: Int.self))<br>}</p>
+<p>func test4(_ ptr: UnsafeMutableRawPointer) {<br>    &#x2F;&#x2F; 获取值<br>    ptr.storeBytes(of: 30, as: Int.self)<br>    print(ptr.load(as: Int.self))<br>}</p>
+<p>test3(&amp;num)<br>test4(&amp;num)</p>
+<p>var ptr &#x3D; withUnsafePointer(to: num) { p in<br>    p<br>}</p>
+<p>var ptr_1 &#x3D; withUnsafePointer(to: num) { p in<br>    return 20<br>}</p>
+<p>print(ptr.pointee)  &#x2F;&#x2F; 10<br>print(ptr_1)  &#x2F;&#x2F; 20<br>闭包返回什么 就是 ptr 就是什么</p>
+<p>&#x2F;&#x2F; 获取指向某个变量的指针<br>var num &#x3D; 10<br>var ptr1 &#x3D; withUnsafePointer(to: num, { $0 })<br>var ptr2 &#x3D; withUnsafeMutablePointer(to: &amp;num, { $0 })<br>print(ptr1.pointee)<br>print(ptr2.pointee)</p>
+<p>class Person {<br>    var age: Int<br>    init(age: Int) {<br>        self.age &#x3D; age<br>    }<br>}</p>
+<p>var p &#x3D; Person(age: 10)</p>
+<p>var ptr &#x3D; withUnsafePointer(to: p, { $0 })<br>print(ptr)  &#x2F;&#x2F; 获取p的地址值</p>
+<p>var ptr_int &#x3D; withUnsafePointer(to: p, { UnsafeRawPointer($0)})<br>print(ptr_int)<br>var ptr_value &#x3D; ptr_int.load(as: UInt.self)<br>var dui_ptr &#x3D; UnsafeMutableRawPointer(bitPattern: ptr_value)<br>print(dui_ptr)   &#x2F;&#x2F; 获取p指向的堆空间的地址值</p>
+<p>创建指针<br>var ptr &#x3D; malloc(16)<br>ptr?.storeBytes(of: 18, as: Int.self)<br>ptr?.storeBytes(of: 20, toByteOffset: 8, as: Int.self)<br>print(ptr?.load(as: Int.self))  &#x2F;&#x2F; 18<br>print(ptr?.load(fromByteOffset: 8, as: Int.self))  &#x2F;&#x2F; 20<br>free(ptr)</p>
+<p>&#x2F;&#x2F; UnsafeMutableRawPointe<br>var ptr &#x3D; UnsafeMutableRawPointer.allocate(byteCount: 16, alignment: 1)<br>ptr.storeBytes(of: 18, as: Int.self)<br>ptr.advanced(by: 8).storeBytes(of: 20, as: Int.self)<br>ptr.deallocate()</p>
+<p>&#x2F;&#x2F; UnsafeMutablePointer<br>var ptr &#x3D; UnsafeMutablePointer<Int>.allocate(capacity: 3) &#x2F;&#x2F; 这里因为是定义了泛型Int，是已知类型，所以这里的3表示容量即3个int<br>ptr.pointee &#x3D; 10 &#x2F;&#x2F;pointee 总是指针头，也就是往第一个自己存10<br>ptr.advanced(by: 1).pointee &#x3D; 20 &#x2F;&#x2F; 偏移1个容量，存储20<br>print(ptr.pointee)  &#x2F;&#x2F; 10<br>print(ptr.advanced(by: 1).pointee) &#x2F;&#x2F; 20<br>&#x2F;&#x2F; 其他<br>ptr.initialize(to: 22)<br>ptr.successor().pointee &#x3D; 33 &#x2F;&#x2F;successor() 偏移到下一个字节<br>ptr.successor().initialize(to: 33) &#x2F;&#x2F;successor() 偏移到下一个字节<br>print(ptr.pointee)   &#x2F;&#x2F; 22<br>print((ptr + 1).pointee) &#x2F;&#x2F; 33<br>print(ptr.successor().pointee) &#x2F;&#x2F; 33<br>print(ptr[0])<br>print(ptr[1])<br>print(ptr[2])</p>
+<p>ptr.deinitialize(count: 2)  &#x2F;&#x2F;deinitialize 和上面的 initialize 对应<br>ptr.deallocate()</p>
+<p>&#x2F;&#x2F; 指针转换<br>var ptr &#x3D; UnsafeMutableRawPointer.allocate(byteCount: 16, alignment: 1)<br>var ptr2 &#x3D; ptr.assumingMemoryBound(to: Int.self)<br>var ptr2 &#x3D; unsafeBitCast(ptr, to: UnsafeMutablePointer<Int>.self)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 字面量</span><br><span class="line">    - 遵守了协议，能直接使用数值初始化</span><br><span class="line">    - 应用：使用字面量协议，使用数组或者字典来初始化结构体，例如 坐标</span><br><span class="line">- 模式匹配 Pattern</span><br><span class="line">    -  _   匹配任意值</span><br><span class="line">    -  _? 匹配非空值</span><br><span class="line">    -  case type(let x, let y?):   值绑定模式  y? 表示y不能为空</span><br><span class="line">    -  if case 0...9 = age &#123; &#125;  判断age是否 &gt;0 &lt;=9</span><br><span class="line">    -  for case nil in ages &#123; &#125;</span><br><span class="line">    -  if 和 for 中使用case 就理解为switch中的case的匹配就行</span><br><span class="line">    -  类型转换模式</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>  switch num {<br>      case let n as Int: {</p>
+<pre><code>  &#125;
+</code></pre>
+<p>  }</p>
+<p>  switch num {<br>      case is Int: {</p>
+<pre><code>  &#125;
+</code></pre>
+<p>  }</p>
+<pre><code>  - where
+- 条件编译   
+-#if os(macOS)  os(iOS)  #elseif arch(x86_64) #elseif swift(&lt;5) #elseif canImport(Foundation) #elseif targetEnvironment(simulator) #else #endif
+-#if DEBUG  判断DEBUG标记
+  - 自定义标记 ，xcode 在 setting 中搜索 swift compiler - custom，添加自己的标记
+
+- 常用写法
+  -  // MARK:
+  -  // TODO:  标记未完成
+  -  // FIXME:  标记待修复问题
+  -  print(#file, #line, #function) 打印当前文件，当前行数，当前执行的函数
+
+- 启动
+  - @UIApplicationMain，可以自定义main.swift,实现 UIApplicationMain 方法
+
+- @_silgen_name(c语言函数名) 。用来自定义c语言的函数名，在c语言库中的函数和swift的函数冲突的时候使用。
+  - 黑科技用法 修改系统函数名
+
+
+- String 、subString
+  - 为什么有两种类型，string截取后的类型是subString，他两个其实指向的是同一份内存。他两个指向一份数据，但是String和subString的值又不一样，所以搞了两个类型
+
+
+
+- 函数编程
+  - map
+  - flatMap         会将数组展开
+  - compactMap  会自动解包
+  - reduce
+  - fliter
+  - map函数的lazy优化
+  - optional类型也可以用 map、flatMap
+  - optional 解包的两种方式：值绑定，或者使用 flatMap
+  - 函子 functor，遵守 func map&lt;T&gt;(_ fn:(Inner) -&gt; T) -&gt; Type&lt;T&gt;.
+  - 函数编程的思想是将参数变成一个的操作 （curry）
+  - 适用函子、单子
+
+- 面向协议编程  pop
+  - 优先使用结构体，没有继承，直接使用协议实现，面向协议编程
+  - 利用协议实现前缀效果，类似命名空间的方式
+
+- 面向对象编程 oop
+  - 继承，会影响所有分类，代码执行有崩溃风险
+  - 可以利用协议来判断类型。协议类型 协议.Type
+
+- 响应式编程 FRP
+  - reactiveCoco  简称 RAC
+  - ReactiveX 简称 RX...
+
+- @objc dynamic
+  - 修饰的内容具有动态性，比如调用方法是按runtime的方式执行
+  - 关联对象，只有类能使用，swift中如何使用？
+  - 推理：只要使用oc的runtime 就需要用这个，还有继承NSObject类，比如kvc kvo
+
+- 编程方式
+  - R.swift
+  - swiftGen
+  - RXSwift
+
+
+- 多线程开发
+
+- 类型不同为什么不能进行运算？相加相减。
+</code></pre>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/01/18/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9A%84%E7%BB%84%E6%88%90/" rel="prev" title="计算机的组成">
+      <i class="fa fa-chevron-left"></i> 计算机的组成
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/02/12/%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9B%AE/" rel="next" title="面试题目">
+      面试题目 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">刘宏亮</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">刘宏亮</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
